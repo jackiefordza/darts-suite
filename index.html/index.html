@@ -13,6 +13,11 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6; /* Light gray background */
+            /* Ensure body takes at least screen height */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         /* Fade-in animation for results/feedback */
         .result-item, .feedback-item {
@@ -68,7 +73,7 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 p-4">
+<body class="p-4">
 
     <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-lg mx-auto">
         <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6 text-gray-800">🎯 Darts Suite</h1>
@@ -134,45 +139,45 @@
 
         <div id="scoreTrackerModeSection" class="hidden">
              <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">501 Score Tracker</h2>
-             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+             <div class="grid grid-cols-2 gap-2 mb-3">
                  <div>
-                     <label for="player1NameInput" class="block text-sm font-medium text-gray-700 mb-1">Player 1 Name:</label>
-                     <input type="text" id="player1NameInput" value="Player 1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out">
+                     <label for="player1NameInput" class="block text-sm font-medium text-gray-700 mb-1">Player 1:</label>
+                     <input type="text" id="player1NameInput" value="Player 1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                  </div>
                  <div>
-                     <label for="player2NameInput" class="block text-sm font-medium text-gray-700 mb-1">Player 2 Name:</label>
-                     <input type="text" id="player2NameInput" value="Player 2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out">
+                     <label for="player2NameInput" class="block text-sm font-medium text-gray-700 mb-1">Player 2:</label>
+                     <input type="text" id="player2NameInput" value="Player 2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                  </div>
              </div>
-             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                 <div id="player1Display" class="p-4 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                     <p id="player1NameDisplay" class="font-semibold text-lg text-gray-800">Player 1</p>
-                     <p id="player1Score" class="text-3xl sm:text-4xl font-bold text-indigo-600">501</p>
-                     <p class="text-xs text-gray-500 mt-1">(Games: <span id="player1GamesWon" class="font-medium">0</span>)</p>
+             <div class="grid grid-cols-2 gap-2 mb-3">
+                 <div id="player1Display" class="p-2 sm:p-3 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                     <p id="player1NameDisplay" class="font-semibold text-base sm:text-lg text-gray-800 truncate">Player 1</p>
+                     <p id="player1Score" class="text-2xl sm:text-4xl font-bold text-indigo-600">501</p>
+                     <p class="text-xs text-gray-500 mt-1">(Wins: <span id="player1GamesWon" class="font-medium">0</span>)</p>
                  </div>
-                 <div id="player2Display" class="p-4 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                     <p id="player2NameDisplay" class="font-semibold text-lg text-gray-800">Player 2</p>
-                     <p id="player2Score" class="text-3xl sm:text-4xl font-bold text-indigo-600">501</p>
-                     <p class="text-xs text-gray-500 mt-1">(Games: <span id="player2GamesWon" class="font-medium">0</span>)</p>
+                 <div id="player2Display" class="p-2 sm:p-3 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                     <p id="player2NameDisplay" class="font-semibold text-base sm:text-lg text-gray-800 truncate">Player 2</p>
+                     <p id="player2Score" class="text-2xl sm:text-4xl font-bold text-indigo-600">501</p>
+                     <p class="text-xs text-gray-500 mt-1">(Wins: <span id="player2GamesWon" class="font-medium">0</span>)</p>
                  </div>
              </div>
-             <p id="currentPlayerIndicator" class="text-center font-semibold text-gray-700 mb-4">Current Player: -</p>
-             <div class="mb-4">
-                 <label for="turnScoreInput" class="block text-sm font-medium text-gray-700 mb-2">Enter score for this turn (0-180):</label>
+             <p id="currentPlayerIndicator" class="text-center font-semibold text-gray-700 mb-3">Current Player: -</p>
+             <div class="mb-3">
+                 <label for="turnScoreInput" class="block text-sm font-medium text-gray-700 mb-2">Enter score this turn (0-180):</label>
                  <input type="number" id="turnScoreInput" name="turnScoreInput" placeholder="e.g., 100" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
              </div>
-             <div class="flex flex-col sm:flex-row gap-2 mb-4">
+             <div class="flex flex-col sm:flex-row gap-2 mb-3">
                  <button id="submitTurnScoreBtn" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                     Submit Score & Switch Player
+                     Submit Score
                  </button>
                  <button id="undoTurnBtn" class="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2" disabled>
-                     Undo Last Turn
+                     Undo
                  </button>
              </div>
-             <div id="messageArea501" class="mt-4 text-center font-medium min-h-[2em]"></div>
+             <div id="messageArea501" class="mt-3 text-center font-medium min-h-[2em]"></div>
              <div id="checkoutSuggestion501" class="mt-2 text-center"></div>
-             <button id="reset501GameBtn" class="w-full mt-6 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                 Reset Current Leg
+             <button id="reset501GameBtn" class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                 Reset Leg
              </button>
         </div>
     </div>
@@ -273,9 +278,8 @@
         let undoPossible = false;
         let nextLegTimeoutId = null;
 
-        // --- Functions ---
+        // --- Functions --- (JavaScript logic remains the same)
 
-        /** Populates the finishableScores array from the checkouts object */
         function initializeGameData() {
             finishableScores = Object.keys(checkouts)
                                    .map(score => parseInt(score))
@@ -284,44 +288,35 @@
             console.log(`Initialized practice game with ${finishableScores.length} possible scores.`);
         }
 
-        /** Starts a new practice game with a random score within the selected range */
         function startNewPracticeGame() {
             const feedbackArea = feedbackAreaGame;
             let minScore = parseInt(minScoreInput.value) || 2;
             let maxScore = parseInt(maxScoreInput.value) || 170;
-
             feedbackArea.innerHTML = '';
             feedbackArea.className = 'mt-4 text-center font-medium min-h-[2em]';
-
             minScore = Math.max(2, minScore);
             maxScore = Math.min(170, maxScore);
-
             if (minScore > maxScore) {
-                displayGameFeedback('Min score cannot be greater than Max score. Adjust the range and try again.', 'yellow', feedbackArea);
+                displayGameFeedback('Min score cannot be greater than Max score.', 'yellow', feedbackArea);
                 gameScoreDisplay.textContent = '-';
                 scoreInputGame.disabled = true;
                 submitAnswerBtn.disabled = true;
                 revealAnswerBtn.disabled = true;
                 return;
             }
-
             minScoreInput.value = minScore;
             maxScoreInput.value = maxScore;
-
             const availableScores = finishableScores.filter(score => score >= minScore && score <= maxScore);
-
             if (availableScores.length === 0) {
-                displayGameFeedback(`No standard checkouts found between ${minScore} and ${maxScore}. Try a different range.`, 'yellow', feedbackArea);
+                displayGameFeedback(`No standard checkouts found between ${minScore} and ${maxScore}.`, 'yellow', feedbackArea);
                 gameScoreDisplay.textContent = '-';
                 scoreInputGame.disabled = true;
                 submitAnswerBtn.disabled = true;
                 revealAnswerBtn.disabled = true;
                 return;
             }
-
             const randomIndex = Math.floor(Math.random() * availableScores.length);
             currentGameScore = availableScores[randomIndex];
-
             gameScoreDisplay.textContent = currentGameScore;
             scoreInputGame.value = '';
             scoreInputGame.disabled = false;
@@ -331,76 +326,54 @@
             console.log(`New practice game started. Score: ${currentGameScore} (Range: ${minScore}-${maxScore})`);
         }
 
-        /**
-         * Checks the user's answer in the practice game.
-         * Automatically prefixes number-only inputs with 'S'.
-         */
         function checkPracticeAnswer() {
             const userAnswerRaw = scoreInputGame.value.trim();
             const targetScore = currentGameScore;
             const feedbackArea = feedbackAreaGame;
-
             if (!userAnswerRaw) {
                 displayGameFeedback('Please enter your suggested checkout.', 'yellow', feedbackArea);
                 return;
             }
-
             const parts = userAnswerRaw.split(/[\s,>]+/).filter(part => part.length > 0);
             const processedParts = parts.map(part => {
                 const firstChar = part.charAt(0);
-                if (firstChar >= '0' && firstChar <= '9') {
-                    return 'S' + part;
-                }
+                if (firstChar >= '0' && firstChar <= '9') { return 'S' + part; }
                 return part;
             });
             const prefixedUserAnswer = processedParts.join(' ');
-
             const correctOptions = checkouts[targetScore];
             if (!correctOptions) {
                 console.error(`No checkout options found for score: ${targetScore}`);
                 displayGameFeedback('Internal error: Could not find checkouts for this score.', 'red', feedbackArea);
-                scoreInputGame.disabled = true;
-                submitAnswerBtn.disabled = true;
-                revealAnswerBtn.disabled = true;
+                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
                 return;
             }
-
             const normalize = (str) => str.toUpperCase().replace(/->/g, ' ').replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
             const normalizedUserAnswer = normalize(prefixedUserAnswer);
             const isCorrect = correctOptions.some(option => normalize(option) === normalizedUserAnswer);
-
             if (isCorrect) {
                 displayGameFeedback(`🎯 Correct! "${prefixedUserAnswer}" is a valid checkout for ${targetScore}. Well done!`, 'green', feedbackArea);
             } else {
                 displayGameFeedback(`Not quite! A common checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'red', feedbackArea);
             }
-
-            scoreInputGame.disabled = true;
-            submitAnswerBtn.disabled = true;
-            revealAnswerBtn.disabled = true;
+            scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
             newGameBtn.focus();
         }
 
-        /** Reveals the answer for the current practice game score. */
         function revealAnswer() {
             const targetScore = currentGameScore;
             const feedbackArea = feedbackAreaGame;
             const correctOptions = checkouts[targetScore];
-
             if (correctOptions && correctOptions.length > 0) {
                 displayGameFeedback(`A possible checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'blue', feedbackArea);
             } else {
                  displayGameFeedback(`No standard checkout found for ${targetScore}.`, 'yellow', feedbackArea);
                  console.error(`Attempted to reveal answer for score ${targetScore}, but no options found.`);
             }
-
-            scoreInputGame.disabled = true;
-            submitAnswerBtn.disabled = true;
-            revealAnswerBtn.disabled = true;
+            scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
             newGameBtn.focus();
         }
 
-        /** Displays feedback messages in the specified area with appropriate styling */
         function displayGameFeedback(message, type, areaElement) {
             areaElement.innerHTML = `<p class="feedback-item">${message}</p>`;
             let colorClass = 'text-gray-700';
@@ -411,77 +384,51 @@
             areaElement.className = `mt-4 text-center font-medium ${colorClass}`;
         }
 
-        /** Displays possible checkouts in the Lookup mode */
         function displayLookupCheckouts() {
             const score = parseInt(scoreInputLookup.value);
-            messageAreaLookup.textContent = '';
-            checkoutListLookup.innerHTML = '';
-
-            if (isNaN(score)) {
-                messageAreaLookup.textContent = 'Please enter a valid number.';
-                return;
-            }
+            messageAreaLookup.textContent = ''; checkoutListLookup.innerHTML = '';
+            if (isNaN(score)) { messageAreaLookup.textContent = 'Please enter a valid number.'; return; }
             if (score < 2 || score > 170) {
                 messageAreaLookup.textContent = 'Score must be between 2 and 170.';
-                checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">-</p>';
-                return;
+                checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">-</p>'; return;
             }
             if (impossibleCheckouts.includes(score)) {
                 messageAreaLookup.textContent = `Score ${score} is not possible to checkout with 3 darts.`;
-                checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">Aim to leave a finishable score.</p>';
-                return;
+                checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">Aim to leave a finishable score.</p>'; return;
             }
-
             const options = checkouts[score];
             if (options && options.length > 0) {
                 options.forEach((option, index) => {
                     const div = document.createElement('div');
                     div.className = 'bg-green-100 p-3 rounded-md text-green-800 font-medium result-item shadow-sm';
-                    div.style.animationDelay = `${index * 0.05}s`;
-                    div.textContent = option;
+                    div.style.animationDelay = `${index * 0.05}s`; div.textContent = option;
                     checkoutListLookup.appendChild(div);
                 });
             } else {
                 let suggestion = "No standard checkout listed. Aim to leave a preferred double (e.g., 32, 40).";
-                if (score > 1 && score <= 40 && score % 2 !== 0) {
-                    suggestion = `Hit S${score - (score-1)} (${score-1}) to leave D${(score-1)/2}.`;
-                 } else if (score > 40 && score <= 60) {
-                    suggestion = `Aim for S${score - 40} to leave D20, or S${score - 50} to leave DB.`;
-                }
+                if (score > 1 && score <= 40 && score % 2 !== 0) { suggestion = `Hit S${score - (score-1)} (${score-1}) to leave D${(score-1)/2}.`; }
+                else if (score > 40 && score <= 60) { suggestion = `Aim for S${score - 40} to leave D20, or S${score - 50} to leave DB.`; }
                 checkoutListLookup.innerHTML = `<p class="text-gray-600 p-3 bg-yellow-100 rounded-md">${suggestion}</p>`;
             }
         }
 
-        // --- 501 Score Tracker Functions --- (No changes needed for mobile optimization here)
-
         function startNextLeg() {
             console.log("Starting next leg automatically...");
-            playerScores = [501, 501];
-            currentPlayerIndex = (legStartingPlayerIndex + 1) % 2;
-            legStartingPlayerIndex = currentPlayerIndex;
-            legWon = false;
-            player1Score.textContent = playerScores[0];
-            player2Score.textContent = playerScores[1];
-            player1GamesWon.textContent = playerGamesWonTally[0];
-            player2GamesWon.textContent = playerGamesWonTally[1];
-            messageArea501.textContent = 'Next leg!';
-            checkoutSuggestion501.innerHTML = '';
-            turnScoreInput.value = '';
-            turnScoreInput.disabled = false;
-            submitTurnScoreBtn.disabled = false;
+            playerScores = [501, 501]; currentPlayerIndex = (legStartingPlayerIndex + 1) % 2;
+            legStartingPlayerIndex = currentPlayerIndex; legWon = false;
+            player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
+            player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
+            messageArea501.textContent = 'Next leg!'; checkoutSuggestion501.innerHTML = '';
+            turnScoreInput.value = ''; turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false;
             lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null;
-            undoPossible = false; undoTurnBtn.disabled = true;
-            nextLegTimeoutId = null;
-            updateCurrentPlayerIndicator();
-            turnScoreInput.focus();
+            undoPossible = false; undoTurnBtn.disabled = true; nextLegTimeoutId = null;
+            updateCurrentPlayerIndicator(); turnScoreInput.focus();
         }
 
         function resetCurrentLegManually() {
             if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
-            playerNames[0] = player1NameInput.value || "Player 1";
-            playerNames[1] = player2NameInput.value || "Player 2";
-            playerScores = [501, 501];
-            currentPlayerIndex = 0; legStartingPlayerIndex = 0; legWon = false;
+            playerNames[0] = player1NameInput.value || "Player 1"; playerNames[1] = player2NameInput.value || "Player 2";
+            playerScores = [501, 501]; currentPlayerIndex = 0; legStartingPlayerIndex = 0; legWon = false;
             player1NameDisplay.textContent = playerNames[0]; player2NameDisplay.textContent = playerNames[1];
             player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
             player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
@@ -489,8 +436,7 @@
             turnScoreInput.value = ''; turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false;
             lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null;
             undoPossible = false; undoTurnBtn.disabled = true;
-            updateCurrentPlayerIndicator();
-            turnScoreInput.focus();
+            updateCurrentPlayerIndicator(); turnScoreInput.focus();
             console.log("501 leg reset manually.");
         }
 
@@ -516,7 +462,7 @@
             const messageArea = messageArea501; const suggestionArea = checkoutSuggestion501;
             messageArea.textContent = ''; suggestionArea.innerHTML = '';
             if (isNaN(enteredScore) || enteredScore < 0 || enteredScore > 180) {
-                messageArea.textContent = 'Invalid score. Please enter a number between 0 and 180.';
+                messageArea.textContent = 'Invalid score. Please enter 0-180.';
                 turnScoreInput.select(); return;
             }
             lastPlayerScores = [...playerScores]; lastPlayerIndex = currentPlayerIndex; lastGamesWonTally = [...playerGamesWonTally];
@@ -524,7 +470,7 @@
             let currentScore = playerScores[currentPlayerIndex];
             const potentialScore = currentScore - enteredScore;
             if (potentialScore < 2 && potentialScore !== 0) {
-                messageArea.textContent = `${playerNames[currentPlayerIndex]} Bust! Score remains ${currentScore}.`;
+                messageArea.textContent = `${playerNames[currentPlayerIndex]} Bust! Score is ${currentScore}.`;
             } else {
                 playerScores[currentPlayerIndex] = potentialScore;
                 document.getElementById(`player${currentPlayerIndex + 1}Score`).textContent = potentialScore;
@@ -535,8 +481,7 @@
                     displayGameFeedback(`GAME SHOT! Leg to ${playerNames[currentPlayerIndex]}! Starting next leg in 2s...`, 'green', messageArea501);
                     legWon = true;
                     turnScoreInput.disabled = true; submitTurnScoreBtn.disabled = true; undoTurnBtn.disabled = true;
-                    nextLegTimeoutId = setTimeout(startNextLeg, 2000);
-                    return;
+                    nextLegTimeoutId = setTimeout(startNextLeg, 2000); return;
                 }
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % 2;
@@ -549,14 +494,15 @@
                     suggestionArea.innerHTML = `<p class="text-sm mt-2 text-blue-600">${playerNames[currentPlayerIndex]}'s checkout: <strong>${suggestions.join(' / ')}</strong></p>`;
                 }
             }
-            turnScoreInput.value = '';
-            turnScoreInput.focus();
+            turnScoreInput.value = ''; turnScoreInput.focus();
         }
 
         function undoLastTurn() {
             if (!undoPossible || lastPlayerScores === null) { console.log("Nothing to undo."); return; }
             console.log("Undoing last turn...");
-            playerScores = [...lastPlayerScores]; currentPlayerIndex = lastPlayerIndex; playerGamesWonTally = [...lastGamesWonTally]; legWon = false;
+            playerScores = [...lastPlayerScores]; currentPlayerIndex = lastPlayerIndex; playerGamesWonTally = [...lastGamesWonTally];
+            legWon = false;
+            if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
             player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
             player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
             updateCurrentPlayerIndicator();
@@ -565,7 +511,6 @@
             undoPossible = false; lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null; undoTurnBtn.disabled = true;
         }
 
-        /** Switches between the different modes (Lookup, Practice, Tracker) */
         function switchMode(modeToShow) {
             lookupModeSection.classList.add('hidden'); gameModeSection.classList.add('hidden'); scoreTrackerModeSection.classList.add('hidden');
             lookupModeBtn.classList.replace('mode-button-active', 'mode-button-inactive'); gameModeBtn.classList.replace('mode-button-active', 'mode-button-inactive'); trackerModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
@@ -575,7 +520,7 @@
                 startNewPracticeGame();
             } else if (modeToShow === 'tracker') {
                 scoreTrackerModeSection.classList.remove('hidden'); trackerModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
-                resetCurrentLegManually();
+                updateCurrentPlayerIndicator(); turnScoreInput.focus();
             } else {
                 lookupModeSection.classList.remove('hidden'); lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
                 scoreInputLookup.focus();
@@ -583,32 +528,34 @@
         }
 
         // --- Event Listeners ---
-        // Setup listeners for button clicks and input events
-
         lookupModeBtn.addEventListener('click', () => switchMode('lookup'));
         gameModeBtn.addEventListener('click', () => switchMode('game'));
         trackerModeBtn.addEventListener('click', () => switchMode('tracker'));
-
         calculateBtnLookup.addEventListener('click', displayLookupCheckouts);
         scoreInputLookup.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); calculateBtnLookup.click(); } });
         scoreInputLookup.addEventListener('input', () => { messageAreaLookup.textContent = ''; });
-
         submitAnswerBtn.addEventListener('click', checkPracticeAnswer);
         revealAnswerBtn.addEventListener('click', revealAnswer);
         newGameBtn.addEventListener('click', startNewPracticeGame);
         scoreInputGame.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if (!submitAnswerBtn.disabled) { submitAnswerBtn.click(); } } });
         scoreInputGame.addEventListener('input', () => { if (!submitAnswerBtn.disabled) { feedbackAreaGame.innerHTML = ''; feedbackAreaGame.className = 'mt-4 text-center font-medium min-h-[2em]'; } });
-
         submitTurnScoreBtn.addEventListener('click', submitTurnScore);
         reset501GameBtn.addEventListener('click', resetCurrentLegManually);
         undoTurnBtn.addEventListener('click', undoLastTurn);
         turnScoreInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if (!submitTurnScoreBtn.disabled && !legWon) { submitTurnScoreBtn.click(); } } });
-        player1NameInput.addEventListener('input', (e) => { const newName = e.target.value || "Player 1"; player1NameDisplay.textContent = newName; playerNames[0] = newName; updateCurrentPlayerIndicator(); });
-        player2NameInput.addEventListener('input', (e) => { const newName = e.target.value || "Player 2"; player2NameDisplay.textContent = newName; playerNames[1] = newName; updateCurrentPlayerIndicator(); });
+        player1NameInput.addEventListener('input', (e) => {
+            const newName = e.target.value || "Player 1";
+            player1NameDisplay.textContent = newName; playerNames[0] = newName; updateCurrentPlayerIndicator();
+        });
+        player2NameInput.addEventListener('input', (e) => {
+            const newName = e.target.value || "Player 2";
+            player2NameDisplay.textContent = newName; playerNames[1] = newName; updateCurrentPlayerIndicator();
+        });
 
         // --- Initialization ---
         initializeGameData();
-        switchMode('lookup');
+        resetCurrentLegManually(); // Initialize 501 state on first load
+        switchMode('lookup'); // Then switch view to lookup
 
     </script>
 </body>
