@@ -33,16 +33,27 @@
         .current-player-highlight { background-color: #dcfce7; border: 2px solid #86efac; }
         button:disabled { background-color: #d1d5db; cursor: not-allowed; }
         button:disabled:hover { background-color: #d1d5db; }
-        /* Style for selected difficulty */
         input[type="radio"]:checked + label {
             background-color: #10b981; /* Emerald-500 */
             color: white;
             border-color: #059669; /* Emerald-600 */
         }
-        /* Smaller text for difficulty labels */
         .difficulty-label {
-             font-size: 0.8rem; /* Adjust as needed */
-             padding: 0.4rem 0.6rem; /* Adjust padding */
+             font-size: 0.8rem;
+             padding: 0.4rem 0.6rem;
+        }
+        /* Smaller labels for game settings */
+        .setting-label {
+            font-size: 0.875rem; /* text-sm */
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+        .setting-input {
+            padding: 0.5rem 0.75rem; /* py-2 px-3 */
+            font-size: 0.875rem; /* text-sm */
+        }
+        /* Smaller text for averages */
+        .avg-text {
+             font-size: 0.75rem; /* text-xs */
         }
     </style>
 </head>
@@ -158,37 +169,57 @@
         <div id="vsComputerModeSection" class="hidden">
             <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Play vs Computer</h2>
 
-            <div id="difficultySelectionArea" class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Select Difficulty Level (1-10):</label>
-                <div class="grid grid-cols-5 gap-1 justify-center">
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only"> <label for="diff1" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">1</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only"> <label for="diff2" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">2</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only"> <label for="diff3" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">3</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only"> <label for="diff4" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">4</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only" checked> <label for="diff5" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">5</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only"> <label for="diff6" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">6</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only"> <label for="diff7" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">7</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only"> <label for="diff8" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">8</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only"> <label for="diff9" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">9</label> </div>
-                    <div class="text-center"> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only"> <label for="diff10" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">10</label> </div>
+            <div id="vsCompSetupArea" class="mb-4 border-b pb-4">
+                <div class="grid grid-cols-2 gap-4 mb-3">
+                     <div>
+                         <label for="startScoreInputVsComp" class="setting-label block font-medium text-gray-700">Starting Score:</label>
+                         <input type="number" id="startScoreInputVsComp" value="501" min="101" step="100" class="setting-input w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-150 ease-in-out">
+                     </div>
+                     <div>
+                         <label for="legsToWinInputVsComp" class="setting-label block font-medium text-gray-700">First to (Legs):</label>
+                         <input type="number" id="legsToWinInputVsComp" value="3" min="1" class="setting-input w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-150 ease-in-out">
+                     </div>
+                </div>
+
+                <div id="difficultySelectionArea">
+                    <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Select Difficulty Level (1-10):</label>
+                    <div class="grid grid-cols-5 gap-1 justify-center">
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only"> <label for="diff1" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">1</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only"> <label for="diff2" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">2</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only"> <label for="diff3" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">3</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only"> <label for="diff4" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">4</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only" checked> <label for="diff5" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">5</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only"> <label for="diff6" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">6</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only"> <label for="diff7" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">7</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only"> <label for="diff8" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">8</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only"> <label for="diff9" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">9</label> </div>
+                        <div class="text-center"> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only"> <label for="diff10" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">10</label> </div>
+                    </div>
                 </div>
             </div>
 
-            <button id="startVsCompGameBtn" class="w-full mb-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
-                Start Game
+            <button id="startVsCompGameBtn" class="w-full my-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                Start Match
             </button>
 
             <div id="vsCompScoreDisplay" class="hidden">
                 <div class="grid grid-cols-2 gap-2 mb-3">
+                    {/* Player Box */}
                     <div id="player1DisplayVsComp" class="p-2 sm:p-3 border border-gray-200 rounded-lg text-center transition-colors duration-300">
                         <p id="player1NameDisplayVsComp" class="font-semibold text-base sm:text-lg text-gray-800 truncate">You</p>
                         <p id="player1ScoreVsComp" class="text-2xl sm:text-4xl font-bold text-indigo-600">501</p>
-                        <p class="text-xs text-gray-500 mt-1">(Wins: <span id="player1GamesWonVsComp" class="font-medium">0</span>)</p>
+                        <p class="avg-text text-gray-500 mt-1">(<span id="player1GamesWonVsComp" class="font-medium">0</span> / <span id="targetLegsVsComp">3</span> Legs)</p>
+                        <p class="avg-text text-gray-500 mt-1">Leg Avg: <span id="legAvgDisplayVsComp" class="font-medium">-</span></p>
+                        <p class="avg-text text-gray-500">Overall Avg: <span id="overallAvgDisplayVsComp" class="font-medium">-</span></p>
                     </div>
+                    {/* Computer Box */}
                     <div id="player2DisplayVsComp" class="p-2 sm:p-3 border border-gray-200 rounded-lg text-center transition-colors duration-300">
                         <p id="player2NameDisplayVsComp" class="font-semibold text-base sm:text-lg text-gray-800 truncate">Computer</p>
                         <p id="player2ScoreVsComp" class="text-2xl sm:text-4xl font-bold text-indigo-600">501</p>
-                        <p class="text-xs text-gray-500 mt-1">(Wins: <span id="player2GamesWonVsComp" class="font-medium">0</span>)</p>
+                        <p class="avg-text text-gray-500 mt-1">(<span id="player2GamesWonVsComp" class="font-medium">0</span> / <span id="targetLegsVsComp2">3</span> Legs)</p>
+                        {/* Computer Average Displays */}
+                        <p class="avg-text text-gray-500 mt-1">Leg Avg: <span id="compLegAvgDisplayVsComp" class="font-medium">-</span></p>
+                        <p class="avg-text text-gray-500">Overall Avg: <span id="compOverallAvgDisplayVsComp" class="font-medium">-</span></p>
                     </div>
                 </div>
                 <p id="currentPlayerIndicatorVsComp" class="text-center font-semibold text-gray-700 mb-3">Current Player: -</p>
@@ -204,7 +235,7 @@
                 <div id="messageAreaVsComp" class="mt-3 text-center font-medium min-h-[2em]"></div>
                 <div id="checkoutSuggestionVsComp" class="mt-2 text-center"></div>
                 <button id="resetVsCompGameBtn" class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    Reset Game
+                    Reset Match
                 </button>
             </div>
         </div>
@@ -286,9 +317,14 @@
         const messageArea501 = document.getElementById('messageArea501');
         const checkoutSuggestion501 = document.getElementById('checkoutSuggestion501');
         const reset501GameBtn = document.getElementById('reset501GameBtn');
+        // Vs Comp Setup
+        const vsCompSetupArea = document.getElementById('vsCompSetupArea'); // Container for setup
+        const startScoreInputVsComp = document.getElementById('startScoreInputVsComp');
+        const legsToWinInputVsComp = document.getElementById('legsToWinInputVsComp');
         const difficultySelectionArea = document.getElementById('difficultySelectionArea');
-        const difficultyRadios = document.querySelectorAll('input[name="difficulty"]'); // Selects all difficulty radios
+        const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
         const startVsCompGameBtn = document.getElementById('startVsCompGameBtn');
+        // Vs Comp Gameplay
         const vsCompScoreDisplay = document.getElementById('vsCompScoreDisplay');
         const player1DisplayVsComp = document.getElementById('player1DisplayVsComp');
         const player2DisplayVsComp = document.getElementById('player2DisplayVsComp');
@@ -298,6 +334,12 @@
         const player2ScoreVsComp = document.getElementById('player2ScoreVsComp');
         const player1GamesWonVsComp = document.getElementById('player1GamesWonVsComp');
         const player2GamesWonVsComp = document.getElementById('player2GamesWonVsComp');
+        const targetLegsVsComp = document.getElementById('targetLegsVsComp'); // Span for target legs (Player 1)
+        const targetLegsVsComp2 = document.getElementById('targetLegsVsComp2'); // Span for target legs (Player 2)
+        const legAvgDisplayVsComp = document.getElementById('legAvgDisplayVsComp'); // Span for leg average
+        const overallAvgDisplayVsComp = document.getElementById('overallAvgDisplayVsComp'); // Span for overall average
+        const compLegAvgDisplayVsComp = document.getElementById('compLegAvgDisplayVsComp'); // Span for computer leg average
+        const compOverallAvgDisplayVsComp = document.getElementById('compOverallAvgDisplayVsComp'); // Span for computer overall average
         const currentPlayerIndicatorVsComp = document.getElementById('currentPlayerIndicatorVsComp');
         const turnScoreInputVsComp = document.getElementById('turnScoreInputVsComp');
         const submitTurnScoreBtnVsComp = document.getElementById('submitTurnScoreBtnVsComp');
@@ -307,122 +349,89 @@
 
         // --- State ---
         let currentMode = 'lookup';
-        let currentGameScore = 0;
+        let currentGameScore = 0; // Practice mode score
+        // Shared 501 Game State (Tracker & VsComp)
         let playerNames = ["Player 1", "Player 2"];
         let playerScores = [501, 501];
-        let playerGamesWonTally = [0, 0];
+        let playerGamesWonTally = [0, 0]; // Legs won in current match
         let currentPlayerIndex = 0;
         let legStartingPlayerIndex = 0;
         let legWon = false;
+        let matchWon = false; // Flag for Vs Comp match end
+        // 501 Tracker Specific State
         let lastPlayerScores = null;
         let lastPlayerIndex = null;
         let lastGamesWonTally = null;
         let undoPossible = false;
         let nextLegTimeoutId = null;
+        // Vs Computer Specific State
         let vsCompDifficulty = 5; // Default difficulty level (1-10)
         let computerTurnTimeoutId = null;
+        let startScore = 501; // Configurable start score
+        let legsToWin = 3; // Configurable legs to win
+        // Average Tracking State (Vs Comp)
+        let humanTotalScore = 0;
+        let humanTotalTurns = 0;
+        let humanLegScore = 0;
+        let humanLegTurns = 0;
+        let computerTotalScore = 0; // New state for computer overall avg
+        let computerTotalTurns = 0; // New state for computer overall avg
+        let computerLegScore = 0; // New state for computer leg avg
+        let computerLegTurns = 0; // New state for computer leg avg
 
         // --- Constants ---
-        const COMPUTER_TURN_DELAY = 1200; // ms
+        const COMPUTER_TURN_DELAY = 1000; // Shortened delay slightly
 
         // --- Functions ---
 
         /** Populates the finishableScores array */
-        function initializeGameData() {
+        function initializeGameData() { /* ...unchanged... */
             finishableScores = Object.keys(checkouts).map(score => parseInt(score)).filter(score => !isNaN(score)).sort((a, b) => a - b);
             console.log(`Initialized with ${finishableScores.length} possible checkout scores.`);
         }
 
         /** Starts a new practice game */
-        function startNewPracticeGame() {
+        function startNewPracticeGame() { /* ...unchanged... */
             const feedbackArea = feedbackAreaGame;
-            // Add safety checks for elements
-            if (!minScoreInput || !maxScoreInput || !feedbackArea || !gameScoreDisplay || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn) {
-                console.error("One or more practice game elements are missing!");
-                return;
-            }
-
-            let minScore = parseInt(minScoreInput.value) || 2;
-            let maxScore = parseInt(maxScoreInput.value) || 170;
-            feedbackArea.innerHTML = '';
-            feedbackArea.className = 'mt-4 text-center font-medium min-h-[2em]';
-            minScore = Math.max(2, minScore);
-            maxScore = Math.min(170, maxScore);
-            if (minScore > maxScore) {
-                displayGameFeedback('Min score cannot be greater than Max score.', 'yellow', feedbackArea);
-                gameScoreDisplay.textContent = '-';
-                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return;
-            }
+            if (!minScoreInput || !maxScoreInput || !feedbackArea || !gameScoreDisplay || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn) { console.error("One or more practice game elements are missing!"); return; }
+            let minScore = parseInt(minScoreInput.value) || 2; let maxScore = parseInt(maxScoreInput.value) || 170;
+            feedbackArea.innerHTML = ''; feedbackArea.className = 'mt-4 text-center font-medium min-h-[2em]';
+            minScore = Math.max(2, minScore); maxScore = Math.min(170, maxScore);
+            if (minScore > maxScore) { displayGameFeedback('Min score cannot be greater than Max score.', 'yellow', feedbackArea); gameScoreDisplay.textContent = '-'; scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return; }
             minScoreInput.value = minScore; maxScoreInput.value = maxScore;
             const availableScores = finishableScores.filter(score => score >= minScore && score <= maxScore);
-            if (availableScores.length === 0) {
-                displayGameFeedback(`No standard checkouts found between ${minScore} and ${maxScore}.`, 'yellow', feedbackArea);
-                gameScoreDisplay.textContent = '-';
-                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return;
-            }
-            const randomIndex = Math.floor(Math.random() * availableScores.length);
-            currentGameScore = availableScores[randomIndex];
-            gameScoreDisplay.textContent = currentGameScore;
-            scoreInputGame.value = ''; scoreInputGame.disabled = false;
-            submitAnswerBtn.disabled = false; revealAnswerBtn.disabled = false;
-            scoreInputGame.focus();
+            if (availableScores.length === 0) { displayGameFeedback(`No standard checkouts found between ${minScore} and ${maxScore}.`, 'yellow', feedbackArea); gameScoreDisplay.textContent = '-'; scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return; }
+            const randomIndex = Math.floor(Math.random() * availableScores.length); currentGameScore = availableScores[randomIndex];
+            gameScoreDisplay.textContent = currentGameScore; scoreInputGame.value = ''; scoreInputGame.disabled = false; submitAnswerBtn.disabled = false; revealAnswerBtn.disabled = false; scoreInputGame.focus();
             console.log(`New practice game started. Score: ${currentGameScore} (Range: ${minScore}-${maxScore})`);
         }
 
         /** Checks the practice game answer */
-        function checkPracticeAnswer() {
-            // Add safety checks for elements
-            if (!scoreInputGame || !feedbackAreaGame || !submitAnswerBtn || !revealAnswerBtn || !newGameBtn) {
-                console.error("One or more practice game elements are missing for checking answer!");
-                return;
-            }
-
-            const userAnswerRaw = scoreInputGame.value.trim();
-            const targetScore = currentGameScore;
-            const feedbackArea = feedbackAreaGame;
+        function checkPracticeAnswer() { /* ...unchanged... */
+            if (!scoreInputGame || !feedbackAreaGame || !submitAnswerBtn || !revealAnswerBtn || !newGameBtn) { console.error("One or more practice game elements are missing for checking answer!"); return; }
+            const userAnswerRaw = scoreInputGame.value.trim(); const targetScore = currentGameScore; const feedbackArea = feedbackAreaGame;
             if (!userAnswerRaw) { displayGameFeedback('Please enter your suggested checkout.', 'yellow', feedbackArea); return; }
             const parts = userAnswerRaw.split(/[\s,>]+/).filter(part => part.length > 0);
             const processedParts = parts.map(part => { const firstChar = part.charAt(0); if (firstChar >= '0' && firstChar <= '9') { return 'S' + part; } return part; });
-            const prefixedUserAnswer = processedParts.join(' ');
-            const correctOptions = checkouts[targetScore];
-            if (!correctOptions) {
-                console.error(`No checkout options found for score: ${targetScore}`);
-                displayGameFeedback('Internal error: Could not find checkouts.', 'red', feedbackArea);
-                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return;
-            }
+            const prefixedUserAnswer = processedParts.join(' '); const correctOptions = checkouts[targetScore];
+            if (!correctOptions) { console.error(`No checkout options found for score: ${targetScore}`); displayGameFeedback('Internal error: Could not find checkouts.', 'red', feedbackArea); scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return; }
             const normalize = (str) => str.toUpperCase().replace(/->/g, ' ').replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
-            const normalizedUserAnswer = normalize(prefixedUserAnswer);
-            const isCorrect = correctOptions.some(option => normalize(option) === normalizedUserAnswer);
-            if (isCorrect) { displayGameFeedback(`🎯 Correct! "${prefixedUserAnswer}" is a valid checkout for ${targetScore}.`, 'green', feedbackArea); }
-            else { displayGameFeedback(`Not quite! A common checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'red', feedbackArea); }
-            scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
-            newGameBtn.focus();
+            const normalizedUserAnswer = normalize(prefixedUserAnswer); const isCorrect = correctOptions.some(option => normalize(option) === normalizedUserAnswer);
+            if (isCorrect) { displayGameFeedback(`🎯 Correct! "${prefixedUserAnswer}" is a valid checkout for ${targetScore}.`, 'green', feedbackArea); } else { displayGameFeedback(`Not quite! A common checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'red', feedbackArea); }
+            scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; newGameBtn.focus();
          }
 
         /** Reveals the practice game answer */
-        function revealAnswer() {
-             // Add safety checks for elements
-             if (!feedbackAreaGame || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn || !newGameBtn) {
-                console.error("One or more practice game elements are missing for revealing answer!");
-                return;
-            }
-
-             const targetScore = currentGameScore;
-             const feedbackArea = feedbackAreaGame;
-             const correctOptions = checkouts[targetScore];
-             if (correctOptions && correctOptions.length > 0) { displayGameFeedback(`A possible checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'blue', feedbackArea); }
-             else { displayGameFeedback(`No standard checkout found for ${targetScore}.`, 'yellow', feedbackArea); console.error(`Reveal failed for score ${targetScore}.`); }
-             scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
-             newGameBtn.focus();
+        function revealAnswer() { /* ...unchanged... */
+             if (!feedbackAreaGame || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn || !newGameBtn) { console.error("One or more practice game elements are missing for revealing answer!"); return; }
+             const targetScore = currentGameScore; const feedbackArea = feedbackAreaGame; const correctOptions = checkouts[targetScore];
+             if (correctOptions && correctOptions.length > 0) { displayGameFeedback(`A possible checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'blue', feedbackArea); } else { displayGameFeedback(`No standard checkout found for ${targetScore}.`, 'yellow', feedbackArea); console.error(`Reveal failed for score ${targetScore}.`); }
+             scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; newGameBtn.focus();
         }
 
         /** Displays feedback messages */
-        function displayGameFeedback(message, type, areaElement) {
-            // Safety check for areaElement
-            if (!areaElement) {
-                console.error("Cannot display feedback, area element is missing.");
-                return;
-            }
+        function displayGameFeedback(message, type, areaElement) { /* ...unchanged... */
+            if (!areaElement) { console.error("Cannot display feedback, area element is missing."); return; }
             areaElement.innerHTML = `<p class="feedback-item">${message}</p>`; let colorClass = 'text-gray-700';
             if (type === 'green') colorClass = 'text-green-600'; if (type === 'red') colorClass = 'text-red-600';
             if (type === 'yellow') colorClass = 'text-yellow-600'; if (type === 'blue') colorClass = 'text-blue-600';
@@ -443,56 +452,88 @@
         // --- Shared 501 / Vs Comp Functions ---
 
         /** Resets the game state for the current mode */
-        function resetGame() { /* ...unchanged... */
+        function resetGame() {
              if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
              if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
-             playerScores = [501, 501]; currentPlayerIndex = 0; legStartingPlayerIndex = 0; legWon = false;
+
+             // Reset core game state
+             playerScores = [startScore, startScore]; // Use startScore state
+             currentPlayerIndex = 0;
+             legStartingPlayerIndex = 0;
+             legWon = false;
+             matchWon = false;
+
+             // Reset averages and turn counts
+             humanLegScore = 0; humanLegTurns = 0;
+             humanTotalScore = 0; humanTotalTurns = 0;
+             computerLegScore = 0; computerLegTurns = 0; // Reset computer stats
+             computerTotalScore = 0; computerTotalTurns = 0; // Reset computer stats
+             playerGamesWonTally = [0, 0]; // Reset leg wins tally
+
+             // Clear message areas
              if(messageArea501) messageArea501.textContent = '';
              if(messageAreaVsComp) messageAreaVsComp.textContent = '';
              if(checkoutSuggestion501) checkoutSuggestion501.innerHTML = '';
              if(checkoutSuggestionVsComp) checkoutSuggestionVsComp.innerHTML = '';
 
              if (currentMode === 'tracker') {
-                 // Null checks for tracker elements
-                 if (!player1NameInput || !player2NameInput || !player1NameDisplay || !player2NameDisplay || !player1Score || !player2Score || !player1GamesWon || !player2GamesWon || !turnScoreInput || !submitTurnScoreBtn || !undoTurnBtn) {
-                     console.error("One or more tracker elements missing during reset!"); return;
-                 }
+                 if (!player1NameInput || !player2NameInput || !player1NameDisplay || !player2NameDisplay || !player1Score || !player2Score || !player1GamesWon || !player2GamesWon || !turnScoreInput || !submitTurnScoreBtn || !undoTurnBtn) { console.error("One or more tracker elements missing during reset!"); return; }
                  playerNames[0] = player1NameInput.value || "Player 1"; playerNames[1] = player2NameInput.value || "Player 2";
                  player1NameDisplay.textContent = playerNames[0]; player2NameDisplay.textContent = playerNames[1];
-                 player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
+                 player1Score.textContent = startScore; player2Score.textContent = startScore;
                  player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
                  turnScoreInput.value = ''; turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false;
                  undoPossible = false; undoTurnBtn.disabled = true; updateCurrentPlayerIndicator(); turnScoreInput.focus();
                  console.log("501 tracker leg reset manually.");
              } else if (currentMode === 'vsComp') {
-                 // Null checks for Vs Comp elements
-                 if (!difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !turnScoreInputVsComp || !submitTurnScoreBtnVsComp) {
-                     console.error("One or more Vs Comp elements missing during reset!"); return;
-                 }
-                 difficultySelectionArea.classList.remove('hidden'); startVsCompGameBtn.classList.remove('hidden');
+                 if (!vsCompSetupArea || !startScoreInputVsComp || !legsToWinInputVsComp || !difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !turnScoreInputVsComp || !submitTurnScoreBtnVsComp || !legAvgDisplayVsComp || !overallAvgDisplayVsComp || !compLegAvgDisplayVsComp || !compOverallAvgDisplayVsComp) { console.error("One or more Vs Comp elements missing during reset!"); return; }
+                 // Show setup, hide game play
+                 vsCompSetupArea.classList.remove('hidden');
+                 startVsCompGameBtn.classList.remove('hidden');
                  vsCompScoreDisplay.classList.add('hidden');
-                 // Update default checked radio based on state
+                 // Enable setup inputs
+                 startScoreInputVsComp.disabled = false;
+                 legsToWinInputVsComp.disabled = false;
+                 difficultyRadios.forEach(r => r.disabled = false);
+                 // Reset displays
                  const defaultDiffRadio = document.getElementById(`diff${vsCompDifficulty}`);
                  if(defaultDiffRadio) defaultDiffRadio.checked = true;
-                 player1ScoreVsComp.textContent = '501'; player2ScoreVsComp.textContent = '501';
-                 player1GamesWonVsComp.textContent = playerGamesWonTally[0]; player2GamesWonVsComp.textContent = playerGamesWonTally[1];
+                 startScoreInputVsComp.value = startScore;
+                 legsToWinInputVsComp.value = legsToWin;
+                 player1ScoreVsComp.textContent = startScore; player2ScoreVsComp.textContent = startScore;
+                 player1GamesWonVsComp.textContent = '0'; player2GamesWonVsComp.textContent = '0';
+                 if(targetLegsVsComp) targetLegsVsComp.textContent = legsToWinInputVsComp.value || '3';
+                 if(targetLegsVsComp2) targetLegsVsComp2.textContent = legsToWinInputVsComp.value || '3';
+                 legAvgDisplayVsComp.textContent = '-'; overallAvgDisplayVsComp.textContent = '-';
+                 compLegAvgDisplayVsComp.textContent = '-'; compOverallAvgDisplayVsComp.textContent = '-'; // Reset computer averages
                  turnScoreInputVsComp.value = ''; turnScoreInputVsComp.disabled = true; submitTurnScoreBtnVsComp.disabled = true;
-                 console.log("Vs Computer game reset.");
+                 console.log("Vs Computer game reset to setup.");
              }
         }
 
         /** Starts the next leg for the current 501-based mode */
-        function startNextLeg() { /* ...unchanged... */
+        function startNextLeg() {
+            if (matchWon) return;
             if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
+
             console.log(`Starting next leg for mode: ${currentMode}...`);
-            playerScores = [501, 501]; currentPlayerIndex = (legStartingPlayerIndex + 1) % 2; legStartingPlayerIndex = currentPlayerIndex; legWon = false;
+            playerScores = [startScore, startScore];
+            currentPlayerIndex = (legStartingPlayerIndex + 1) % 2;
+            legStartingPlayerIndex = currentPlayerIndex;
+            legWon = false;
+
+            // Reset leg-specific stats
+            humanLegScore = 0; humanLegTurns = 0;
+            computerLegScore = 0; computerLegTurns = 0; // Reset computer leg stats
+
             let messageArea = currentMode === 'tracker' ? messageArea501 : messageAreaVsComp;
             let suggestionArea = currentMode === 'tracker' ? checkoutSuggestion501 : checkoutSuggestionVsComp;
             let turnInput = currentMode === 'tracker' ? turnScoreInput : turnScoreInputVsComp;
             let submitBtn = currentMode === 'tracker' ? submitTurnScoreBtn : submitTurnScoreBtnVsComp;
-            // Add null checks for elements used here
+
             if (!messageArea || !suggestionArea || !turnInput || !submitBtn) { console.error("Missing elements for starting next leg!"); return; }
 
+            // Update UI based on mode
             if (currentMode === 'tracker') {
                 if(player1Score) player1Score.textContent = playerScores[0];
                 if(player2Score) player2Score.textContent = playerScores[1];
@@ -504,12 +545,22 @@
                 if(player2ScoreVsComp) player2ScoreVsComp.textContent = playerScores[1];
                 if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = playerGamesWonTally[0];
                 if(player2GamesWonVsComp) player2GamesWonVsComp.textContent = playerGamesWonTally[1];
+                if(legAvgDisplayVsComp) legAvgDisplayVsComp.textContent = '-'; // Reset leg average display
+                if(compLegAvgDisplayVsComp) compLegAvgDisplayVsComp.textContent = '-'; // Reset computer leg average display
+                // Overall averages remain
             }
+
             messageArea.textContent = 'Next leg!'; suggestionArea.innerHTML = ''; turnInput.value = '';
             turnInput.disabled = false; submitBtn.disabled = false; nextLegTimeoutId = null;
+
             updateCurrentPlayerIndicator();
-            if (currentMode === 'vsComp' && currentPlayerIndex === 1) { turnInput.disabled = true; submitBtn.disabled = true; triggerComputerTurn(); }
-            else { turnInput.focus(); }
+
+            if (currentMode === 'vsComp' && currentPlayerIndex === 1) { // If Computer starts
+                turnInput.disabled = true; submitBtn.disabled = true;
+                triggerComputerTurn();
+            } else { // If Human starts
+                turnInput.focus();
+            }
         }
 
         /** Updates the visual highlight for the current player */
@@ -519,10 +570,7 @@
              const p1NameEl = isVsComp ? player1NameDisplayVsComp : player1NameDisplay; const p2NameEl = isVsComp ? player2NameDisplayVsComp : player2NameDisplay;
              const p1ScoreEl = isVsComp ? player1ScoreVsComp : player1Score; const p2ScoreEl = isVsComp ? player2ScoreVsComp : player2Score;
              const indicatorEl = isVsComp ? currentPlayerIndicatorVsComp : currentPlayerIndicator;
-             // Add null checks
-             if (!p1DisplayEl || !p2DisplayEl || !indicatorEl || !p1NameEl || !p2NameEl || !p1ScoreEl || !p2ScoreEl) {
-                 console.error("Missing elements for updating player indicator!"); return;
-             }
+             if (!p1DisplayEl || !p2DisplayEl || !indicatorEl || !p1NameEl || !p2NameEl || !p1ScoreEl || !p2ScoreEl) { console.error("Missing elements for updating player indicator!"); return; }
              indicatorEl.textContent = `Current Player: ${playerNames[currentPlayerIndex]}`;
              const defaultNameColor = 'text-gray-800'; const defaultScoreColor = 'text-indigo-600'; const highlightTextColor = 'text-green-800';
              const p1Elements = { display: p1DisplayEl, name: p1NameEl, score: p1ScoreEl }; const p2Elements = { display: p2DisplayEl, name: p2NameEl, score: p2ScoreEl };
@@ -532,57 +580,103 @@
         }
 
         /** Handles score submission for 501 Tracker OR Human player in Vs Comp */
-        function submitTurnScore() { /* ...unchanged... */
-            if (legWon) return;
+        function submitTurnScore() {
+            if (legWon || matchWon) return;
+
             const isVsComp = currentMode === 'vsComp';
             const turnInput = isVsComp ? turnScoreInputVsComp : turnScoreInput;
             const messageArea = isVsComp ? messageAreaVsComp : messageArea501;
             const suggestionArea = isVsComp ? checkoutSuggestionVsComp : checkoutSuggestion501;
             const submitBtn = isVsComp ? submitTurnScoreBtnVsComp : submitTurnScoreBtn;
-            // Add null checks
-             if (!turnInput || !messageArea || !suggestionArea || !submitBtn) { console.error("Missing elements for submitting turn score!"); return; }
+
+            if (!turnInput || !messageArea || !suggestionArea || !submitBtn) { console.error("Missing elements for submitting turn score!"); return; }
 
             const playerIndex = currentPlayerIndex;
             messageArea.textContent = ''; suggestionArea.innerHTML = '';
-            const enteredScoreText = turnInput.value; const enteredScore = parseInt(enteredScoreText);
-            if (isNaN(enteredScore) || enteredScore < 0 || enteredScore > 180) { messageArea.textContent = 'Invalid score. Please enter 0-180.'; turnInput.select(); return; }
-            if (!isVsComp) { lastPlayerScores = [...playerScores]; lastPlayerIndex = currentPlayerIndex; lastGamesWonTally = [...playerGamesWonTally]; undoPossible = true; if(undoTurnBtn) undoTurnBtn.disabled = false; }
-            let currentScore = playerScores[playerIndex]; const potentialScore = currentScore - enteredScore;
-            if (potentialScore < 2 && potentialScore !== 0) { messageArea.textContent = `${playerNames[playerIndex]} Bust! Score remains ${currentScore}.`; }
-            else {
+
+            const enteredScoreText = turnInput.value;
+            const enteredScore = parseInt(enteredScoreText);
+            if (isNaN(enteredScore) || enteredScore < 0 || enteredScore > 180) {
+                messageArea.textContent = 'Invalid score. Please enter 0-180.';
+                turnInput.select(); return;
+            }
+
+            // Store state for potential undo (Tracker mode only)
+            if (!isVsComp) {
+                lastPlayerScores = [...playerScores]; lastPlayerIndex = currentPlayerIndex; lastGamesWonTally = [...playerGamesWonTally];
+                undoPossible = true; if(undoTurnBtn) undoTurnBtn.disabled = false;
+            }
+
+            // Update averages (only for human player, index 0)
+            if (playerIndex === 0) {
+                humanLegTurns++;
+                humanLegScore += enteredScore;
+                humanTotalTurns++;
+                humanTotalScore += enteredScore;
+                updateAverageDisplays(); // Update human averages display
+            }
+
+            let currentScore = playerScores[playerIndex];
+            const potentialScore = currentScore - enteredScore;
+
+            // Check for Bust
+            if (potentialScore < 2 && potentialScore !== 0) {
+                messageArea.textContent = `${playerNames[playerIndex]} Bust! Score remains ${currentScore}.`;
+            } else { // Valid score or win
                 playerScores[playerIndex] = potentialScore;
-                // Update correct score display with null checks
+                // Update correct score display
                 if (isVsComp) { if(player1ScoreVsComp) player1ScoreVsComp.textContent = potentialScore; }
-                else {
-                    const scoreEl = document.getElementById(`player${playerIndex + 1}Score`);
-                    if(scoreEl) scoreEl.textContent = potentialScore;
-                }
+                else { const scoreEl = document.getElementById(`player${playerIndex + 1}Score`); if(scoreEl) scoreEl.textContent = potentialScore; }
+
                 messageArea.textContent = `${playerNames[playerIndex]} scored ${enteredScore}. Remaining: ${potentialScore}`;
+
+                // Check for Leg Win
                 if (potentialScore === 0) {
+                    legWon = true;
                     playerGamesWonTally[playerIndex]++;
-                    // Update correct wins display with null checks
-                     if (isVsComp) { if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = playerGamesWonTally[playerIndex]; }
-                     else {
-                         const winsEl = document.getElementById(`player${playerIndex + 1}GamesWon`);
-                         if(winsEl) winsEl.textContent = playerGamesWonTally[playerIndex];
-                     }
-                    displayGameFeedback(`GAME SHOT! Leg to ${playerNames[playerIndex]}! Starting next leg in 2s...`, 'green', messageArea);
-                    legWon = true; turnInput.disabled = true; submitBtn.disabled = true; if (!isVsComp && undoTurnBtn) undoTurnBtn.disabled = true;
-                    nextLegTimeoutId = setTimeout(startNextLeg, 2000); return;
+                    // Update wins display
+                    if (isVsComp) {
+                        if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = playerGamesWonTally[playerIndex];
+                    } else {
+                        const winsEl = document.getElementById(`player${playerIndex + 1}GamesWon`);
+                        if(winsEl) winsEl.textContent = playerGamesWonTally[playerIndex];
+                    }
+
+                    // Check for Match Win (Vs Comp only)
+                    if (isVsComp && playerGamesWonTally[playerIndex] >= legsToWin) {
+                        matchWon = true;
+                        // Determine winner message color based on who won
+                        const winColor = playerIndex === 0 ? 'green' : 'red';
+                        displayGameFeedback(`MATCH WON by ${playerNames[playerIndex]}! (${playerGamesWonTally[0]} - ${playerGamesWonTally[1]})`, winColor, messageArea);
+                        turnInput.disabled = true; submitBtn.disabled = true;
+                    } else {
+                        // Leg won, but match continues
+                        displayGameFeedback(`GAME SHOT! Leg to ${playerNames[playerIndex]}! Starting next leg in 2s...`, 'green', messageArea);
+                        turnInput.disabled = true; submitBtn.disabled = true; if (!isVsComp && undoTurnBtn) undoTurnBtn.disabled = true;
+                        nextLegTimeoutId = setTimeout(startNextLeg, 2000);
+                    }
+                    return; // Exit function early after win
                 }
             }
-            currentPlayerIndex = (currentPlayerIndex + 1) % 2; updateCurrentPlayerIndicator(); turnInput.value = '';
-            if (isVsComp) { turnInput.disabled = true; submitBtn.disabled = true; triggerComputerTurn(); }
-            else { displayCheckoutSuggestion(playerScores[currentPlayerIndex], suggestionArea); turnInput.focus(); }
+
+            // If no win, switch Player
+            currentPlayerIndex = (currentPlayerIndex + 1) % 2;
+            updateCurrentPlayerIndicator();
+            turnInput.value = '';
+
+            if (isVsComp) { // Vs Comp: Trigger computer's turn
+                turnInput.disabled = true; submitBtn.disabled = true;
+                triggerComputerTurn();
+            } else { // Tracker: Show suggestion for next player
+                displayCheckoutSuggestion(playerScores[currentPlayerIndex], suggestionArea);
+                turnInput.focus();
+            }
         }
 
         /** Undoes the last turn in 501 Tracker mode */
         function undoLastTurn() { /* ...unchanged... */
              if (currentMode !== 'tracker' || !undoPossible || lastPlayerScores === null) { console.log("Undo not possible."); return; }
-             // Add null checks for elements
-             if (!player1Score || !player2Score || !player1GamesWon || !player2GamesWon || !messageArea501 || !checkoutSuggestion501 || !turnScoreInput || !submitTurnScoreBtn || !undoTurnBtn) {
-                 console.error("Missing tracker elements for undo!"); return;
-             }
+             if (!player1Score || !player2Score || !player1GamesWon || !player2GamesWon || !messageArea501 || !checkoutSuggestion501 || !turnScoreInput || !submitTurnScoreBtn || !undoTurnBtn) { console.error("Missing tracker elements for undo!"); return; }
              console.log("Undoing last turn..."); playerScores = [...lastPlayerScores]; currentPlayerIndex = lastPlayerIndex; playerGamesWonTally = [...lastGamesWonTally]; legWon = false;
              if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
              player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1]; player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
@@ -592,8 +686,7 @@
         }
 
         /** Displays checkout suggestion if applicable */
-        function displayCheckoutSuggestion(score, suggestionArea) {
-             // Add null check
+        function displayCheckoutSuggestion(score, suggestionArea) { /* ...unchanged... */
              if (!suggestionArea) { console.error("Missing suggestion area element!"); return; }
              suggestionArea.innerHTML = '';
              if (score > 1 && score <= 170 && !impossibleCheckouts.includes(score)) {
@@ -606,32 +699,109 @@
 
         /** Sets up the UI for Vs Computer mode */
         function setupVsComputerUI() {
-             // Add null checks
-             if (!difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1GamesWonVsComp || !player2GamesWonVsComp) {
+             if (!vsCompSetupArea || !startScoreInputVsComp || !legsToWinInputVsComp || !difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1GamesWonVsComp || !player2GamesWonVsComp || !legAvgDisplayVsComp || !overallAvgDisplayVsComp || !compLegAvgDisplayVsComp || !compOverallAvgDisplayVsComp) {
                  console.error("Missing Vs Comp setup elements!"); return;
              }
-             difficultySelectionArea.classList.remove('hidden'); startVsCompGameBtn.classList.remove('hidden'); vsCompScoreDisplay.classList.add('hidden');
+             vsCompSetupArea.classList.remove('hidden');
+             startVsCompGameBtn.classList.remove('hidden');
+             vsCompScoreDisplay.classList.add('hidden');
+             startScoreInputVsComp.disabled = false;
+             legsToWinInputVsComp.disabled = false;
+             difficultyRadios.forEach(r => r.disabled = false);
              const defaultDiffRadio = document.getElementById(`diff${vsCompDifficulty}`);
              if(defaultDiffRadio) defaultDiffRadio.checked = true;
-             playerGamesWonTally = [0, 0]; player1GamesWonVsComp.textContent = '0'; player2GamesWonVsComp.textContent = '0';
+             startScoreInputVsComp.value = startScore;
+             legsToWinInputVsComp.value = legsToWin;
+             // Reset all stats and displays fully
+             playerGamesWonTally = [0, 0];
+             humanTotalScore = 0; humanTotalTurns = 0;
+             humanLegScore = 0; humanLegTurns = 0;
+             computerTotalScore = 0; computerTotalTurns = 0;
+             computerLegScore = 0; computerLegTurns = 0;
+             if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = '0';
+             if(player2GamesWonVsComp) player2GamesWonVsComp.textContent = '0';
+             updateAverageDisplays(); // Update human averages (will show '-')
+             updateComputerAverageDisplays(); // Update computer averages (will show '-')
         }
 
         /** Starts a new game against the computer */
         function startVsComputerGame() {
-             // Add null checks
-             if (!difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1NameDisplayVsComp || !player2NameDisplayVsComp || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !messageAreaVsComp || !checkoutSuggestionVsComp || !turnScoreInputVsComp || !submitTurnScoreBtnVsComp) {
+             if (!vsCompSetupArea || !startScoreInputVsComp || !legsToWinInputVsComp || !difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1NameDisplayVsComp || !player2NameDisplayVsComp || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !messageAreaVsComp || !checkoutSuggestionVsComp || !turnScoreInputVsComp || !submitTurnScoreBtnVsComp || !targetLegsVsComp || !targetLegsVsComp2 || !legAvgDisplayVsComp || !overallAvgDisplayVsComp || !compLegAvgDisplayVsComp || !compOverallAvgDisplayVsComp) {
                  console.error("Missing Vs Comp game elements!"); return;
              }
-             console.log(`Starting Vs Comp game with difficulty Level: ${vsCompDifficulty}`);
-             difficultySelectionArea.classList.add('hidden'); startVsCompGameBtn.classList.add('hidden'); vsCompScoreDisplay.classList.remove('hidden');
-             playerNames = ["You", "Computer"]; playerScores = [501, 501]; legStartingPlayerIndex = 0; currentPlayerIndex = legStartingPlayerIndex; legWon = false;
-             player1NameDisplayVsComp.textContent = playerNames[0]; player2NameDisplayVsComp.textContent = playerNames[1];
-             player1ScoreVsComp.textContent = playerScores[0]; player2ScoreVsComp.textContent = playerScores[1];
-             player1GamesWonVsComp.textContent = playerGamesWonTally[0]; player2GamesWonVsComp.textContent = playerGamesWonTally[1];
-             messageAreaVsComp.textContent = 'Game started! Your throw.'; checkoutSuggestionVsComp.innerHTML = '';
+             // Read and validate settings
+             const inputStartScore = parseInt(startScoreInputVsComp.value) || 501;
+             const inputLegsToWin = parseInt(legsToWinInputVsComp.value) || 3;
+             startScore = Math.max(101, inputStartScore);
+             legsToWin = Math.max(1, inputLegsToWin);
+             startScoreInputVsComp.value = startScore;
+             legsToWinInputVsComp.value = legsToWin;
+
+             console.log(`Starting Vs Comp match: Start ${startScore}, First to ${legsToWin} legs, Difficulty Level: ${vsCompDifficulty}`);
+
+             // Hide setup, show game play
+             vsCompSetupArea.classList.add('hidden');
+             startVsCompGameBtn.classList.add('hidden');
+             vsCompScoreDisplay.classList.remove('hidden');
+             // Disable setup inputs during game
+             startScoreInputVsComp.disabled = true;
+             legsToWinInputVsComp.disabled = true;
+             difficultyRadios.forEach(r => r.disabled = true);
+
+             // Initialize game state
+             playerNames = ["You", "Computer"];
+             playerScores = [startScore, startScore];
+             // playerGamesWonTally reset in setupVsComputerUI
+             legStartingPlayerIndex = 0; // Human starts first leg
+             currentPlayerIndex = legStartingPlayerIndex;
+             legWon = false;
+             matchWon = false;
+             humanLegScore = 0; humanLegTurns = 0; // Reset leg stats
+             computerLegScore = 0; computerLegTurns = 0; // Reset computer leg stats
+             // Overall stats persist until full reset in setupVsComputerUI
+
+             // Update UI
+             player1NameDisplayVsComp.textContent = playerNames[0];
+             player2NameDisplayVsComp.textContent = playerNames[1];
+             player1ScoreVsComp.textContent = playerScores[0];
+             player2ScoreVsComp.textContent = playerScores[1];
+             player1GamesWonVsComp.textContent = playerGamesWonTally[0];
+             player2GamesWonVsComp.textContent = playerGamesWonTally[1];
+             targetLegsVsComp.textContent = legsToWin; // Show target legs
+             targetLegsVsComp2.textContent = legsToWin; // Show target legs
+             updateAverageDisplays(); // Update human displays
+             updateComputerAverageDisplays(); // Update computer displays
+
+             messageAreaVsComp.textContent = `Match Started! First to ${legsToWin} legs. Your throw.`;
+             checkoutSuggestionVsComp.innerHTML = '';
+
              updateCurrentPlayerIndicator();
-             turnScoreInputVsComp.disabled = false; submitTurnScoreBtnVsComp.disabled = false; turnScoreInputVsComp.value = ''; turnScoreInputVsComp.focus();
+
+             // Enable human input
+             turnScoreInputVsComp.disabled = false;
+             submitTurnScoreBtnVsComp.disabled = false;
+             turnScoreInputVsComp.value = '';
+             turnScoreInputVsComp.focus();
         }
+
+        /** Updates the human average displays */
+        function updateAverageDisplays() {
+            if (!legAvgDisplayVsComp || !overallAvgDisplayVsComp) return; // Safety check
+            const legAvg = humanLegTurns > 0 ? (humanLegScore / humanLegTurns * 3).toFixed(1) : '-';
+            legAvgDisplayVsComp.textContent = legAvg;
+            const overallAvg = humanTotalTurns > 0 ? (humanTotalScore / humanTotalTurns * 3).toFixed(1) : '-';
+            overallAvgDisplayVsComp.textContent = overallAvg;
+        }
+
+         /** Updates the computer average displays */
+        function updateComputerAverageDisplays() {
+            if (!compLegAvgDisplayVsComp || !compOverallAvgDisplayVsComp) return; // Safety check
+            const legAvg = computerLegTurns > 0 ? (computerLegScore / computerLegTurns * 3).toFixed(1) : '-';
+            compLegAvgDisplayVsComp.textContent = legAvg;
+            const overallAvg = computerTotalTurns > 0 ? (computerTotalScore / computerTotalTurns * 3).toFixed(1) : '-';
+            compOverallAvgDisplayVsComp.textContent = overallAvg;
+        }
+
 
         /** Generates a score for the computer based on difficulty level (1-10) */
         function generateComputerScore(remainingScore) { /* ...unchanged... */
@@ -648,31 +818,69 @@
 
         /** Handles the computer's turn */
         function computerTurn() {
-            if (legWon) return;
-            const playerIndex = 1; const messageArea = messageAreaVsComp; const suggestionArea = checkoutSuggestionVsComp;
-            const turnInput = turnScoreInputVsComp; const submitBtn = submitTurnScoreBtnVsComp;
-            // Add null checks
-             if (!messageArea || !suggestionArea || !turnInput || !submitBtn || !player2ScoreVsComp || !player2GamesWonVsComp) {
+            if (legWon || matchWon) return;
+
+            const playerIndex = 1; // Computer is always player 1
+            const messageArea = messageAreaVsComp;
+            const suggestionArea = checkoutSuggestionVsComp;
+            const turnInput = turnScoreInputVsComp;
+            const submitBtn = submitTurnScoreBtnVsComp;
+
+            if (!messageArea || !suggestionArea || !turnInput || !submitBtn || !player2ScoreVsComp || !player2GamesWonVsComp) {
                  console.error("Missing Vs Comp elements for computer turn!"); return;
              }
 
             messageArea.textContent = `${playerNames[playerIndex]} is thinking...`; suggestionArea.innerHTML = '';
-            let currentScore = playerScores[playerIndex]; let computerScore = generateComputerScore(currentScore);
-            let potentialScore = currentScore - computerScore; let bust = (potentialScore < 2 && potentialScore !== 0);
-            if (bust) { messageArea.textContent = `${playerNames[playerIndex]} scored ${computerScore}. Bust! Score remains ${currentScore}.`; }
-            else {
-                playerScores[playerIndex] = potentialScore; player2ScoreVsComp.textContent = potentialScore;
+
+            let currentScore = playerScores[playerIndex];
+            let computerScore = generateComputerScore(currentScore);
+            let potentialScore = currentScore - computerScore;
+            let bust = (potentialScore < 2 && potentialScore !== 0);
+
+            // Update computer averages (only if not bust)
+            if (!bust) {
+                computerLegTurns++;
+                computerLegScore += computerScore;
+                computerTotalTurns++;
+                computerTotalScore += computerScore;
+                updateComputerAverageDisplays(); // Update computer average display
+            }
+
+            if (bust) {
+                messageArea.textContent = `${playerNames[playerIndex]} scored ${computerScore}. Bust! Score remains ${currentScore}.`;
+            } else {
+                playerScores[playerIndex] = potentialScore;
+                player2ScoreVsComp.textContent = potentialScore;
                 messageArea.textContent = `${playerNames[playerIndex]} scored ${computerScore}. Remaining: ${potentialScore}`;
+
+                // Check for Leg Win
                 if (potentialScore === 0) {
-                    playerGamesWonTally[playerIndex]++; player2GamesWonVsComp.textContent = playerGamesWonTally[playerIndex];
-                    displayGameFeedback(`GAME SHOT! ${playerNames[playerIndex]} wins the leg! Starting next leg in 2s...`, 'red', messageArea);
-                    legWon = true; turnInput.disabled = true; submitBtn.disabled = true;
-                    nextLegTimeoutId = setTimeout(startNextLeg, 2000); return;
+                    legWon = true;
+                    playerGamesWonTally[playerIndex]++;
+                    player2GamesWonVsComp.textContent = playerGamesWonTally[playerIndex];
+
+                    // Check for Match Win
+                    if (playerGamesWonTally[playerIndex] >= legsToWin) {
+                        matchWon = true;
+                        displayGameFeedback(`MATCH WON by ${playerNames[playerIndex]}! (${playerGamesWonTally[0]} - ${playerGamesWonTally[1]})`, 'red', messageArea);
+                        turnInput.disabled = true; submitBtn.disabled = true;
+                    } else {
+                        // Leg won, but match continues
+                        displayGameFeedback(`GAME SHOT! Leg to ${playerNames[playerIndex]}! Starting next leg in 2s...`, 'red', messageArea);
+                        turnInput.disabled = true; submitBtn.disabled = true;
+                        nextLegTimeoutId = setTimeout(startNextLeg, 2000);
+                    }
+                    return; // Exit early after win
                 }
             }
-            currentPlayerIndex = 0; updateCurrentPlayerIndicator();
+
+            // If no win, switch back to Human
+            currentPlayerIndex = 0;
+            updateCurrentPlayerIndicator();
             displayCheckoutSuggestion(playerScores[0], suggestionArea);
-            turnInput.disabled = false; submitBtn.disabled = false; turnInput.focus();
+            turnInput.disabled = false;
+            submitBtn.disabled = false;
+            turnInput.focus();
         }
 
         /** Wrapper to trigger computer turn with delay */
@@ -681,40 +889,37 @@
              computerTurnTimeoutId = setTimeout(computerTurn, COMPUTER_TURN_DELAY);
         }
 
+
         // --- Mode Switching ---
         /** Switches between the different modes */
         function switchMode(modeToSwitchTo) { /* ...unchanged... */
             console.log(`Switching mode to: ${modeToSwitchTo}`); currentMode = modeToSwitchTo;
-            // Null checks for sections
             if(!lookupModeSection || !gameModeSection || !scoreTrackerModeSection || !vsComputerModeSection) { console.error("One or more mode sections missing!"); return; }
             lookupModeSection.classList.add('hidden'); gameModeSection.classList.add('hidden'); scoreTrackerModeSection.classList.add('hidden'); vsComputerModeSection.classList.add('hidden');
-            // Null checks for buttons
             if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
             if(gameModeBtn) gameModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
             if(trackerModeBtn) trackerModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
             if(vsCompModeBtn) vsCompModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
-
             if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; } if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
             let focusElement = null;
             switch (modeToSwitchTo) {
                 case 'lookup': lookupModeSection.classList.remove('hidden'); if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); focusElement = scoreInputLookup; break;
-                case 'practice': gameModeSection.classList.remove('hidden'); if(gameModeBtn) gameModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); startNewPracticeGame(); focusElement = scoreInputGame; break;
+                case 'game': gameModeSection.classList.remove('hidden'); if(gameModeBtn) gameModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); startNewPracticeGame(); focusElement = scoreInputGame; break;
                 case 'tracker': scoreTrackerModeSection.classList.remove('hidden'); if(trackerModeBtn) trackerModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); playerNames[0] = player1NameInput?.value || "Player 1"; playerNames[1] = player2NameInput?.value || "Player 2"; if(player1NameDisplay) player1NameDisplay.textContent = playerNames[0]; if(player2NameDisplay) player2NameDisplay.textContent = playerNames[1]; if(player1Score) player1Score.textContent = playerScores[0]; if(player2Score) player2Score.textContent = playerScores[1]; if(player1GamesWon) player1GamesWon.textContent = playerGamesWonTally[0]; if(player2GamesWon) player2GamesWon.textContent = playerGamesWonTally[1]; updateCurrentPlayerIndicator(); focusElement = turnScoreInput; break;
-                case 'vsComp': vsComputerModeSection.classList.remove('hidden'); if(vsCompModeBtn) vsCompModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); setupVsComputerUI(); focusElement = document.querySelector('input[name="difficulty"]:checked + label'); break;
+                case 'vsComp': vsComputerModeSection.classList.remove('hidden'); if(vsCompModeBtn) vsCompModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); resetGame(); focusElement = document.querySelector('input[name="difficulty"]:checked + label'); break;
                 default: currentMode = 'lookup'; lookupModeSection.classList.remove('hidden'); if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); focusElement = scoreInputLookup; break;
             }
-            // Add null check for focusElement
             if (focusElement && typeof focusElement.focus === 'function' && !focusElement.disabled) { setTimeout(() => focusElement.focus(), 50); }
+            else if (focusElement && focusElement.nodeName === 'LABEL') { const radioId = focusElement.getAttribute('for'); const radioToFocus = document.getElementById(radioId); if (radioToFocus && typeof radioToFocus.focus === 'function') { setTimeout(() => radioToFocus.focus(), 50); } }
         }
 
         // --- Event Listeners ---
-        // Add null checks before adding listeners
         if(lookupModeBtn) lookupModeBtn.addEventListener('click', () => switchMode('lookup'));
         if(gameModeBtn) gameModeBtn.addEventListener('click', () => switchMode('game'));
         if(trackerModeBtn) trackerModeBtn.addEventListener('click', () => switchMode('tracker'));
         if(vsCompModeBtn) vsCompModeBtn.addEventListener('click', () => switchMode('vsComp'));
         if(calculateBtnLookup) calculateBtnLookup.addEventListener('click', displayLookupCheckouts);
-        if(scoreInputLookup) { scoreInputLookup.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); calculateBtnLookup.click(); } }); scoreInputLookup.addEventListener('input', () => { messageAreaLookup.textContent = ''; }); }
+        if(scoreInputLookup) { scoreInputLookup.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); calculateBtnLookup.click(); } }); scoreInputLookup.addEventListener('input', () => { if(messageAreaLookup) messageAreaLookup.textContent = ''; }); }
         if(submitAnswerBtn) submitAnswerBtn.addEventListener('click', checkPracticeAnswer);
         if(revealAnswerBtn) revealAnswerBtn.addEventListener('click', revealAnswer);
         if(newGameBtn) newGameBtn.addEventListener('click', startNewPracticeGame);
@@ -729,7 +934,7 @@
         if(startVsCompGameBtn) startVsCompGameBtn.addEventListener('click', startVsComputerGame);
         if(submitTurnScoreBtnVsComp) submitTurnScoreBtnVsComp.addEventListener('click', submitTurnScore);
         if(resetVsCompGameBtn) resetVsCompGameBtn.addEventListener('click', resetGame);
-        if(turnScoreInputVsComp) turnScoreInputVsComp.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnVsComp.disabled && !legWon) submitTurnScoreBtnVsComp.click(); } });
+        if(turnScoreInputVsComp) turnScoreInputVsComp.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnVsComp.disabled && !legWon && !matchWon) submitTurnScoreBtnVsComp.click(); } });
 
         // --- Initialization ---
         initializeGameData();
