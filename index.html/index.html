@@ -9,67 +9,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic styling and animations */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
-            /* Ensure body takes at least screen height */
+            background-color: #f3f4f6;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        /* Fade-in animation for results/feedback */
         .result-item, .feedback-item {
             opacity: 0;
             transform: translateY(10px);
             animation: fadeIn 0.5s ease-out forwards;
         }
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        /* Style placeholder text */
-        input::placeholder {
-            color: #9ca3af; /* Gray-400 */
-            opacity: 1;
-        }
-        /* Mode button styling */
-        .mode-button-active {
-            background-color: #dc2626; /* Red-600 */
-            color: white;
-        }
-        .mode-button-inactive {
-            background-color: #e5e7eb; /* Gray-200 */
-            color: #374151; /* Gray-700 */
-        }
-        /* Utility to hide elements */
-        .hidden {
-            display: none;
-        }
-        /* Hide number input spinners (cross-browser) */
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        input::placeholder { color: #9ca3af; opacity: 1; }
+        .mode-button-active { background-color: #dc2626; color: white; }
+        .mode-button-inactive { background-color: #e5e7eb; color: #374151; }
+        .hidden { display: none; }
         input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        .current-player-highlight { background-color: #dcfce7; border: 2px solid #86efac; }
+        button:disabled { background-color: #d1d5db; cursor: not-allowed; }
+        button:disabled:hover { background-color: #d1d5db; }
+        /* Style for selected difficulty */
+        input[type="radio"]:checked + label {
+            background-color: #10b981; /* Emerald-500 */
+            color: white;
+            border-color: #059669; /* Emerald-600 */
         }
-        input[type=number] {
-            -moz-appearance: textfield; /* Firefox */
-        }
-        /* Highlight for current player in 501 */
-        .current-player-highlight {
-            background-color: #dcfce7; /* Green-100 */
-            border: 2px solid #86efac; /* Green-300 */
-        }
-        /* Disabled button styling */
-        button:disabled {
-            background-color: #d1d5db; /* Gray-300 */
-            cursor: not-allowed;
-        }
-        button:disabled:hover {
-             background-color: #d1d5db; /* Keep same color on hover when disabled */
+        /* Smaller text for difficulty labels */
+        .difficulty-label {
+             font-size: 0.8rem; /* Adjust as needed */
+             padding: 0.4rem 0.6rem; /* Adjust padding */
         }
     </style>
 </head>
@@ -82,6 +55,7 @@
             <button id="lookupModeBtn" class="mode-button mode-button-active px-3 py-2 rounded-lg font-medium transition duration-150 ease-in-out text-sm sm:text-base">Checkout Lookup</button>
             <button id="gameModeBtn" class="mode-button mode-button-inactive px-3 py-2 rounded-lg font-medium transition duration-150 ease-in-out text-sm sm:text-base">Practice Game</button>
             <button id="trackerModeBtn" class="mode-button mode-button-inactive px-3 py-2 rounded-lg font-medium transition duration-150 ease-in-out text-sm sm:text-base">501 Score Tracker</button>
+            <button id="vsCompModeBtn" class="mode-button mode-button-inactive px-3 py-2 rounded-lg font-medium transition duration-150 ease-in-out text-sm sm:text-base">Vs Computer</button>
         </div>
 
         <div id="lookupModeSection">
@@ -180,12 +154,66 @@
                  Reset Leg
              </button>
         </div>
+
+        <div id="vsComputerModeSection" class="hidden">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Play vs Computer</h2>
+
+            <div id="difficultySelectionArea" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Select Difficulty Level (1-10):</label>
+                <div class="grid grid-cols-5 gap-1 justify-center">
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only"> <label for="diff1" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">1</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only"> <label for="diff2" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">2</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only"> <label for="diff3" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">3</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only"> <label for="diff4" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">4</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only" checked> <label for="diff5" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">5</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only"> <label for="diff6" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">6</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only"> <label for="diff7" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">7</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only"> <label for="diff8" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">8</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only"> <label for="diff9" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">9</label> </div>
+                    <div class="text-center"> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only"> <label for="diff10" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">10</label> </div>
+                </div>
+            </div>
+
+            <button id="startVsCompGameBtn" class="w-full mb-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                Start Game
+            </button>
+
+            <div id="vsCompScoreDisplay" class="hidden">
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <div id="player1DisplayVsComp" class="p-2 sm:p-3 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                        <p id="player1NameDisplayVsComp" class="font-semibold text-base sm:text-lg text-gray-800 truncate">You</p>
+                        <p id="player1ScoreVsComp" class="text-2xl sm:text-4xl font-bold text-indigo-600">501</p>
+                        <p class="text-xs text-gray-500 mt-1">(Wins: <span id="player1GamesWonVsComp" class="font-medium">0</span>)</p>
+                    </div>
+                    <div id="player2DisplayVsComp" class="p-2 sm:p-3 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                        <p id="player2NameDisplayVsComp" class="font-semibold text-base sm:text-lg text-gray-800 truncate">Computer</p>
+                        <p id="player2ScoreVsComp" class="text-2xl sm:text-4xl font-bold text-indigo-600">501</p>
+                        <p class="text-xs text-gray-500 mt-1">(Wins: <span id="player2GamesWonVsComp" class="font-medium">0</span>)</p>
+                    </div>
+                </div>
+                <p id="currentPlayerIndicatorVsComp" class="text-center font-semibold text-gray-700 mb-3">Current Player: -</p>
+                <div class="mb-3">
+                    <label for="turnScoreInputVsComp" class="block text-sm font-medium text-gray-700 mb-2">Enter your score this turn (0-180):</label>
+                    <input type="number" id="turnScoreInputVsComp" name="turnScoreInputVsComp" placeholder="e.g., 100" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
+                </div>
+                <div class="flex flex-col sm:flex-row gap-2 mb-3">
+                    <button id="submitTurnScoreBtnVsComp" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Submit Score
+                    </button>
+                </div>
+                <div id="messageAreaVsComp" class="mt-3 text-center font-medium min-h-[2em]"></div>
+                <div id="checkoutSuggestionVsComp" class="mt-2 text-center"></div>
+                <button id="resetVsCompGameBtn" class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    Reset Game
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <script>
         // --- Checkout Data (Standard Finishes) ---
-        // Comprehensive list of standard checkouts from 170 down to 2.
-        const checkouts = {
+        const checkouts = { /* ... data unchanged ... */
             170: ["T20 -> T20 -> DB"], 167: ["T20 -> T19 -> DB"], 164: ["T20 -> T18 -> DB", "T19 -> T19 -> DB"], 161: ["T20 -> T17 -> DB"], 160: ["T20 -> T20 -> D20"],
             158: ["T20 -> T20 -> D19"], 157: ["T20 -> T19 -> D20"], 156: ["T20 -> T20 -> D18"], 155: ["T20 -> T19 -> D19"], 154: ["T20 -> T18 -> D20"], 153: ["T20 -> T19 -> D18"],
             152: ["T20 -> T20 -> D16"], 151: ["T20 -> T17 -> D20"], 150: ["T20 -> T18 -> D18", "T19 -> T19 -> D18"], 149: ["T20 -> T19 -> D16"], 148: ["T20 -> T16 -> D20"],
@@ -217,25 +245,22 @@
             16: ["D8"], 15: ["S7 -> D4"], 14: ["D7", "S6 -> D4"], 13: ["S5 -> D4"], 12: ["D6", "S4 -> D4"], 11: ["S3 -> D4"], 10: ["D5", "S2 -> D4"], 9: ["S1 -> D4"],
             8: ["D4"], 7: ["S3 -> D2"], 6: ["D3"], 5: ["S1 -> D2"], 4: ["D2"], 3: ["S1 -> D1"], 2: ["D1"],
         };
-        // Scores impossible to finish in 3 darts
         const impossibleCheckouts = [169, 168, 166, 165, 163, 162, 159];
-        // Array to hold scores that have checkouts listed
         let finishableScores = [];
 
         // --- DOM Elements ---
-        // Get references to all interactive elements on the page
         const lookupModeBtn = document.getElementById('lookupModeBtn');
         const gameModeBtn = document.getElementById('gameModeBtn');
         const trackerModeBtn = document.getElementById('trackerModeBtn');
+        const vsCompModeBtn = document.getElementById('vsCompModeBtn');
         const lookupModeSection = document.getElementById('lookupModeSection');
         const gameModeSection = document.getElementById('gameModeSection');
         const scoreTrackerModeSection = document.getElementById('scoreTrackerModeSection');
-        // Lookup Mode Elements
+        const vsComputerModeSection = document.getElementById('vsComputerModeSection');
         const scoreInputLookup = document.getElementById('scoreInputLookup');
         const calculateBtnLookup = document.getElementById('calculateBtnLookup');
         const checkoutListLookup = document.getElementById('checkoutListLookup');
         const messageAreaLookup = document.getElementById('messageAreaLookup');
-        // Game Mode Elements
         const minScoreInput = document.getElementById('minScoreInput');
         const maxScoreInput = document.getElementById('maxScoreInput');
         const gameScoreDisplay = document.getElementById('gameScoreDisplay');
@@ -244,7 +269,6 @@
         const revealAnswerBtn = document.getElementById('revealAnswerBtn');
         const feedbackAreaGame = document.getElementById('feedbackAreaGame');
         const newGameBtn = document.getElementById('newGameBtn');
-        // 501 Tracker Mode Elements
         const player1NameInput = document.getElementById('player1NameInput');
         const player2NameInput = document.getElementById('player2NameInput');
         const player1NameDisplay = document.getElementById('player1NameDisplay');
@@ -262,9 +286,27 @@
         const messageArea501 = document.getElementById('messageArea501');
         const checkoutSuggestion501 = document.getElementById('checkoutSuggestion501');
         const reset501GameBtn = document.getElementById('reset501GameBtn');
+        const difficultySelectionArea = document.getElementById('difficultySelectionArea');
+        const difficultyRadios = document.querySelectorAll('input[name="difficulty"]'); // Selects all difficulty radios
+        const startVsCompGameBtn = document.getElementById('startVsCompGameBtn');
+        const vsCompScoreDisplay = document.getElementById('vsCompScoreDisplay');
+        const player1DisplayVsComp = document.getElementById('player1DisplayVsComp');
+        const player2DisplayVsComp = document.getElementById('player2DisplayVsComp');
+        const player1NameDisplayVsComp = document.getElementById('player1NameDisplayVsComp');
+        const player2NameDisplayVsComp = document.getElementById('player2NameDisplayVsComp');
+        const player1ScoreVsComp = document.getElementById('player1ScoreVsComp');
+        const player2ScoreVsComp = document.getElementById('player2ScoreVsComp');
+        const player1GamesWonVsComp = document.getElementById('player1GamesWonVsComp');
+        const player2GamesWonVsComp = document.getElementById('player2GamesWonVsComp');
+        const currentPlayerIndicatorVsComp = document.getElementById('currentPlayerIndicatorVsComp');
+        const turnScoreInputVsComp = document.getElementById('turnScoreInputVsComp');
+        const submitTurnScoreBtnVsComp = document.getElementById('submitTurnScoreBtnVsComp');
+        const messageAreaVsComp = document.getElementById('messageAreaVsComp');
+        const checkoutSuggestionVsComp = document.getElementById('checkoutSuggestionVsComp');
+        const resetVsCompGameBtn = document.getElementById('resetVsCompGameBtn');
 
         // --- State ---
-        // Variables to hold the current state of the games
+        let currentMode = 'lookup';
         let currentGameScore = 0;
         let playerNames = ["Player 1", "Player 2"];
         let playerScores = [501, 501];
@@ -277,19 +319,29 @@
         let lastGamesWonTally = null;
         let undoPossible = false;
         let nextLegTimeoutId = null;
+        let vsCompDifficulty = 5; // Default difficulty level (1-10)
+        let computerTurnTimeoutId = null;
 
-        // --- Functions --- (JavaScript logic remains the same)
+        // --- Constants ---
+        const COMPUTER_TURN_DELAY = 1200; // ms
 
+        // --- Functions ---
+
+        /** Populates the finishableScores array */
         function initializeGameData() {
-            finishableScores = Object.keys(checkouts)
-                                   .map(score => parseInt(score))
-                                   .filter(score => !isNaN(score))
-                                   .sort((a, b) => a - b);
-            console.log(`Initialized practice game with ${finishableScores.length} possible scores.`);
+            finishableScores = Object.keys(checkouts).map(score => parseInt(score)).filter(score => !isNaN(score)).sort((a, b) => a - b);
+            console.log(`Initialized with ${finishableScores.length} possible checkout scores.`);
         }
 
+        /** Starts a new practice game */
         function startNewPracticeGame() {
             const feedbackArea = feedbackAreaGame;
+            // Add safety checks for elements
+            if (!minScoreInput || !maxScoreInput || !feedbackArea || !gameScoreDisplay || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn) {
+                console.error("One or more practice game elements are missing!");
+                return;
+            }
+
             let minScore = parseInt(minScoreInput.value) || 2;
             let maxScore = parseInt(maxScoreInput.value) || 170;
             feedbackArea.innerHTML = '';
@@ -299,263 +351,390 @@
             if (minScore > maxScore) {
                 displayGameFeedback('Min score cannot be greater than Max score.', 'yellow', feedbackArea);
                 gameScoreDisplay.textContent = '-';
-                scoreInputGame.disabled = true;
-                submitAnswerBtn.disabled = true;
-                revealAnswerBtn.disabled = true;
-                return;
+                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return;
             }
-            minScoreInput.value = minScore;
-            maxScoreInput.value = maxScore;
+            minScoreInput.value = minScore; maxScoreInput.value = maxScore;
             const availableScores = finishableScores.filter(score => score >= minScore && score <= maxScore);
             if (availableScores.length === 0) {
                 displayGameFeedback(`No standard checkouts found between ${minScore} and ${maxScore}.`, 'yellow', feedbackArea);
                 gameScoreDisplay.textContent = '-';
-                scoreInputGame.disabled = true;
-                submitAnswerBtn.disabled = true;
-                revealAnswerBtn.disabled = true;
-                return;
+                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return;
             }
             const randomIndex = Math.floor(Math.random() * availableScores.length);
             currentGameScore = availableScores[randomIndex];
             gameScoreDisplay.textContent = currentGameScore;
-            scoreInputGame.value = '';
-            scoreInputGame.disabled = false;
-            submitAnswerBtn.disabled = false;
-            revealAnswerBtn.disabled = false;
+            scoreInputGame.value = ''; scoreInputGame.disabled = false;
+            submitAnswerBtn.disabled = false; revealAnswerBtn.disabled = false;
             scoreInputGame.focus();
             console.log(`New practice game started. Score: ${currentGameScore} (Range: ${minScore}-${maxScore})`);
         }
 
+        /** Checks the practice game answer */
         function checkPracticeAnswer() {
+            // Add safety checks for elements
+            if (!scoreInputGame || !feedbackAreaGame || !submitAnswerBtn || !revealAnswerBtn || !newGameBtn) {
+                console.error("One or more practice game elements are missing for checking answer!");
+                return;
+            }
+
             const userAnswerRaw = scoreInputGame.value.trim();
             const targetScore = currentGameScore;
             const feedbackArea = feedbackAreaGame;
-            if (!userAnswerRaw) {
-                displayGameFeedback('Please enter your suggested checkout.', 'yellow', feedbackArea);
-                return;
-            }
+            if (!userAnswerRaw) { displayGameFeedback('Please enter your suggested checkout.', 'yellow', feedbackArea); return; }
             const parts = userAnswerRaw.split(/[\s,>]+/).filter(part => part.length > 0);
-            const processedParts = parts.map(part => {
-                const firstChar = part.charAt(0);
-                if (firstChar >= '0' && firstChar <= '9') { return 'S' + part; }
-                return part;
-            });
+            const processedParts = parts.map(part => { const firstChar = part.charAt(0); if (firstChar >= '0' && firstChar <= '9') { return 'S' + part; } return part; });
             const prefixedUserAnswer = processedParts.join(' ');
             const correctOptions = checkouts[targetScore];
             if (!correctOptions) {
                 console.error(`No checkout options found for score: ${targetScore}`);
-                displayGameFeedback('Internal error: Could not find checkouts for this score.', 'red', feedbackArea);
-                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
-                return;
+                displayGameFeedback('Internal error: Could not find checkouts.', 'red', feedbackArea);
+                scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true; return;
             }
             const normalize = (str) => str.toUpperCase().replace(/->/g, ' ').replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
             const normalizedUserAnswer = normalize(prefixedUserAnswer);
             const isCorrect = correctOptions.some(option => normalize(option) === normalizedUserAnswer);
-            if (isCorrect) {
-                displayGameFeedback(`🎯 Correct! "${prefixedUserAnswer}" is a valid checkout for ${targetScore}. Well done!`, 'green', feedbackArea);
-            } else {
-                displayGameFeedback(`Not quite! A common checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'red', feedbackArea);
-            }
+            if (isCorrect) { displayGameFeedback(`🎯 Correct! "${prefixedUserAnswer}" is a valid checkout for ${targetScore}.`, 'green', feedbackArea); }
+            else { displayGameFeedback(`Not quite! A common checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'red', feedbackArea); }
             scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
             newGameBtn.focus();
-        }
+         }
 
+        /** Reveals the practice game answer */
         function revealAnswer() {
-            const targetScore = currentGameScore;
-            const feedbackArea = feedbackAreaGame;
-            const correctOptions = checkouts[targetScore];
-            if (correctOptions && correctOptions.length > 0) {
-                displayGameFeedback(`A possible checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'blue', feedbackArea);
-            } else {
-                 displayGameFeedback(`No standard checkout found for ${targetScore}.`, 'yellow', feedbackArea);
-                 console.error(`Attempted to reveal answer for score ${targetScore}, but no options found.`);
+             // Add safety checks for elements
+             if (!feedbackAreaGame || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn || !newGameBtn) {
+                console.error("One or more practice game elements are missing for revealing answer!");
+                return;
             }
-            scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
-            newGameBtn.focus();
+
+             const targetScore = currentGameScore;
+             const feedbackArea = feedbackAreaGame;
+             const correctOptions = checkouts[targetScore];
+             if (correctOptions && correctOptions.length > 0) { displayGameFeedback(`A possible checkout for ${targetScore} is: <strong class="block mt-1">${correctOptions[0]}</strong>`, 'blue', feedbackArea); }
+             else { displayGameFeedback(`No standard checkout found for ${targetScore}.`, 'yellow', feedbackArea); console.error(`Reveal failed for score ${targetScore}.`); }
+             scoreInputGame.disabled = true; submitAnswerBtn.disabled = true; revealAnswerBtn.disabled = true;
+             newGameBtn.focus();
         }
 
+        /** Displays feedback messages */
         function displayGameFeedback(message, type, areaElement) {
-            areaElement.innerHTML = `<p class="feedback-item">${message}</p>`;
-            let colorClass = 'text-gray-700';
-            if (type === 'green') colorClass = 'text-green-600';
-            if (type === 'red') colorClass = 'text-red-600';
-            if (type === 'yellow') colorClass = 'text-yellow-600';
-            if (type === 'blue') colorClass = 'text-blue-600';
-            areaElement.className = `mt-4 text-center font-medium ${colorClass}`;
-        }
-
-        function displayLookupCheckouts() {
-            const score = parseInt(scoreInputLookup.value);
-            messageAreaLookup.textContent = ''; checkoutListLookup.innerHTML = '';
-            if (isNaN(score)) { messageAreaLookup.textContent = 'Please enter a valid number.'; return; }
-            if (score < 2 || score > 170) {
-                messageAreaLookup.textContent = 'Score must be between 2 and 170.';
-                checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">-</p>'; return;
+            // Safety check for areaElement
+            if (!areaElement) {
+                console.error("Cannot display feedback, area element is missing.");
+                return;
             }
-            if (impossibleCheckouts.includes(score)) {
-                messageAreaLookup.textContent = `Score ${score} is not possible to checkout with 3 darts.`;
-                checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">Aim to leave a finishable score.</p>'; return;
+            areaElement.innerHTML = `<p class="feedback-item">${message}</p>`; let colorClass = 'text-gray-700';
+            if (type === 'green') colorClass = 'text-green-600'; if (type === 'red') colorClass = 'text-red-600';
+            if (type === 'yellow') colorClass = 'text-yellow-600'; if (type === 'blue') colorClass = 'text-blue-600';
+            areaElement.className = `mt-3 text-center font-medium min-h-[2em] ${colorClass}`;
+        }
+
+        /** Displays checkout lookup results */
+        function displayLookupCheckouts() { /* ...unchanged... */
+             const score = parseInt(scoreInputLookup.value); messageAreaLookup.textContent = ''; checkoutListLookup.innerHTML = '';
+             if (isNaN(score)) { messageAreaLookup.textContent = 'Please enter a valid number.'; return; }
+             if (score < 2 || score > 170) { messageAreaLookup.textContent = 'Score must be between 2 and 170.'; checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">-</p>'; return; }
+             if (impossibleCheckouts.includes(score)) { messageAreaLookup.textContent = `Score ${score} is impossible to checkout.`; checkoutListLookup.innerHTML = '<p class="text-gray-500 text-center">Aim to leave a finishable score.</p>'; return; }
+             const options = checkouts[score];
+             if (options && options.length > 0) { options.forEach((option, index) => { const div = document.createElement('div'); div.className = 'bg-green-100 p-3 rounded-md text-green-800 font-medium result-item shadow-sm'; div.style.animationDelay = `${index * 0.05}s`; div.textContent = option; checkoutListLookup.appendChild(div); }); }
+             else { let suggestion = "No standard checkout listed. Aim for a preferred double."; if (score > 1 && score <= 40 && score % 2 !== 0) { suggestion = `Hit S${score - (score-1)} (${score-1}) to leave D${(score-1)/2}.`; } else if (score > 40 && score <= 60) { suggestion = `Aim for S${score - 40} to leave D20, or S${score - 50} to leave DB.`; } checkoutListLookup.innerHTML = `<p class="text-gray-600 p-3 bg-yellow-100 rounded-md">${suggestion}</p>`; }
+        }
+
+        // --- Shared 501 / Vs Comp Functions ---
+
+        /** Resets the game state for the current mode */
+        function resetGame() { /* ...unchanged... */
+             if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
+             if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
+             playerScores = [501, 501]; currentPlayerIndex = 0; legStartingPlayerIndex = 0; legWon = false;
+             if(messageArea501) messageArea501.textContent = '';
+             if(messageAreaVsComp) messageAreaVsComp.textContent = '';
+             if(checkoutSuggestion501) checkoutSuggestion501.innerHTML = '';
+             if(checkoutSuggestionVsComp) checkoutSuggestionVsComp.innerHTML = '';
+
+             if (currentMode === 'tracker') {
+                 // Null checks for tracker elements
+                 if (!player1NameInput || !player2NameInput || !player1NameDisplay || !player2NameDisplay || !player1Score || !player2Score || !player1GamesWon || !player2GamesWon || !turnScoreInput || !submitTurnScoreBtn || !undoTurnBtn) {
+                     console.error("One or more tracker elements missing during reset!"); return;
+                 }
+                 playerNames[0] = player1NameInput.value || "Player 1"; playerNames[1] = player2NameInput.value || "Player 2";
+                 player1NameDisplay.textContent = playerNames[0]; player2NameDisplay.textContent = playerNames[1];
+                 player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
+                 player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
+                 turnScoreInput.value = ''; turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false;
+                 undoPossible = false; undoTurnBtn.disabled = true; updateCurrentPlayerIndicator(); turnScoreInput.focus();
+                 console.log("501 tracker leg reset manually.");
+             } else if (currentMode === 'vsComp') {
+                 // Null checks for Vs Comp elements
+                 if (!difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !turnScoreInputVsComp || !submitTurnScoreBtnVsComp) {
+                     console.error("One or more Vs Comp elements missing during reset!"); return;
+                 }
+                 difficultySelectionArea.classList.remove('hidden'); startVsCompGameBtn.classList.remove('hidden');
+                 vsCompScoreDisplay.classList.add('hidden');
+                 // Update default checked radio based on state
+                 const defaultDiffRadio = document.getElementById(`diff${vsCompDifficulty}`);
+                 if(defaultDiffRadio) defaultDiffRadio.checked = true;
+                 player1ScoreVsComp.textContent = '501'; player2ScoreVsComp.textContent = '501';
+                 player1GamesWonVsComp.textContent = playerGamesWonTally[0]; player2GamesWonVsComp.textContent = playerGamesWonTally[1];
+                 turnScoreInputVsComp.value = ''; turnScoreInputVsComp.disabled = true; submitTurnScoreBtnVsComp.disabled = true;
+                 console.log("Vs Computer game reset.");
+             }
+        }
+
+        /** Starts the next leg for the current 501-based mode */
+        function startNextLeg() { /* ...unchanged... */
+            if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
+            console.log(`Starting next leg for mode: ${currentMode}...`);
+            playerScores = [501, 501]; currentPlayerIndex = (legStartingPlayerIndex + 1) % 2; legStartingPlayerIndex = currentPlayerIndex; legWon = false;
+            let messageArea = currentMode === 'tracker' ? messageArea501 : messageAreaVsComp;
+            let suggestionArea = currentMode === 'tracker' ? checkoutSuggestion501 : checkoutSuggestionVsComp;
+            let turnInput = currentMode === 'tracker' ? turnScoreInput : turnScoreInputVsComp;
+            let submitBtn = currentMode === 'tracker' ? submitTurnScoreBtn : submitTurnScoreBtnVsComp;
+            // Add null checks for elements used here
+            if (!messageArea || !suggestionArea || !turnInput || !submitBtn) { console.error("Missing elements for starting next leg!"); return; }
+
+            if (currentMode === 'tracker') {
+                if(player1Score) player1Score.textContent = playerScores[0];
+                if(player2Score) player2Score.textContent = playerScores[1];
+                if(player1GamesWon) player1GamesWon.textContent = playerGamesWonTally[0];
+                if(player2GamesWon) player2GamesWon.textContent = playerGamesWonTally[1];
+                undoPossible = false; if(undoTurnBtn) undoTurnBtn.disabled = true;
+            } else if (currentMode === 'vsComp') {
+                if(player1ScoreVsComp) player1ScoreVsComp.textContent = playerScores[0];
+                if(player2ScoreVsComp) player2ScoreVsComp.textContent = playerScores[1];
+                if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = playerGamesWonTally[0];
+                if(player2GamesWonVsComp) player2GamesWonVsComp.textContent = playerGamesWonTally[1];
             }
-            const options = checkouts[score];
-            if (options && options.length > 0) {
-                options.forEach((option, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'bg-green-100 p-3 rounded-md text-green-800 font-medium result-item shadow-sm';
-                    div.style.animationDelay = `${index * 0.05}s`; div.textContent = option;
-                    checkoutListLookup.appendChild(div);
-                });
-            } else {
-                let suggestion = "No standard checkout listed. Aim to leave a preferred double (e.g., 32, 40).";
-                if (score > 1 && score <= 40 && score % 2 !== 0) { suggestion = `Hit S${score - (score-1)} (${score-1}) to leave D${(score-1)/2}.`; }
-                else if (score > 40 && score <= 60) { suggestion = `Aim for S${score - 40} to leave D20, or S${score - 50} to leave DB.`; }
-                checkoutListLookup.innerHTML = `<p class="text-gray-600 p-3 bg-yellow-100 rounded-md">${suggestion}</p>`;
-            }
+            messageArea.textContent = 'Next leg!'; suggestionArea.innerHTML = ''; turnInput.value = '';
+            turnInput.disabled = false; submitBtn.disabled = false; nextLegTimeoutId = null;
+            updateCurrentPlayerIndicator();
+            if (currentMode === 'vsComp' && currentPlayerIndex === 1) { turnInput.disabled = true; submitBtn.disabled = true; triggerComputerTurn(); }
+            else { turnInput.focus(); }
         }
 
-        function startNextLeg() {
-            console.log("Starting next leg automatically...");
-            playerScores = [501, 501]; currentPlayerIndex = (legStartingPlayerIndex + 1) % 2;
-            legStartingPlayerIndex = currentPlayerIndex; legWon = false;
-            player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
-            player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
-            messageArea501.textContent = 'Next leg!'; checkoutSuggestion501.innerHTML = '';
-            turnScoreInput.value = ''; turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false;
-            lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null;
-            undoPossible = false; undoTurnBtn.disabled = true; nextLegTimeoutId = null;
-            updateCurrentPlayerIndicator(); turnScoreInput.focus();
+        /** Updates the visual highlight for the current player */
+        function updateCurrentPlayerIndicator() { /* ...unchanged... */
+             const isVsComp = currentMode === 'vsComp';
+             const p1DisplayEl = isVsComp ? player1DisplayVsComp : player1Display; const p2DisplayEl = isVsComp ? player2DisplayVsComp : player2Display;
+             const p1NameEl = isVsComp ? player1NameDisplayVsComp : player1NameDisplay; const p2NameEl = isVsComp ? player2NameDisplayVsComp : player2NameDisplay;
+             const p1ScoreEl = isVsComp ? player1ScoreVsComp : player1Score; const p2ScoreEl = isVsComp ? player2ScoreVsComp : player2Score;
+             const indicatorEl = isVsComp ? currentPlayerIndicatorVsComp : currentPlayerIndicator;
+             // Add null checks
+             if (!p1DisplayEl || !p2DisplayEl || !indicatorEl || !p1NameEl || !p2NameEl || !p1ScoreEl || !p2ScoreEl) {
+                 console.error("Missing elements for updating player indicator!"); return;
+             }
+             indicatorEl.textContent = `Current Player: ${playerNames[currentPlayerIndex]}`;
+             const defaultNameColor = 'text-gray-800'; const defaultScoreColor = 'text-indigo-600'; const highlightTextColor = 'text-green-800';
+             const p1Elements = { display: p1DisplayEl, name: p1NameEl, score: p1ScoreEl }; const p2Elements = { display: p2DisplayEl, name: p2NameEl, score: p2ScoreEl };
+             const activePlayer = (currentPlayerIndex === 0) ? p1Elements : p2Elements; const inactivePlayer = (currentPlayerIndex === 0) ? p2Elements : p1Elements;
+             activePlayer.display.classList.add('current-player-highlight'); activePlayer.name.classList.remove(defaultNameColor); activePlayer.name.classList.add(highlightTextColor); activePlayer.score.classList.remove(defaultScoreColor); activePlayer.score.classList.add(highlightTextColor);
+             inactivePlayer.display.classList.remove('current-player-highlight'); inactivePlayer.name.classList.remove(highlightTextColor); inactivePlayer.name.classList.add(defaultNameColor); inactivePlayer.score.classList.remove(highlightTextColor); inactivePlayer.score.classList.add(defaultScoreColor);
         }
 
-        function resetCurrentLegManually() {
-            if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
-            playerNames[0] = player1NameInput.value || "Player 1"; playerNames[1] = player2NameInput.value || "Player 2";
-            playerScores = [501, 501]; currentPlayerIndex = 0; legStartingPlayerIndex = 0; legWon = false;
-            player1NameDisplay.textContent = playerNames[0]; player2NameDisplay.textContent = playerNames[1];
-            player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
-            player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
-            messageArea501.textContent = 'Leg reset manually.'; checkoutSuggestion501.innerHTML = '';
-            turnScoreInput.value = ''; turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false;
-            lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null;
-            undoPossible = false; undoTurnBtn.disabled = true;
-            updateCurrentPlayerIndicator(); turnScoreInput.focus();
-            console.log("501 leg reset manually.");
-        }
-
-        function updateCurrentPlayerIndicator() {
-             currentPlayerIndicator.textContent = `Current Player: ${playerNames[currentPlayerIndex]}`;
-             const defaultNameColor = 'text-gray-800'; const defaultScoreColor = 'text-indigo-600';
-             const highlightTextColor = 'text-green-800';
-             const p1Elements = { display: player1Display, name: player1NameDisplay, score: player1Score };
-             const p2Elements = { display: player2Display, name: player2NameDisplay, score: player2Score };
-             const activePlayer = (currentPlayerIndex === 0) ? p1Elements : p2Elements;
-             const inactivePlayer = (currentPlayerIndex === 0) ? p2Elements : p1Elements;
-             activePlayer.display.classList.add('current-player-highlight');
-             activePlayer.name.classList.remove(defaultNameColor); activePlayer.name.classList.add(highlightTextColor);
-             activePlayer.score.classList.remove(defaultScoreColor); activePlayer.score.classList.add(highlightTextColor);
-             inactivePlayer.display.classList.remove('current-player-highlight');
-             inactivePlayer.name.classList.remove(highlightTextColor); inactivePlayer.name.classList.add(defaultNameColor);
-             inactivePlayer.score.classList.remove(highlightTextColor); inactivePlayer.score.classList.add(defaultScoreColor);
-        }
-
-        function submitTurnScore() {
+        /** Handles score submission for 501 Tracker OR Human player in Vs Comp */
+        function submitTurnScore() { /* ...unchanged... */
             if (legWon) return;
-            const enteredScoreText = turnScoreInput.value; const enteredScore = parseInt(enteredScoreText);
-            const messageArea = messageArea501; const suggestionArea = checkoutSuggestion501;
+            const isVsComp = currentMode === 'vsComp';
+            const turnInput = isVsComp ? turnScoreInputVsComp : turnScoreInput;
+            const messageArea = isVsComp ? messageAreaVsComp : messageArea501;
+            const suggestionArea = isVsComp ? checkoutSuggestionVsComp : checkoutSuggestion501;
+            const submitBtn = isVsComp ? submitTurnScoreBtnVsComp : submitTurnScoreBtn;
+            // Add null checks
+             if (!turnInput || !messageArea || !suggestionArea || !submitBtn) { console.error("Missing elements for submitting turn score!"); return; }
+
+            const playerIndex = currentPlayerIndex;
             messageArea.textContent = ''; suggestionArea.innerHTML = '';
-            if (isNaN(enteredScore) || enteredScore < 0 || enteredScore > 180) {
-                messageArea.textContent = 'Invalid score. Please enter 0-180.';
-                turnScoreInput.select(); return;
-            }
-            lastPlayerScores = [...playerScores]; lastPlayerIndex = currentPlayerIndex; lastGamesWonTally = [...playerGamesWonTally];
-            undoPossible = true; undoTurnBtn.disabled = false;
-            let currentScore = playerScores[currentPlayerIndex];
-            const potentialScore = currentScore - enteredScore;
-            if (potentialScore < 2 && potentialScore !== 0) {
-                messageArea.textContent = `${playerNames[currentPlayerIndex]} Bust! Score is ${currentScore}.`;
-            } else {
-                playerScores[currentPlayerIndex] = potentialScore;
-                document.getElementById(`player${currentPlayerIndex + 1}Score`).textContent = potentialScore;
-                messageArea.textContent = `${playerNames[currentPlayerIndex]} scored ${enteredScore}. Remaining: ${potentialScore}`;
+            const enteredScoreText = turnInput.value; const enteredScore = parseInt(enteredScoreText);
+            if (isNaN(enteredScore) || enteredScore < 0 || enteredScore > 180) { messageArea.textContent = 'Invalid score. Please enter 0-180.'; turnInput.select(); return; }
+            if (!isVsComp) { lastPlayerScores = [...playerScores]; lastPlayerIndex = currentPlayerIndex; lastGamesWonTally = [...playerGamesWonTally]; undoPossible = true; if(undoTurnBtn) undoTurnBtn.disabled = false; }
+            let currentScore = playerScores[playerIndex]; const potentialScore = currentScore - enteredScore;
+            if (potentialScore < 2 && potentialScore !== 0) { messageArea.textContent = `${playerNames[playerIndex]} Bust! Score remains ${currentScore}.`; }
+            else {
+                playerScores[playerIndex] = potentialScore;
+                // Update correct score display with null checks
+                if (isVsComp) { if(player1ScoreVsComp) player1ScoreVsComp.textContent = potentialScore; }
+                else {
+                    const scoreEl = document.getElementById(`player${playerIndex + 1}Score`);
+                    if(scoreEl) scoreEl.textContent = potentialScore;
+                }
+                messageArea.textContent = `${playerNames[playerIndex]} scored ${enteredScore}. Remaining: ${potentialScore}`;
                 if (potentialScore === 0) {
-                    playerGamesWonTally[currentPlayerIndex]++;
-                    document.getElementById(`player${currentPlayerIndex + 1}GamesWon`).textContent = playerGamesWonTally[currentPlayerIndex];
-                    displayGameFeedback(`GAME SHOT! Leg to ${playerNames[currentPlayerIndex]}! Starting next leg in 2s...`, 'green', messageArea501);
-                    legWon = true;
-                    turnScoreInput.disabled = true; submitTurnScoreBtn.disabled = true; undoTurnBtn.disabled = true;
+                    playerGamesWonTally[playerIndex]++;
+                    // Update correct wins display with null checks
+                     if (isVsComp) { if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = playerGamesWonTally[playerIndex]; }
+                     else {
+                         const winsEl = document.getElementById(`player${playerIndex + 1}GamesWon`);
+                         if(winsEl) winsEl.textContent = playerGamesWonTally[playerIndex];
+                     }
+                    displayGameFeedback(`GAME SHOT! Leg to ${playerNames[playerIndex]}! Starting next leg in 2s...`, 'green', messageArea);
+                    legWon = true; turnInput.disabled = true; submitBtn.disabled = true; if (!isVsComp && undoTurnBtn) undoTurnBtn.disabled = true;
                     nextLegTimeoutId = setTimeout(startNextLeg, 2000); return;
                 }
             }
-            currentPlayerIndex = (currentPlayerIndex + 1) % 2;
-            updateCurrentPlayerIndicator();
-            const nextPlayerScore = playerScores[currentPlayerIndex];
-            suggestionArea.innerHTML = '';
-            if (nextPlayerScore > 1 && nextPlayerScore <= 170 && !impossibleCheckouts.includes(nextPlayerScore)) {
-                const suggestions = checkouts[nextPlayerScore];
-                if (suggestions && suggestions.length > 0) {
-                    suggestionArea.innerHTML = `<p class="text-sm mt-2 text-blue-600">${playerNames[currentPlayerIndex]}'s checkout: <strong>${suggestions.join(' / ')}</strong></p>`;
+            currentPlayerIndex = (currentPlayerIndex + 1) % 2; updateCurrentPlayerIndicator(); turnInput.value = '';
+            if (isVsComp) { turnInput.disabled = true; submitBtn.disabled = true; triggerComputerTurn(); }
+            else { displayCheckoutSuggestion(playerScores[currentPlayerIndex], suggestionArea); turnInput.focus(); }
+        }
+
+        /** Undoes the last turn in 501 Tracker mode */
+        function undoLastTurn() { /* ...unchanged... */
+             if (currentMode !== 'tracker' || !undoPossible || lastPlayerScores === null) { console.log("Undo not possible."); return; }
+             // Add null checks for elements
+             if (!player1Score || !player2Score || !player1GamesWon || !player2GamesWon || !messageArea501 || !checkoutSuggestion501 || !turnScoreInput || !submitTurnScoreBtn || !undoTurnBtn) {
+                 console.error("Missing tracker elements for undo!"); return;
+             }
+             console.log("Undoing last turn..."); playerScores = [...lastPlayerScores]; currentPlayerIndex = lastPlayerIndex; playerGamesWonTally = [...lastGamesWonTally]; legWon = false;
+             if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
+             player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1]; player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
+             updateCurrentPlayerIndicator(); messageArea501.textContent = 'Last turn undone.'; checkoutSuggestion501.innerHTML = '';
+             turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false; turnScoreInput.focus();
+             undoPossible = false; lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null; undoTurnBtn.disabled = true;
+        }
+
+        /** Displays checkout suggestion if applicable */
+        function displayCheckoutSuggestion(score, suggestionArea) {
+             // Add null check
+             if (!suggestionArea) { console.error("Missing suggestion area element!"); return; }
+             suggestionArea.innerHTML = '';
+             if (score > 1 && score <= 170 && !impossibleCheckouts.includes(score)) {
+                 const suggestions = checkouts[score];
+                 if (suggestions && suggestions.length > 0) { suggestionArea.innerHTML = `<p class="text-sm mt-2 text-blue-600">Checkout: <strong>${suggestions.join(' / ')}</strong></p>`; }
+             }
+        }
+
+        // --- Vs Computer Specific Functions ---
+
+        /** Sets up the UI for Vs Computer mode */
+        function setupVsComputerUI() {
+             // Add null checks
+             if (!difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1GamesWonVsComp || !player2GamesWonVsComp) {
+                 console.error("Missing Vs Comp setup elements!"); return;
+             }
+             difficultySelectionArea.classList.remove('hidden'); startVsCompGameBtn.classList.remove('hidden'); vsCompScoreDisplay.classList.add('hidden');
+             const defaultDiffRadio = document.getElementById(`diff${vsCompDifficulty}`);
+             if(defaultDiffRadio) defaultDiffRadio.checked = true;
+             playerGamesWonTally = [0, 0]; player1GamesWonVsComp.textContent = '0'; player2GamesWonVsComp.textContent = '0';
+        }
+
+        /** Starts a new game against the computer */
+        function startVsComputerGame() {
+             // Add null checks
+             if (!difficultySelectionArea || !startVsCompGameBtn || !vsCompScoreDisplay || !player1NameDisplayVsComp || !player2NameDisplayVsComp || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !messageAreaVsComp || !checkoutSuggestionVsComp || !turnScoreInputVsComp || !submitTurnScoreBtnVsComp) {
+                 console.error("Missing Vs Comp game elements!"); return;
+             }
+             console.log(`Starting Vs Comp game with difficulty Level: ${vsCompDifficulty}`);
+             difficultySelectionArea.classList.add('hidden'); startVsCompGameBtn.classList.add('hidden'); vsCompScoreDisplay.classList.remove('hidden');
+             playerNames = ["You", "Computer"]; playerScores = [501, 501]; legStartingPlayerIndex = 0; currentPlayerIndex = legStartingPlayerIndex; legWon = false;
+             player1NameDisplayVsComp.textContent = playerNames[0]; player2NameDisplayVsComp.textContent = playerNames[1];
+             player1ScoreVsComp.textContent = playerScores[0]; player2ScoreVsComp.textContent = playerScores[1];
+             player1GamesWonVsComp.textContent = playerGamesWonTally[0]; player2GamesWonVsComp.textContent = playerGamesWonTally[1];
+             messageAreaVsComp.textContent = 'Game started! Your throw.'; checkoutSuggestionVsComp.innerHTML = '';
+             updateCurrentPlayerIndicator();
+             turnScoreInputVsComp.disabled = false; submitTurnScoreBtnVsComp.disabled = false; turnScoreInputVsComp.value = ''; turnScoreInputVsComp.focus();
+        }
+
+        /** Generates a score for the computer based on difficulty level (1-10) */
+        function generateComputerScore(remainingScore) { /* ...unchanged... */
+            const difficultyLevel = parseInt(vsCompDifficulty) || 5; const targetAverage = (difficultyLevel * 10) - 5;
+            const standardDeviation = Math.max(8, 20 - difficultyLevel); const checkoutChance = difficultyLevel * 0.05;
+            const isFinishable = remainingScore <= 170 && remainingScore >= 2 && !impossibleCheckouts.includes(remainingScore) && checkouts[remainingScore];
+            if (isFinishable && Math.random() < checkoutChance) { console.log(`Computer (Level ${difficultyLevel}, Rem: ${remainingScore}) attempting checkout!`); return remainingScore; }
+            let baseScore = targetAverage + standardDeviation * (Math.random() + Math.random() - 1);
+            const outlierChance = 0.1;
+            if (Math.random() < outlierChance) { if (Math.random() < 0.5) { baseScore = Math.random() * 20; } else { if (difficultyLevel > 2) { baseScore = 100 + Math.random() * 80; } } }
+            let score = Math.round(baseScore); score = Math.max(0, Math.min(score, 180));
+            console.log(`Computer (Level ${difficultyLevel}, Rem: ${remainingScore}) generated score: ${score}`); return score;
+        }
+
+        /** Handles the computer's turn */
+        function computerTurn() {
+            if (legWon) return;
+            const playerIndex = 1; const messageArea = messageAreaVsComp; const suggestionArea = checkoutSuggestionVsComp;
+            const turnInput = turnScoreInputVsComp; const submitBtn = submitTurnScoreBtnVsComp;
+            // Add null checks
+             if (!messageArea || !suggestionArea || !turnInput || !submitBtn || !player2ScoreVsComp || !player2GamesWonVsComp) {
+                 console.error("Missing Vs Comp elements for computer turn!"); return;
+             }
+
+            messageArea.textContent = `${playerNames[playerIndex]} is thinking...`; suggestionArea.innerHTML = '';
+            let currentScore = playerScores[playerIndex]; let computerScore = generateComputerScore(currentScore);
+            let potentialScore = currentScore - computerScore; let bust = (potentialScore < 2 && potentialScore !== 0);
+            if (bust) { messageArea.textContent = `${playerNames[playerIndex]} scored ${computerScore}. Bust! Score remains ${currentScore}.`; }
+            else {
+                playerScores[playerIndex] = potentialScore; player2ScoreVsComp.textContent = potentialScore;
+                messageArea.textContent = `${playerNames[playerIndex]} scored ${computerScore}. Remaining: ${potentialScore}`;
+                if (potentialScore === 0) {
+                    playerGamesWonTally[playerIndex]++; player2GamesWonVsComp.textContent = playerGamesWonTally[playerIndex];
+                    displayGameFeedback(`GAME SHOT! ${playerNames[playerIndex]} wins the leg! Starting next leg in 2s...`, 'red', messageArea);
+                    legWon = true; turnInput.disabled = true; submitBtn.disabled = true;
+                    nextLegTimeoutId = setTimeout(startNextLeg, 2000); return;
                 }
             }
-            turnScoreInput.value = ''; turnScoreInput.focus();
+            currentPlayerIndex = 0; updateCurrentPlayerIndicator();
+            displayCheckoutSuggestion(playerScores[0], suggestionArea);
+            turnInput.disabled = false; submitBtn.disabled = false; turnInput.focus();
         }
 
-        function undoLastTurn() {
-            if (!undoPossible || lastPlayerScores === null) { console.log("Nothing to undo."); return; }
-            console.log("Undoing last turn...");
-            playerScores = [...lastPlayerScores]; currentPlayerIndex = lastPlayerIndex; playerGamesWonTally = [...lastGamesWonTally];
-            legWon = false;
-            if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
-            player1Score.textContent = playerScores[0]; player2Score.textContent = playerScores[1];
-            player1GamesWon.textContent = playerGamesWonTally[0]; player2GamesWon.textContent = playerGamesWonTally[1];
-            updateCurrentPlayerIndicator();
-            messageArea501.textContent = 'Last turn undone.'; checkoutSuggestion501.innerHTML = '';
-            turnScoreInput.disabled = false; submitTurnScoreBtn.disabled = false; turnScoreInput.focus();
-            undoPossible = false; lastPlayerScores = null; lastPlayerIndex = null; lastGamesWonTally = null; undoTurnBtn.disabled = true;
+        /** Wrapper to trigger computer turn with delay */
+        function triggerComputerTurn() { /* ...unchanged... */
+             if (computerTurnTimeoutId) clearTimeout(computerTurnTimeoutId);
+             computerTurnTimeoutId = setTimeout(computerTurn, COMPUTER_TURN_DELAY);
         }
 
-        function switchMode(modeToShow) {
-            lookupModeSection.classList.add('hidden'); gameModeSection.classList.add('hidden'); scoreTrackerModeSection.classList.add('hidden');
-            lookupModeBtn.classList.replace('mode-button-active', 'mode-button-inactive'); gameModeBtn.classList.replace('mode-button-active', 'mode-button-inactive'); trackerModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
-            if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
-            if (modeToShow === 'game') {
-                gameModeSection.classList.remove('hidden'); gameModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
-                startNewPracticeGame();
-            } else if (modeToShow === 'tracker') {
-                scoreTrackerModeSection.classList.remove('hidden'); trackerModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
-                updateCurrentPlayerIndicator(); turnScoreInput.focus();
-            } else {
-                lookupModeSection.classList.remove('hidden'); lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
-                scoreInputLookup.focus();
+        // --- Mode Switching ---
+        /** Switches between the different modes */
+        function switchMode(modeToSwitchTo) { /* ...unchanged... */
+            console.log(`Switching mode to: ${modeToSwitchTo}`); currentMode = modeToSwitchTo;
+            // Null checks for sections
+            if(!lookupModeSection || !gameModeSection || !scoreTrackerModeSection || !vsComputerModeSection) { console.error("One or more mode sections missing!"); return; }
+            lookupModeSection.classList.add('hidden'); gameModeSection.classList.add('hidden'); scoreTrackerModeSection.classList.add('hidden'); vsComputerModeSection.classList.add('hidden');
+            // Null checks for buttons
+            if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
+            if(gameModeBtn) gameModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
+            if(trackerModeBtn) trackerModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
+            if(vsCompModeBtn) vsCompModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
+
+            if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; } if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
+            let focusElement = null;
+            switch (modeToSwitchTo) {
+                case 'lookup': lookupModeSection.classList.remove('hidden'); if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); focusElement = scoreInputLookup; break;
+                case 'practice': gameModeSection.classList.remove('hidden'); if(gameModeBtn) gameModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); startNewPracticeGame(); focusElement = scoreInputGame; break;
+                case 'tracker': scoreTrackerModeSection.classList.remove('hidden'); if(trackerModeBtn) trackerModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); playerNames[0] = player1NameInput?.value || "Player 1"; playerNames[1] = player2NameInput?.value || "Player 2"; if(player1NameDisplay) player1NameDisplay.textContent = playerNames[0]; if(player2NameDisplay) player2NameDisplay.textContent = playerNames[1]; if(player1Score) player1Score.textContent = playerScores[0]; if(player2Score) player2Score.textContent = playerScores[1]; if(player1GamesWon) player1GamesWon.textContent = playerGamesWonTally[0]; if(player2GamesWon) player2GamesWon.textContent = playerGamesWonTally[1]; updateCurrentPlayerIndicator(); focusElement = turnScoreInput; break;
+                case 'vsComp': vsComputerModeSection.classList.remove('hidden'); if(vsCompModeBtn) vsCompModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); setupVsComputerUI(); focusElement = document.querySelector('input[name="difficulty"]:checked + label'); break;
+                default: currentMode = 'lookup'; lookupModeSection.classList.remove('hidden'); if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); focusElement = scoreInputLookup; break;
             }
+            // Add null check for focusElement
+            if (focusElement && typeof focusElement.focus === 'function' && !focusElement.disabled) { setTimeout(() => focusElement.focus(), 50); }
         }
 
         // --- Event Listeners ---
-        lookupModeBtn.addEventListener('click', () => switchMode('lookup'));
-        gameModeBtn.addEventListener('click', () => switchMode('game'));
-        trackerModeBtn.addEventListener('click', () => switchMode('tracker'));
-        calculateBtnLookup.addEventListener('click', displayLookupCheckouts);
-        scoreInputLookup.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); calculateBtnLookup.click(); } });
-        scoreInputLookup.addEventListener('input', () => { messageAreaLookup.textContent = ''; });
-        submitAnswerBtn.addEventListener('click', checkPracticeAnswer);
-        revealAnswerBtn.addEventListener('click', revealAnswer);
-        newGameBtn.addEventListener('click', startNewPracticeGame);
-        scoreInputGame.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if (!submitAnswerBtn.disabled) { submitAnswerBtn.click(); } } });
-        scoreInputGame.addEventListener('input', () => { if (!submitAnswerBtn.disabled) { feedbackAreaGame.innerHTML = ''; feedbackAreaGame.className = 'mt-4 text-center font-medium min-h-[2em]'; } });
-        submitTurnScoreBtn.addEventListener('click', submitTurnScore);
-        reset501GameBtn.addEventListener('click', resetCurrentLegManually);
-        undoTurnBtn.addEventListener('click', undoLastTurn);
-        turnScoreInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if (!submitTurnScoreBtn.disabled && !legWon) { submitTurnScoreBtn.click(); } } });
-        player1NameInput.addEventListener('input', (e) => {
-            const newName = e.target.value || "Player 1";
-            player1NameDisplay.textContent = newName; playerNames[0] = newName; updateCurrentPlayerIndicator();
-        });
-        player2NameInput.addEventListener('input', (e) => {
-            const newName = e.target.value || "Player 2";
-            player2NameDisplay.textContent = newName; playerNames[1] = newName; updateCurrentPlayerIndicator();
-        });
+        // Add null checks before adding listeners
+        if(lookupModeBtn) lookupModeBtn.addEventListener('click', () => switchMode('lookup'));
+        if(gameModeBtn) gameModeBtn.addEventListener('click', () => switchMode('game'));
+        if(trackerModeBtn) trackerModeBtn.addEventListener('click', () => switchMode('tracker'));
+        if(vsCompModeBtn) vsCompModeBtn.addEventListener('click', () => switchMode('vsComp'));
+        if(calculateBtnLookup) calculateBtnLookup.addEventListener('click', displayLookupCheckouts);
+        if(scoreInputLookup) { scoreInputLookup.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); calculateBtnLookup.click(); } }); scoreInputLookup.addEventListener('input', () => { messageAreaLookup.textContent = ''; }); }
+        if(submitAnswerBtn) submitAnswerBtn.addEventListener('click', checkPracticeAnswer);
+        if(revealAnswerBtn) revealAnswerBtn.addEventListener('click', revealAnswer);
+        if(newGameBtn) newGameBtn.addEventListener('click', startNewPracticeGame);
+        if(scoreInputGame) { scoreInputGame.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitAnswerBtn.disabled) submitAnswerBtn.click(); } }); scoreInputGame.addEventListener('input', () => { if (!submitAnswerBtn.disabled && feedbackAreaGame) { feedbackAreaGame.innerHTML = ''; feedbackAreaGame.className = 'mt-4 text-center font-medium min-h-[2em]'; } }); }
+        if(submitTurnScoreBtn) submitTurnScoreBtn.addEventListener('click', submitTurnScore);
+        if(reset501GameBtn) reset501GameBtn.addEventListener('click', resetGame);
+        if(undoTurnBtn) undoTurnBtn.addEventListener('click', undoLastTurn);
+        if(turnScoreInput) turnScoreInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtn.disabled && !legWon) submitTurnScoreBtn.click(); } });
+        if(player1NameInput) player1NameInput.addEventListener('input', (e) => { const n = e.target.value || "Player 1"; if(player1NameDisplay) player1NameDisplay.textContent = n; playerNames[0] = n; if(currentMode === 'tracker') updateCurrentPlayerIndicator(); });
+        if(player2NameInput) player2NameInput.addEventListener('input', (e) => { const n = e.target.value || "Player 2"; if(player2NameDisplay) player2NameDisplay.textContent = n; playerNames[1] = n; if(currentMode === 'tracker') updateCurrentPlayerIndicator(); });
+        if(difficultyRadios) difficultyRadios.forEach(radio => { radio.addEventListener('change', (e) => { vsCompDifficulty = parseInt(e.target.value); console.log(`Difficulty set to Level: ${vsCompDifficulty}`); }); });
+        if(startVsCompGameBtn) startVsCompGameBtn.addEventListener('click', startVsComputerGame);
+        if(submitTurnScoreBtnVsComp) submitTurnScoreBtnVsComp.addEventListener('click', submitTurnScore);
+        if(resetVsCompGameBtn) resetVsCompGameBtn.addEventListener('click', resetGame);
+        if(turnScoreInputVsComp) turnScoreInputVsComp.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnVsComp.disabled && !legWon) submitTurnScoreBtnVsComp.click(); } });
 
         // --- Initialization ---
         initializeGameData();
-        resetCurrentLegManually(); // Initialize 501 state on first load
-        switchMode('lookup'); // Then switch view to lookup
+        resetGame(); // Initialize shared game state
+        switchMode('lookup'); // Start in lookup mode
 
     </script>
 </body>
