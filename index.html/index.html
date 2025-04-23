@@ -47,7 +47,7 @@
         button:disabled { background-color: #d1d5db; cursor: not-allowed; color: #6b7280; } /* Tailwind gray-300, gray-500 */
         button:disabled:hover { background-color: #d1d5db; } /* Tailwind gray-300 */
 
-        /* --- NEW: Enhanced Difficulty Selection Styling --- */
+        /* Enhanced Difficulty Selection Styling */
         input[type="radio"].difficulty-radio:checked + label.difficulty-label {
             background-color: #10b981; /* Tailwind Emerald-500 */
             color: white;
@@ -99,12 +99,13 @@
             color: #4b5563; /* gray-600 */
         }
 
-        /* --- NEW: Keypad Styling Adjustment --- */
+        /* Keypad Styling */
         .keypad-button {
-            @apply border border-gray-300 rounded-lg p-3 text-lg font-medium bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition duration-150 ease-in-out flex items-center justify-center;
-             /* Slightly softer look */
+            /* Adjusted padding for potentially smaller keypad */
+            @apply border border-gray-300 rounded-lg p-2 text-lg font-medium bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition duration-150 ease-in-out flex items-center justify-center;
              background-color: #f9fafb; /* gray-50 */
              border-color: #e5e7eb; /* gray-200 */
+             min-height: 40px; /* Ensure buttons have a minimum tap height */
         }
          .keypad-button:hover {
              background-color: #f3f4f6; /* gray-100 */
@@ -116,248 +117,228 @@
          #keypadBackspace { color: #ef4444; } /* red-500 */
          #keypadEnter { color: #22c55e; } /* green-500 */
 
-        /* --- NEW: Active Match Sub-mode Indicator --- */
-        /* Add a subtle top border to the active match section */
+        /* Active Match Sub-mode Indicator */
          #pvpModeSection.match-active,
-         #vsComputerModeSection.match-active {
-            /* No extra visual indicator needed as the section itself is visible */
-         }
-         /* Style the choice buttons slightly differently when one is active */
+         #vsComputerModeSection.match-active { }
          #pvpBtn.sub-mode-active,
-         #playPcBtn.sub-mode-active {
-             opacity: 0.7; /* Dim the inactive button slightly */
-         }
+         #playPcBtn.sub-mode-active { opacity: 0.7; }
          #pvpBtn:not(.sub-mode-active),
-         #playPcBtn:not(.sub-mode-active) {
-             opacity: 1;
-         }
-         /* Style the active choice button */
-         #pvpBtn.sub-mode-active {
-            /* Optional: Add a stronger visual cue if needed */
-            /* box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); */
-         }
-         #playPcBtn.sub-mode-active {
-             /* Optional: Add a stronger visual cue if needed */
-             /* box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); */
-         }
+         #playPcBtn:not(.sub-mode-active) { opacity: 1; }
     </style>
 </head>
 <body class="p-4">
 
-    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-lg mx-auto mb-24 sm:mb-0">
-        <h1 class="text-xl sm:text-2xl font-bold text-center mb-4 text-gray-800">🎯 Darts Suite</h1>
+    <div class="flex flex-row gap-2 sm:block">
 
-        <div class="flex flex-wrap justify-center gap-2 mb-4">
-            <button id="lookupModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Checkout Lookup</button>
-            <button id="gameModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Practice Game</button>
-            <button id="playMatchModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Play Match</button>
-        </div>
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg w-full sm:w-full sm:max-w-lg sm:mx-auto sm:mb-0">
+            <h1 class="text-xl sm:text-2xl font-bold text-center mb-4 text-gray-800">🎯 Darts Suite</h1>
 
-        <div id="lookupModeSection" class="hidden">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Find a Checkout</h2>
-            <div class="mb-3">
-                <label for="scoreInputLookup" class="block text-sm font-medium text-gray-700 mb-1">Enter score remaining:</label>
-                <input type="number" id="scoreInputLookup" name="scoreInputLookup" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*">
+            <div class="flex flex-wrap justify-center gap-2 mb-4">
+                <button id="lookupModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Checkout Lookup</button>
+                <button id="gameModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Practice Game</button>
+                <button id="playMatchModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Play Match</button>
             </div>
-            <button id="calculateBtnLookup" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mb-4 text-sm sm:text-base">
-                Find Checkouts
-            </button>
-            <div id="resultsLookup" class="mt-3">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">Possible Checkouts:</h3>
-                <div id="checkoutListLookup" class="space-y-1.5 text-sm">
-                    <p class="text-gray-500">Enter a score between 2 and 170.</p>
-                </div>
-            </div>
-            <div id="messageAreaLookup" class="mt-3 text-center text-red-500 font-medium text-sm min-h-[1.25em]"></div>
-        </div>
 
-        <div id="gameModeSection" class="hidden">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Practice Your Finishes!</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                <div>
-                    <label for="minScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Min Score:</label>
-                    <input type="number" id="minScoreInput" name="minScoreInput" value="2" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
+            <div id="lookupModeSection" class="hidden">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Find a Checkout</h2>
+                <div class="mb-3">
+                    <label for="scoreInputLookup" class="block text-sm font-medium text-gray-700 mb-1">Enter score remaining:</label>
+                    <input type="number" id="scoreInputLookup" name="scoreInputLookup" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*">
                 </div>
-                <div>
-                    <label for="maxScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Max Score:</label>
-                    <input type="number" id="maxScoreInput" name="maxScoreInput" value="170" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
-                </div>
-            </div>
-            <p class="text-xs text-gray-500 text-center mb-3 -mt-2">Set range & click 'New Game'</p>
-            <div class="text-center mb-3 p-3 bg-gray-100 rounded-lg">
-                <p class="text-sm font-medium text-gray-600">Score to checkout:</p>
-                <p id="gameScoreDisplay" class="text-2xl sm:text-3xl font-bold text-red-600">-</p>
-            </div>
-            <div class="mb-3">
-                <label for="scoreInputGame" class="block text-sm font-medium text-gray-700 mb-1">Your checkout attempt (e.g., T20, D16):</label>
-                <input type="text" id="scoreInputGame" name="scoreInputGame" placeholder="T20, D20 or T19 D16 etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" autocapitalize="off" autocorrect="off">
-            </div>
-            <div class="flex flex-col gap-2 mb-3">
-                <button id="submitAnswerBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
-                    Check My Answer
+                <button id="calculateBtnLookup" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mb-4 text-sm sm:text-base">
+                    Find Checkouts
                 </button>
-                <button id="revealAnswerBtn" type="button" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
-                    Reveal Answer
-                </button>
-            </div>
-            <div id="feedbackAreaGame" class="mt-3 text-center font-medium min-h-[2em] text-sm"></div>
-            <button id="newGameBtn" type="button" class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm sm:text-base">
-                New Game
-            </button>
-        </div>
-
-        <div id="playMatchChoiceSection" class="hidden">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4 text-center">Select Match Type</h2>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <button id="pvpBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 15v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
-                    Player vs Player
-                </button>
-                <button id="playPcBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"></path><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1z"></path><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2-1a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5z" clip-rule="evenodd"></path></svg>
-                    Player vs Computer
-                </button>
-            </div>
-        </div>
-
-        <div id="pvpModeSection" class="hidden">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Player vs Player (501)</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                <div>
-                    <label for="player1NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 1:</label>
-                    <input type="text" id="player1NameInputPvp" value="Player 1" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                <div id="resultsLookup" class="mt-3">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">Possible Checkouts:</h3>
+                    <div id="checkoutListLookup" class="space-y-1.5 text-sm">
+                        <p class="text-gray-500">Enter a score between 2 and 170.</p>
+                    </div>
                 </div>
-                <div>
-                    <label for="player2NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 2:</label>
-                    <input type="text" id="player2NameInputPvp" value="Player 2" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-                </div>
+                <div id="messageAreaLookup" class="mt-3 text-center text-red-500 font-medium text-sm min-h-[1.25em]"></div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                <div id="player1DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                    <p id="player1NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 1</p>
-                    <p id="player1ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                    <p class="avg-text mt-0.5">Legs: <span id="player1GamesWonPvp" class="avg-value">0</span></p>
-                    <p class="avg-text mt-0.5">Leg Avg: <span id="p1LegAvgPvp" class="avg-value">-</span></p>
-                    <p class="avg-text">Overall Avg: <span id="p1OverallAvgPvp" class="avg-value">-</span></p>
-                </div>
-                <div id="player2DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                    <p id="player2NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 2</p>
-                    <p id="player2ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                    <p class="avg-text mt-0.5">Legs: <span id="player2GamesWonPvp" class="avg-value">0</span></p>
-                    <p class="avg-text mt-0.5">Leg Avg: <span id="p2LegAvgPvp" class="avg-value">-</span></p>
-                    <p class="avg-text">Overall Avg: <span id="p2OverallAvgPvp" class="avg-value">-</span></p>
-                </div>
-            </div>
-            <p id="currentPlayerIndicatorPvp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
-            <div class="mb-2">
-                <label for="turnScoreInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Enter score this turn (0-180):</label>
-                <input type="number" id="turnScoreInputPvp" name="turnScoreInputPvp" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 mb-2">
-                <button id="submitTurnScoreBtnPvp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
-                    Submit Score
-                </button>
-                <button id="undoTurnBtnPvp" type="button" class="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
-                    Undo
-                </button>
-            </div>
-            <div id="messageAreaPvp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
-            <div id="checkoutSuggestionPvp" class="mt-1 text-center text-sm text-blue-600 font-medium"></div>
-            <button id="resetPvpGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
-                Reset Leg
-            </button>
-        </div>
 
-        <div id="vsComputerModeSection" class="hidden">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Play vs Computer</h2>
-
-            <div id="vsCompSetupArea" class="mb-3 border-b border-gray-200 pb-3">
+            <div id="gameModeSection" class="hidden">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Practice Your Finishes!</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
-                        <label for="startScoreInputVsComp" class="setting-label block font-medium">Starting Score:</label>
-                        <input type="number" id="startScoreInputVsComp" value="501" min="101" step="100" class="setting-input w-full">
+                        <label for="minScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Min Score:</label>
+                        <input type="number" id="minScoreInput" name="minScoreInput" value="2" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="legsToWinInputVsComp" class="setting-label block font-medium">First to (Legs):</label>
-                        <input type="number" id="legsToWinInputVsComp" value="3" min="1" class="setting-input w-full">
+                        <label for="maxScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Max Score:</label>
+                        <input type="number" id="maxScoreInput" name="maxScoreInput" value="170" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
                     </div>
                 </div>
-
-                <div id="difficultySelectionArea">
-                    <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Select Difficulty Level (1-10):</label>
-                    <div class="grid grid-cols-5 gap-1.5 justify-center max-w-xs mx-auto">
-                        <div> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only difficulty-radio"> <label for="diff1" class="difficulty-label">1</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only difficulty-radio"> <label for="diff2" class="difficulty-label">2</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only difficulty-radio"> <label for="diff3" class="difficulty-label">3</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only difficulty-radio"> <label for="diff4" class="difficulty-label">4</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only difficulty-radio" checked> <label for="diff5" class="difficulty-label">5</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only difficulty-radio"> <label for="diff6" class="difficulty-label">6</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only difficulty-radio"> <label for="diff7" class="difficulty-label">7</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only difficulty-radio"> <label for="diff8" class="difficulty-label">8</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only difficulty-radio"> <label for="diff9" class="difficulty-label">9</label> </div>
-                        <div> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only difficulty-radio"> <label for="diff10" class="difficulty-label">10</label> </div>
-                    </div>
+                <p class="text-xs text-gray-500 text-center mb-3 -mt-2">Set range & click 'New Game'</p>
+                <div class="text-center mb-3 p-3 bg-gray-100 rounded-lg">
+                    <p class="text-sm font-medium text-gray-600">Score to checkout:</p>
+                    <p id="gameScoreDisplay" class="text-2xl sm:text-3xl font-bold text-red-600">-</p>
                 </div>
-                 <button id="startVsCompGameBtn" type="button" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base">
-                    Start Match
+                <div class="mb-3">
+                    <label for="scoreInputGame" class="block text-sm font-medium text-gray-700 mb-1">Your checkout attempt (e.g., T20, D16):</label>
+                    <input type="text" id="scoreInputGame" name="scoreInputGame" placeholder="T20, D20 or T19 D16 etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" autocapitalize="off" autocorrect="off">
+                </div>
+                <div class="flex flex-col gap-2 mb-3">
+                    <button id="submitAnswerBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
+                        Check My Answer
+                    </button>
+                    <button id="revealAnswerBtn" type="button" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
+                        Reveal Answer
+                    </button>
+                </div>
+                <div id="feedbackAreaGame" class="mt-3 text-center font-medium min-h-[2em] text-sm"></div>
+                <button id="newGameBtn" type="button" class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm sm:text-base">
+                    New Game
                 </button>
             </div>
 
-            <div id="vsCompScoreDisplay" class="hidden">
+            <div id="playMatchChoiceSection" class="hidden">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4 text-center">Select Match Type</h2>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="pvpBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 15v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                        Player vs Player
+                    </button>
+                    <button id="playPcBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"></path><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1z"></path><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2-1a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5z" clip-rule="evenodd"></path></svg>
+                        Player vs Computer
+                    </button>
+                </div>
+            </div>
+
+            <div id="pvpModeSection" class="hidden">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Player vs Player (501)</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                    <div id="player1DisplayVsComp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                        <p id="player1NameDisplayVsComp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">You</p>
-                        <p id="player1ScoreVsComp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                        <p class="avg-text mt-0.5">(<span id="player1GamesWonVsComp" class="avg-value">0</span> / <span id="targetLegsVsComp">3</span> Legs)</p>
-                        <p class="avg-text mt-0.5">Leg Avg: <span id="legAvgDisplayVsComp" class="avg-value">-</span></p>
-                        <p class="avg-text">Overall Avg: <span id="overallAvgDisplayVsComp" class="avg-value">-</span></p>
+                    <div>
+                        <label for="player1NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 1:</label>
+                        <input type="text" id="player1NameInputPvp" value="Player 1" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                     </div>
-                    <div id="player2DisplayVsComp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                        <p id="player2NameDisplayVsComp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Computer</p>
-                        <p id="player2ScoreVsComp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                        <p class="avg-text mt-0.5">(<span id="player2GamesWonVsComp" class="avg-value">0</span> / <span id="targetLegsVsComp2">3</span> Legs)</p>
-                        <p class="avg-text mt-0.5">Leg Avg: <span id="compLegAvgDisplayVsComp" class="avg-value">-</span></p>
-                        <p class="avg-text">Overall Avg: <span id="compOverallAvgDisplayVsComp" class="avg-value">-</span></p>
+                    <div>
+                        <label for="player2NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 2:</label>
+                        <input type="text" id="player2NameInputPvp" value="Player 2" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                     </div>
                 </div>
-                <p id="currentPlayerIndicatorVsComp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                    <div id="player1DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                        <p id="player1NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 1</p>
+                        <p id="player1ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
+                        <p class="avg-text mt-0.5">Legs: <span id="player1GamesWonPvp" class="avg-value">0</span></p>
+                        <p class="avg-text mt-0.5">Leg Avg: <span id="p1LegAvgPvp" class="avg-value">-</span></p>
+                        <p class="avg-text">Overall Avg: <span id="p1OverallAvgPvp" class="avg-value">-</span></p>
+                    </div>
+                    <div id="player2DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                        <p id="player2NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 2</p>
+                        <p id="player2ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
+                        <p class="avg-text mt-0.5">Legs: <span id="player2GamesWonPvp" class="avg-value">0</span></p>
+                        <p class="avg-text mt-0.5">Leg Avg: <span id="p2LegAvgPvp" class="avg-value">-</span></p>
+                        <p class="avg-text">Overall Avg: <span id="p2OverallAvgPvp" class="avg-value">-</span></p>
+                    </div>
+                </div>
+                <p id="currentPlayerIndicatorPvp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
                 <div class="mb-2">
-                    <label for="turnScoreInputVsComp" class="block text-sm font-medium text-gray-700 mb-1">Enter your score this turn (0-180):</label>
-                    <input type="number" id="turnScoreInputVsComp" name="turnScoreInputVsComp" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
+                    <label for="turnScoreInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Enter score this turn (0-180):</label>
+                    <input type="number" id="turnScoreInputPvp" name="turnScoreInputPvp" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
                 </div>
                 <div class="flex flex-col sm:flex-row gap-2 mb-2">
-                    <button id="submitTurnScoreBtnVsComp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
+                    <button id="submitTurnScoreBtnPvp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
                         Submit Score
                     </button>
-                    </div>
-                <div id="messageAreaVsComp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
-                <div id="checkoutSuggestionVsComp" class="mt-1 text-center text-sm text-blue-600 font-medium"></div>
-                <button id="resetVsCompGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
-                    Reset Match
+                    <button id="undoTurnBtnPvp" type="button" class="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
+                        Undo
+                    </button>
+                </div>
+                <div id="messageAreaPvp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
+                <div id="checkoutSuggestionPvp" class="mt-1 text-center text-sm text-blue-600 font-medium"></div>
+                <button id="resetPvpGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
+                    Reset Leg
                 </button>
             </div>
-        </div>
 
-        <div id="numericKeypad" class="hidden sm:hidden fixed bottom-0 left-0 right-0 bg-gray-200 p-2 shadow-[0_-2px_5px_rgba(0,0,0,0.1)] border-t border-gray-300 z-50">
-             <div class="grid grid-cols-3 gap-2">
-                <button type="button" class="keypad-button keypad-num">7</button>
-                <button type="button" class="keypad-button keypad-num">8</button>
-                <button type="button" class="keypad-button keypad-num">9</button>
-                <button type="button" class="keypad-button keypad-num">4</button>
-                <button type="button" class="keypad-button keypad-num">5</button>
-                <button type="button" class="keypad-button keypad-num">6</button>
-                <button type="button" class="keypad-button keypad-num">1</button>
-                <button type="button" class="keypad-button keypad-num">2</button>
-                <button type="button" class="keypad-button keypad-num">3</button>
-                <button type="button" id="keypadBackspace" class="keypad-button">⌫</button>
-                <button type="button" class="keypad-button keypad-num">0</button>
-                <button type="button" id="keypadEnter" class="keypad-button">↵</button>
+            <div id="vsComputerModeSection" class="hidden">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Play vs Computer</h2>
+
+                <div id="vsCompSetupArea" class="mb-3 border-b border-gray-200 pb-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label for="startScoreInputVsComp" class="setting-label block font-medium">Starting Score:</label>
+                            <input type="number" id="startScoreInputVsComp" value="501" min="101" step="100" class="setting-input w-full">
+                        </div>
+                        <div>
+                            <label for="legsToWinInputVsComp" class="setting-label block font-medium">First to (Legs):</label>
+                            <input type="number" id="legsToWinInputVsComp" value="3" min="1" class="setting-input w-full">
+                        </div>
+                    </div>
+
+                    <div id="difficultySelectionArea">
+                        <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Select Difficulty Level (1-10):</label>
+                        <div class="grid grid-cols-5 gap-1.5 justify-center max-w-xs mx-auto">
+                            <div> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only difficulty-radio"> <label for="diff1" class="difficulty-label">1</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only difficulty-radio"> <label for="diff2" class="difficulty-label">2</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only difficulty-radio"> <label for="diff3" class="difficulty-label">3</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only difficulty-radio"> <label for="diff4" class="difficulty-label">4</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only difficulty-radio" checked> <label for="diff5" class="difficulty-label">5</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only difficulty-radio"> <label for="diff6" class="difficulty-label">6</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only difficulty-radio"> <label for="diff7" class="difficulty-label">7</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only difficulty-radio"> <label for="diff8" class="difficulty-label">8</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only difficulty-radio"> <label for="diff9" class="difficulty-label">9</label> </div>
+                            <div> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only difficulty-radio"> <label for="diff10" class="difficulty-label">10</label> </div>
+                        </div>
+                    </div>
+                     <button id="startVsCompGameBtn" type="button" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base">
+                        Start Match
+                    </button>
+                </div>
+
+                <div id="vsCompScoreDisplay" class="hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                        <div id="player1DisplayVsComp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                            <p id="player1NameDisplayVsComp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">You</p>
+                            <p id="player1ScoreVsComp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
+                            <p class="avg-text mt-0.5">(<span id="player1GamesWonVsComp" class="avg-value">0</span> / <span id="targetLegsVsComp">3</span> Legs)</p>
+                            <p class="avg-text mt-0.5">Leg Avg: <span id="legAvgDisplayVsComp" class="avg-value">-</span></p>
+                            <p class="avg-text">Overall Avg: <span id="overallAvgDisplayVsComp" class="avg-value">-</span></p>
+                        </div>
+                        <div id="player2DisplayVsComp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                            <p id="player2NameDisplayVsComp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Computer</p>
+                            <p id="player2ScoreVsComp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
+                            <p class="avg-text mt-0.5">(<span id="player2GamesWonVsComp" class="avg-value">0</span> / <span id="targetLegsVsComp2">3</span> Legs)</p>
+                            <p class="avg-text mt-0.5">Leg Avg: <span id="compLegAvgDisplayVsComp" class="avg-value">-</span></p>
+                            <p class="avg-text">Overall Avg: <span id="compOverallAvgDisplayVsComp" class="avg-value">-</span></p>
+                        </div>
+                    </div>
+                    <p id="currentPlayerIndicatorVsComp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
+                    <div class="mb-2">
+                        <label for="turnScoreInputVsComp" class="block text-sm font-medium text-gray-700 mb-1">Enter your score this turn (0-180):</label>
+                        <input type="number" id="turnScoreInputVsComp" name="turnScoreInputVsComp" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2 mb-2">
+                        <button id="submitTurnScoreBtnVsComp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
+                            Submit Score
+                        </button>
+                        </div>
+                    <div id="messageAreaVsComp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
+                    <div id="checkoutSuggestionVsComp" class="mt-1 text-center text-sm text-blue-600 font-medium"></div>
+                    <button id="resetVsCompGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
+                        Reset Match
+                    </button>
+                </div>
             </div>
+        </div> <div id="numericKeypad" class="w-2/5 bg-gray-100 p-2 rounded-lg shadow-md grid grid-cols-3 gap-1 sm:hidden">
+            <button type="button" class="keypad-button keypad-num">7</button>
+            <button type="button" class="keypad-button keypad-num">8</button>
+            <button type="button" class="keypad-button keypad-num">9</button>
+            <button type="button" class="keypad-button keypad-num">4</button>
+            <button type="button" class="keypad-button keypad-num">5</button>
+            <button type="button" class="keypad-button keypad-num">6</button>
+            <button type="button" class="keypad-button keypad-num">1</button>
+            <button type="button" class="keypad-button keypad-num">2</button>
+            <button type="button" class="keypad-button keypad-num">3</button>
+            <button type="button" id="keypadBackspace" class="keypad-button">⌫</button>
+            <button type="button" class="keypad-button keypad-num">0</button>
+            <button type="button" id="keypadEnter" class="keypad-button">↵</button>
         </div>
 
-    </div>
-
-    <script>
+    </div> <script>
         // --- Checkout Data (Standard Finishes) ---
         const checkouts = {
             170: ["T20 T20 Bull"], 167: ["T20 T19 Bull"], 164: ["T20 T18 Bull", "T19 T19 Bull"], 161: ["T20 T17 Bull"], 160: ["T20 T20 D20"],
@@ -588,7 +569,7 @@
             if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
             if (practiceGameTimeoutId) { clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; } // Clear practice timer
 
-            hideKeypad(); // Hide keypad whenever mode changes
+            // Keypad visibility handled by CSS now, no JS hide needed
 
             let focusElement = null; // Element to focus after switching
 
@@ -1318,24 +1299,7 @@
         }
 
         // --- Keypad Functions ---
-
-        /** Shows the numeric keypad */
-        function showKeypad() {
-            if (numericKeypad && window.innerWidth < 640) { // Only show on small screens (Tailwind 'sm' breakpoint)
-                numericKeypad.classList.remove('hidden');
-                // Adjust body padding to prevent content from being hidden behind keypad
-                 document.body.style.paddingBottom = `${numericKeypad.offsetHeight + 16}px`; // Add keypad height + some margin
-            }
-        }
-
-        /** Hides the numeric keypad */
-        function hideKeypad() {
-            if (numericKeypad) {
-                numericKeypad.classList.add('hidden');
-                document.body.style.paddingBottom = '1rem'; // Reset body padding (default p-4)
-            }
-             activeNumericInput = null; // Clear active input when keypad hides
-        }
+        // ** REMOVED showKeypad and hideKeypad functions **
 
         /** Handles numeric input from the keypad */
         function handleKeypadInput(event) {
@@ -1374,8 +1338,8 @@
                  // }
 
                  // Optionally hide keypad after enter, or let blur handle it
-                 // hideKeypad();
-                  activeNumericInput.blur(); // Trigger blur to potentially hide keypad
+                 // hideKeypad(); // Removed
+                  activeNumericInput.blur(); // Trigger blur to potentially hide keypad (if OSK is also open)
              }
         }
 
@@ -1433,23 +1397,14 @@
                 else if (button.id === 'keypadEnter') { button.addEventListener('click', handleEnter); }
             });
         }
-        // Listen for focus/blur on numeric inputs to show/hide keypad
+        // Listen for focus on numeric inputs to set the target for the keypad
         if (numericInputs) {
             numericInputs.forEach(input => {
                 input.addEventListener('focus', (e) => {
-                     activeNumericInput = e.target;
-                     if (window.innerWidth < 640) { showKeypad(); }
+                     activeNumericInput = e.target; // Still need to know which input is active
+                     // ** REMOVED showKeypad() call **
                 });
-                 // Use a small timeout on blur to allow clicking keypad buttons before hiding
-                 input.addEventListener('blur', (e) => {
-                     setTimeout(() => {
-                         // Check if the new focused element is INSIDE the keypad
-                         const newlyFocused = document.activeElement;
-                         if (!numericKeypad?.contains(newlyFocused)) {
-                             hideKeypad();
-                         }
-                     }, 100); // 100ms delay
-                 });
+                 // ** REMOVED blur listener that called hideKeypad() **
             });
         }
 
