@@ -140,8 +140,6 @@
              /* Optional: Add a stronger visual cue if needed */
              /* box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); */
          }
-
-
     </style>
 </head>
 <body class="p-4">
@@ -788,7 +786,7 @@
 
         /** Resets the game state based on the current mode */
         function resetGame() {
-            console.log(`Resetting game for mode: ${currentMode}`);
+            console.log(`%cResetting game for mode: ${currentMode}`, 'color: orange; font-weight: bold;'); // Added style to log
             legWon = false;
             matchWon = false; // Reset match status too
             clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null;
@@ -799,6 +797,8 @@
                 // Reset PvP specific state
                 startScore = DEFAULT_START_SCORE; // PvP always uses 501
                 playerNames = [player1NameInputPvp?.value || "Player 1", player2NameInputPvp?.value || "Player 2"];
+                playerScores = [startScore, startScore]; // Reset scores here
+                console.log(`PvP Reset: Scores set to ${playerScores}`);
                 playerGamesWonTally = [0, 0];
                 legStartingPlayerIndex = 0; // Player 1 starts first leg
                 currentPlayerIndex = legStartingPlayerIndex;
@@ -825,6 +825,8 @@
                 legsToWin = parseInt(legsToWinInputVsComp?.value) || 3;
                 vsCompDifficulty = parseInt(document.querySelector('input[name="difficulty"]:checked')?.value) || 5;
                 playerNames = ["You", "Computer"];
+                playerScores = [startScore, startScore]; // Reset scores here too for consistency
+                console.log(`VsComp Reset (Setup): Scores initialized to ${playerScores}`);
                 playerGamesWonTally = [0, 0];
                 legStartingPlayerIndex = 0; // Player always starts first leg vs Comp
                 currentPlayerIndex = legStartingPlayerIndex;
@@ -841,10 +843,11 @@
 
         /** Starts the next leg for the current 501-based mode */
         function startNextLeg() {
-            console.log("Starting next leg...");
+            console.log("%cStarting next leg...", 'color: blue; font-weight: bold;');
             legWon = false;
             clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null;
             playerScores = [startScore, startScore]; // Reset scores to start score
+            console.log(`Next Leg Start: Scores reset to ${playerScores}`);
             legStartingPlayerIndex = 1 - legStartingPlayerIndex; // Alternate starting player
             currentPlayerIndex = legStartingPlayerIndex;
 
@@ -900,7 +903,7 @@
 
         /** Handles score submission for PvP OR Human player in Vs Comp */
         function submitTurnScore() {
-            let turnScoreInput, messageArea, submitBtn;
+            let turnScoreInput, messageArea, submitBtn, suggestionArea;
             let isVsComp = currentMode === 'vsComp';
             let isPvp = currentMode === 'pvp';
 
@@ -908,80 +911,91 @@
                 turnScoreInput = turnScoreInputPvp;
                 messageArea = messageAreaPvp;
                 submitBtn = submitTurnScoreBtnPvp;
-            } else if (isVsComp) {
+                suggestionArea = checkoutSuggestionPvp;
+            } else if (isVsComp && currentPlayerIndex === 0) { // Only handle human submit in VsComp
                 turnScoreInput = turnScoreInputVsComp;
                 messageArea = messageAreaVsComp;
                 submitBtn = submitTurnScoreBtnVsComp;
+                suggestionArea = checkoutSuggestionVsComp;
             } else {
+                console.warn("submitTurnScore called in incorrect mode or for computer player.");
                 return; // Should not happen if called correctly
             }
 
             if (!turnScoreInput || !messageArea || !submitBtn || legWon || matchWon) return;
 
             const scoreInput = parseInt(turnScoreInput.value);
+            console.log(`Submit Turn: Player ${currentPlayerIndex + 1} (${playerNames[currentPlayerIndex]}) entered ${scoreInput}`); // Log input
 
             // --- Input Validation ---
             if (isNaN(scoreInput) || scoreInput < 0 || scoreInput > MAX_SCORE) {
                 displayFeedback(`Invalid score. Please enter between 0 and ${MAX_SCORE}.`, 'error', messageArea);
-                turnScoreInput.focus(); // Keep focus on input
+                turnScoreInput.select(); // Select input for easy correction
+                turnScoreInput.focus();
                 return;
             }
 
             const currentScore = playerScores[currentPlayerIndex];
             const remainingScore = currentScore - scoreInput;
+            console.log(`Current Score: ${currentScore}, Remaining: ${remainingScore}`); // Log calculation
 
             // --- Bust Check ---
             if (remainingScore < 0 || remainingScore === 1) {
+                console.log("Bust!");
                 displayFeedback(`Bust! Score reset to ${currentScore}.`, 'warning', messageArea);
-                // Update averages
+                // Update averages (only turns increment on bust)
                  if (isPvp) {
                      if (currentPlayerIndex === 0) { p1LegTurns++; p1TotalTurns++; }
                      else { p2LegTurns++; p2TotalTurns++; }
-                     updatePvpAverageDisplays(); // Update display after turn count increment
-                     // Save state for undo BEFORE switching player
-                     saveUndoStatePvp();
+                     updatePvpAverageDisplays();
+                     saveUndoStatePvp(); // Save state AFTER turn increment but BEFORE switching player
                  } else { // VsComp (Human player)
                      humanLegTurnsVsComp++; humanTotalTurnsVsComp++;
-                     updateAverageDisplays(); // Update display
+                     updateAverageDisplays();
                  }
+                // ** FIX: Update UI immediately after bust to show score didn't change **
+                if (isPvp) setupPvpUI(); else setupVsComputerUI();
 
                 // Switch player
                 currentPlayerIndex = 1 - currentPlayerIndex;
-                turnScoreInput.value = ''; // Clear input for next player
+                turnScoreInput.value = ''; // Clear input
                 updateCurrentPlayerIndicator();
-                displayCheckoutSuggestion(playerScores[currentPlayerIndex], isPvp ? checkoutSuggestionPvp : checkoutSuggestionVsComp); // Suggest for next player
+                displayCheckoutSuggestion(playerScores[currentPlayerIndex], suggestionArea); // Suggest for next player
 
-                // Trigger computer turn if applicable
                 if (isVsComp && currentPlayerIndex === 1) {
                     triggerComputerTurn();
-                } else {
-                    turnScoreInput.focus(); // Focus input for next human player
+                } else if (isPvp) {
+                     turnScoreInput.focus();
                 }
                 return; // End turn processing after bust
             }
 
             // --- Valid Score - Update State ---
+            console.log(`Valid score ${scoreInput}. Updating state.`);
             if (isPvp) {
-                // Save state for undo BEFORE making changes
-                saveUndoStatePvp();
-                // Update scores and averages
+                saveUndoStatePvp(); // Save state BEFORE making changes
                 playerScores[currentPlayerIndex] = remainingScore;
                 if (currentPlayerIndex === 0) {
                     p1LegScore += scoreInput; p1TotalScore += scoreInput; p1LegTurns++; p1TotalTurns++;
                 } else {
                     p2LegScore += scoreInput; p2TotalScore += scoreInput; p2LegTurns++; p2TotalTurns++;
                 }
-                updatePvpAverageDisplays();
+                console.log(`PvP Scores Updated: ${playerScores}`);
+                setupPvpUI(); // ** FIX: Update UI immediately **
+                updatePvpAverageDisplays(); // Averages depend on updated turns/score
             } else { // VsComp (Human player)
                 playerScores[currentPlayerIndex] = remainingScore;
                 humanLegScoreVsComp += scoreInput; humanTotalScoreVsComp += scoreInput;
                 humanLegTurnsVsComp++; humanTotalTurnsVsComp++;
-                updateAverageDisplays();
+                console.log(`VsComp Scores Updated: ${playerScores}`);
+                setupVsComputerUI(); // ** FIX: Update UI immediately **
+                updateAverageDisplays(); // Averages depend on updated turns/score
             }
 
 
              // --- Leg/Game Win Check ---
             if (remainingScore === 0) {
+                console.log(`Player ${currentPlayerIndex + 1} wins the leg!`);
                 legWon = true;
                 playerGamesWonTally[currentPlayerIndex]++;
                 displayFeedback(`${playerNames[currentPlayerIndex]} wins the leg!`, 'success', messageArea);
@@ -990,11 +1004,12 @@
                 submitBtn.disabled = true;
                 if(undoTurnBtnPvp) undoTurnBtnPvp.disabled = true; // Cannot undo winning throw
 
-                // Update UI immediately
+                // Update UI immediately (already done above, but ensures final state is shown)
                 if (isPvp) setupPvpUI(); else setupVsComputerUI();
 
                 // Check for Match Win (VsComp only)
                 if (isVsComp && playerGamesWonTally[currentPlayerIndex] >= legsToWin) {
+                     console.log(`Player ${currentPlayerIndex + 1} wins the match!`);
                     matchWon = true;
                     displayFeedback(`${playerNames[currentPlayerIndex]} wins the match ${playerGamesWonTally[0]} - ${playerGamesWonTally[1]}!`, 'success', messageArea);
                     if(resetVsCompGameBtn) resetVsCompGameBtn.textContent = 'New Match'; // Change button text
@@ -1007,17 +1022,18 @@
 
             } else {
                  // --- Continue Game - Switch Player ---
+                 console.log("Leg continues. Switching player.");
                  displayFeedback(`Score: ${scoreInput}. ${remainingScore} remaining.`, 'info', messageArea);
                  currentPlayerIndex = 1 - currentPlayerIndex;
-                 turnScoreInput.value = ''; // Clear input for next player
+                 turnScoreInput.value = ''; // Clear input
                  updateCurrentPlayerIndicator();
-                 displayCheckoutSuggestion(playerScores[currentPlayerIndex], isPvp ? checkoutSuggestionPvp : checkoutSuggestionVsComp);
+                 displayCheckoutSuggestion(playerScores[currentPlayerIndex], suggestionArea);
 
                  // Trigger computer turn if applicable
                  if (isVsComp && currentPlayerIndex === 1) {
                      triggerComputerTurn();
-                 } else {
-                    turnScoreInput.focus();
+                 } else if (isPvp || (isVsComp && currentPlayerIndex === 0)) {
+                     turnScoreInput.focus();
                  }
             }
         }
@@ -1060,6 +1076,7 @@
             p2LegScore = lastTurnState.p2Score.leg;
             p2TotalScore = lastTurnState.p2Score.total;
             playerGamesWonTally = [...lastTurnState.gamesWon]; // Restore leg wins just in case
+            console.log(`PvP Scores Restored: ${playerScores}`); // Log restored scores
 
             // Update UI
             setupPvpUI(); // Refreshes scores, names, averages
@@ -1088,8 +1105,8 @@
 
              player1NameDisplayPvp.textContent = playerNames[0];
              player2NameDisplayPvp.textContent = playerNames[1];
-             player1ScorePvp.textContent = playerScores[0];
-             player2ScorePvp.textContent = playerScores[1];
+             player1ScorePvp.textContent = playerScores[0]; // Update score display
+             player2ScorePvp.textContent = playerScores[1]; // Update score display
              player1GamesWonPvp.textContent = playerGamesWonTally[0];
              player2GamesWonPvp.textContent = playerGamesWonTally[1];
              updatePvpAverageDisplays(); // Calculate and display averages
@@ -1098,14 +1115,16 @@
         /** Updates the PvP average displays */
         function updatePvpAverageDisplays() {
             // Player 1
-            const p1LegAvg = p1LegTurns > 0 ? (p1LegScore / p1LegTurns * 3).toFixed(2) : '-';
-            const p1OverallAvg = p1TotalTurns > 0 ? (p1TotalScore / p1TotalTurns * 3).toFixed(2) : '-';
+            // ** FIX: Removed * 3 from average calculation **
+            const p1LegAvg = p1LegTurns > 0 ? (p1LegScore / p1LegTurns).toFixed(2) : '-';
+            const p1OverallAvg = p1TotalTurns > 0 ? (p1TotalScore / p1TotalTurns).toFixed(2) : '-';
             if(p1LegAvgPvp) p1LegAvgPvp.textContent = p1LegAvg;
             if(p1OverallAvgPvp) p1OverallAvgPvp.textContent = p1OverallAvg;
 
             // Player 2
-            const p2LegAvg = p2LegTurns > 0 ? (p2LegScore / p2LegTurns * 3).toFixed(2) : '-';
-            const p2OverallAvg = p2TotalTurns > 0 ? (p2TotalScore / p2TotalTurns * 3).toFixed(2) : '-';
+            // ** FIX: Removed * 3 from average calculation **
+            const p2LegAvg = p2LegTurns > 0 ? (p2LegScore / p2LegTurns).toFixed(2) : '-';
+            const p2OverallAvg = p2TotalTurns > 0 ? (p2TotalScore / p2TotalTurns).toFixed(2) : '-';
              if(p2LegAvgPvp) p2LegAvgPvp.textContent = p2LegAvg;
              if(p2OverallAvgPvp) p2OverallAvgPvp.textContent = p2OverallAvg;
         }
@@ -1114,7 +1133,7 @@
 
         /** Starts a new game against the computer after setup */
         function startVsComputerGame() {
-            console.log("Starting Vs Computer game...");
+            console.log("%cStarting Vs Computer game...", 'color: green; font-weight: bold;');
             // Hide setup, show gameplay
             if(vsCompSetupArea) vsCompSetupArea.classList.add('hidden');
             if(vsCompScoreDisplay) vsCompScoreDisplay.classList.remove('hidden');
@@ -1127,7 +1146,8 @@
 
             // Reset game state with new settings
             playerNames = ["You", "Computer"];
-            playerScores = [startScore, startScore];
+            playerScores = [startScore, startScore]; // Reset scores here
+            console.log(`VsComp Start Match: Scores set to ${playerScores}`);
             playerGamesWonTally = [0, 0];
             legStartingPlayerIndex = 0; // Human always starts first leg
             currentPlayerIndex = legStartingPlayerIndex;
@@ -1153,8 +1173,8 @@
 
             player1NameDisplayVsComp.textContent = playerNames[0]; // "You"
             player2NameDisplayVsComp.textContent = playerNames[1]; // "Computer"
-            player1ScoreVsComp.textContent = playerScores[0];
-            player2ScoreVsComp.textContent = playerScores[1];
+            player1ScoreVsComp.textContent = playerScores[0]; // Update score display
+            player2ScoreVsComp.textContent = playerScores[1]; // Update score display
             player1GamesWonVsComp.textContent = playerGamesWonTally[0];
             player2GamesWonVsComp.textContent = playerGamesWonTally[1];
             targetLegsVsComp.textContent = legsToWin; // Show target legs
@@ -1165,16 +1185,18 @@
 
         /** Updates the human average displays in Vs Comp */
         function updateAverageDisplays() {
-            const legAvg = humanLegTurnsVsComp > 0 ? (humanLegScoreVsComp / humanLegTurnsVsComp * 3).toFixed(2) : '-';
-            const overallAvg = humanTotalTurnsVsComp > 0 ? (humanTotalScoreVsComp / humanTotalTurnsVsComp * 3).toFixed(2) : '-';
+            // ** FIX: Removed * 3 from average calculation **
+            const legAvg = humanLegTurnsVsComp > 0 ? (humanLegScoreVsComp / humanLegTurnsVsComp).toFixed(2) : '-';
+            const overallAvg = humanTotalTurnsVsComp > 0 ? (humanTotalScoreVsComp / humanTotalTurnsVsComp).toFixed(2) : '-';
             if(legAvgDisplayVsComp) legAvgDisplayVsComp.textContent = legAvg;
             if(overallAvgDisplayVsComp) overallAvgDisplayVsComp.textContent = overallAvg;
         }
 
         /** Updates the computer average displays in Vs Comp */
         function updateComputerAverageDisplays() {
-            const legAvg = computerLegTurns > 0 ? (computerLegScore / computerLegTurns * 3).toFixed(2) : '-';
-            const overallAvg = computerTotalTurns > 0 ? (computerTotalScore / computerTotalTurns * 3).toFixed(2) : '-';
+            // ** FIX: Removed * 3 from average calculation **
+            const legAvg = computerLegTurns > 0 ? (computerLegScore / computerLegTurns).toFixed(2) : '-';
+            const overallAvg = computerTotalTurns > 0 ? (computerTotalScore / computerTotalTurns).toFixed(2) : '-';
              if(compLegAvgDisplayVsComp) compLegAvgDisplayVsComp.textContent = legAvg;
              if(compOverallAvgDisplayVsComp) compOverallAvgDisplayVsComp.textContent = overallAvg;
         }
@@ -1244,22 +1266,27 @@
              const currentScore = playerScores[1];
              const score = generateComputerScore(currentScore);
              const remainingScore = currentScore - score;
+             console.log(`Computer scored ${score}. Current: ${currentScore}, Remaining: ${remainingScore}`); // Log score
 
              // Update state
-             playerScores[1] = remainingScore;
+             playerScores[1] = remainingScore; // Update computer's score
+             console.log(`VsComp Computer Turn: Scores updated to ${playerScores}`); // Log updated scores
              computerLegScore += score; computerTotalScore += score;
              computerLegTurns++; computerTotalTurns++;
-             updateComputerAverageDisplays(); // Update averages
+             setupVsComputerUI(); // ** FIX: Update UI immediately **
+             updateComputerAverageDisplays(); // Averages depend on updated turns/score
 
              // Check for win
              if (remainingScore === 0) {
+                 console.log("Computer wins the leg!");
                  legWon = true;
                  playerGamesWonTally[1]++;
                  displayFeedback(`Computer scores ${score} and wins the leg!`, 'success', messageAreaVsComp);
-                 setupVsComputerUI(); // Update UI
+                 setupVsComputerUI(); // Update UI (already done, but ensures final state)
 
                  // Check for Match Win
                  if (playerGamesWonTally[1] >= legsToWin) {
+                     console.log("Computer wins the match!");
                      matchWon = true;
                      displayFeedback(`Computer wins the match ${playerGamesWonTally[0]} - ${playerGamesWonTally[1]}!`, 'error', messageAreaVsComp); // Use 'error' color for loss
                      if(resetVsCompGameBtn) resetVsCompGameBtn.textContent = 'New Match';
@@ -1271,6 +1298,7 @@
                  }
              } else {
                  // Continue game - switch back to human
+                 console.log("Computer turn ends. Switching to human.");
                  displayFeedback(`Computer scores ${score}. ${remainingScore} remaining. Your turn!`, 'info', messageAreaVsComp);
                  currentPlayerIndex = 0; // Switch to human
                  updateCurrentPlayerIndicator();
@@ -1393,7 +1421,7 @@
         // Vs Comp Listeners
         difficultyRadios?.forEach(radio => { radio.addEventListener('change', (e) => { vsCompDifficulty = parseInt(e.target.value); console.log(`Difficulty set to Level: ${vsCompDifficulty}`); }); });
         startVsCompGameBtn?.addEventListener('click', startVsComputerGame);
-        submitTurnScoreBtnVsComp?.addEventListener('click', submitTurnScore);
+        submitTurnScoreBtnVsComp?.addEventListener('click', submitTurnScore); // Human score submission
         resetVsCompGameBtn?.addEventListener('click', resetGame);
         turnScoreInputVsComp?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnVsComp?.disabled && !legWon && !matchWon && currentPlayerIndex === 0) submitTurnScoreBtnVsComp?.click(); } });
 
