@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #f3f4f6; /* Tailwind gray-100 */
         }
         .result-item, .feedback-item {
             opacity: 0;
@@ -19,40 +19,129 @@
             animation: fadeIn 0.5s ease-out forwards;
         }
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-        input::placeholder { color: #9ca3af; opacity: 1; }
-        .mode-button-active { background-color: #dc2626; color: white; }
-        .mode-button-inactive { background-color: #e5e7eb; color: #374151; }
+
+        /* Input placeholder styling */
+        input::placeholder { color: #9ca3af; opacity: 1; } /* Tailwind gray-400 */
+
+        /* Mode button styling */
+        .mode-button-active { background-color: #dc2626; color: white; } /* Tailwind red-600 */
+        .mode-button-inactive { background-color: #e5e7eb; color: #374151; } /* Tailwind gray-200, gray-700 */
+        .mode-button-inactive:hover { background-color: #d1d5db; } /* Tailwind gray-300 */
+
+        /* Utility class */
         .hidden { display: none; }
+
+        /* Hide number input spinners */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-        .current-player-highlight { background-color: #dcfce7; border: 2px solid #86efac; }
-        button:disabled { background-color: #d1d5db; cursor: not-allowed; }
-        button:disabled:hover { background-color: #d1d5db; }
-        input[type="radio"]:checked + label {
-            background-color: #10b981; /* Emerald-500 */
+
+        /* Player highlighting */
+        .current-player-highlight {
+             background-color: #dcfce7; /* Tailwind green-100 */
+             border: 2px solid #4ade80; /* Tailwind green-400 */
+             box-shadow: 0 0 0 2px #dcfce7; /* Subtle outer glow */
+        }
+
+        /* Disabled button styling */
+        button:disabled { background-color: #d1d5db; cursor: not-allowed; color: #6b7280; } /* Tailwind gray-300, gray-500 */
+        button:disabled:hover { background-color: #d1d5db; } /* Tailwind gray-300 */
+
+        /* --- NEW: Enhanced Difficulty Selection Styling --- */
+        input[type="radio"].difficulty-radio:checked + label.difficulty-label {
+            background-color: #10b981; /* Tailwind Emerald-500 */
             color: white;
-            border-color: #059669; /* Emerald-600 */
+            border-color: #059669; /* Tailwind Emerald-600 */
+            font-weight: 600; /* Semibold */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: scale(1.03);
         }
         .difficulty-label {
-             font-size: 0.8rem;
-             padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.6rem;
+            transition: all 0.15s ease-in-out; /* Smooth transition for selection */
+            display: block; /* Ensure label takes full div width */
+            border: 1px solid #d1d5db; /* Tailwind gray-300 */
+            border-radius: 0.5rem; /* lg */
+            cursor: pointer;
+            text-align: center;
         }
+        .difficulty-label:hover {
+             background-color: #f3f4f6; /* Tailwind gray-100 */
+        }
+
+        /* General settings input styling */
         .setting-label {
             font-size: 0.875rem; /* text-sm */
             margin-bottom: 0.25rem; /* mb-1 */
+            color: #4b5563; /* gray-600 */
         }
         .setting-input {
             padding: 0.5rem 0.75rem; /* py-2 px-3 */
             font-size: 0.875rem; /* text-sm */
+            border-radius: 0.5rem; /* lg */
+            border: 1px solid #d1d5db; /* gray-300 */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
+        .setting-input:focus {
+            outline: none;
+            border-color: #10b981; /* Emerald-500 */
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Average text styling */
         .avg-text {
-             font-size: 0.75rem; /* text-xs */
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* gray-500 */
         }
+        .avg-value {
+            font-weight: 500; /* medium */
+            color: #4b5563; /* gray-600 */
+        }
+
+        /* --- NEW: Keypad Styling Adjustment --- */
         .keypad-button {
             @apply border border-gray-300 rounded-lg p-3 text-lg font-medium bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition duration-150 ease-in-out flex items-center justify-center;
+             /* Slightly softer look */
+             background-color: #f9fafb; /* gray-50 */
+             border-color: #e5e7eb; /* gray-200 */
         }
-        /* Removed .choice-button @apply rule */
+         .keypad-button:hover {
+             background-color: #f3f4f6; /* gray-100 */
+         }
+         .keypad-button:active {
+             background-color: #e5e7eb; /* gray-200 */
+         }
+         /* Special keypad buttons */
+         #keypadBackspace { color: #ef4444; } /* red-500 */
+         #keypadEnter { color: #22c55e; } /* green-500 */
+
+        /* --- NEW: Active Match Sub-mode Indicator --- */
+        /* Add a subtle top border to the active match section */
+         #pvpModeSection.match-active,
+         #vsComputerModeSection.match-active {
+            /* No extra visual indicator needed as the section itself is visible */
+         }
+         /* Style the choice buttons slightly differently when one is active */
+         #pvpBtn.sub-mode-active,
+         #playPcBtn.sub-mode-active {
+             opacity: 0.7; /* Dim the inactive button slightly */
+         }
+         #pvpBtn:not(.sub-mode-active),
+         #playPcBtn:not(.sub-mode-active) {
+             opacity: 1;
+         }
+         /* Style the active choice button */
+         #pvpBtn.sub-mode-active {
+            /* Optional: Add a stronger visual cue if needed */
+            /* box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); */
+         }
+         #playPcBtn.sub-mode-active {
+             /* Optional: Add a stronger visual cue if needed */
+             /* box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); */
+         }
+
+
     </style>
 </head>
 <body class="p-4">
@@ -61,177 +150,176 @@
         <h1 class="text-xl sm:text-2xl font-bold text-center mb-4 text-gray-800">🎯 Darts Suite</h1>
 
         <div class="flex flex-wrap justify-center gap-2 mb-4">
-            <button id="lookupModeBtn" type="button" class="mode-button mode-button-active px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Checkout Lookup</button>
+            <button id="lookupModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Checkout Lookup</button>
             <button id="gameModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Practice Game</button>
             <button id="playMatchModeBtn" type="button" class="mode-button mode-button-inactive px-3 py-1.5 rounded-lg font-medium transition duration-150 ease-in-out text-xs sm:text-sm">Play Match</button>
         </div>
 
-        <div id="lookupModeSection">
-             <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Find a Checkout</h2>
-             <div class="mb-3">
-                 <label for="scoreInputLookup" class="block text-sm font-medium text-gray-700 mb-1">Enter score remaining:</label>
-                 <input type="number" id="scoreInputLookup" name="scoreInputLookup" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*">
-             </div>
-             <button id="calculateBtnLookup" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mb-4 text-sm sm:text-base">
-                 Find Checkouts
-             </button>
-             <div id="resultsLookup" class="mt-3">
-                 <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">Possible Checkouts:</h3>
-                 <div id="checkoutListLookup" class="space-y-1.5 text-sm">
-                     <p class="text-gray-500">Enter a score between 2 and 170.</p>
-                 </div>
-             </div>
-             <div id="messageAreaLookup" class="mt-3 text-center text-red-500 font-medium text-sm"></div>
+        <div id="lookupModeSection" class="hidden">
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Find a Checkout</h2>
+            <div class="mb-3">
+                <label for="scoreInputLookup" class="block text-sm font-medium text-gray-700 mb-1">Enter score remaining:</label>
+                <input type="number" id="scoreInputLookup" name="scoreInputLookup" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*">
+            </div>
+            <button id="calculateBtnLookup" type="button" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mb-4 text-sm sm:text-base">
+                Find Checkouts
+            </button>
+            <div id="resultsLookup" class="mt-3">
+                <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">Possible Checkouts:</h3>
+                <div id="checkoutListLookup" class="space-y-1.5 text-sm">
+                    <p class="text-gray-500">Enter a score between 2 and 170.</p>
+                </div>
+            </div>
+            <div id="messageAreaLookup" class="mt-3 text-center text-red-500 font-medium text-sm min-h-[1.25em]"></div>
         </div>
 
         <div id="gameModeSection" class="hidden">
-             <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Practice Your Finishes!</h2>
-             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                 <div>
-                     <label for="minScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Min Score:</label>
-                     <input type="number" id="minScoreInput" name="minScoreInput" value="2" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
-                 </div>
-                 <div>
-                     <label for="maxScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Max Score:</label>
-                     <input type="number" id="maxScoreInput" name="maxScoreInput" value="170" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
-                 </div>
-             </div>
-             <p class="text-xs text-gray-500 text-center mb-3 -mt-2">Set range & click 'New Game'</p>
-             <div class="text-center mb-3 p-3 bg-gray-100 rounded-lg">
-                 <p class="text-sm font-medium text-gray-600">Score to checkout:</p>
-                 <p id="gameScoreDisplay" class="text-2xl sm:text-3xl font-bold text-red-600">-</p>
-             </div>
-             <div class="mb-3">
-                 <label for="scoreInputGame" class="block text-sm font-medium text-gray-700 mb-1">Your checkout attempt (e.g., T20, D20):</label>
-                 <input type="text" id="scoreInputGame" name="scoreInputGame" placeholder="T20, D20 or T19 D16 etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-             </div>
-             <div class="flex flex-col gap-2 mb-3">
-                 <button id="submitAnswerBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
-                     Check My Answer
-                 </button>
-                 <button id="revealAnswerBtn" type="button" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
-                     Reveal Answer
-                 </button>
-             </div>
-             <div id="feedbackAreaGame" class="mt-3 text-center font-medium min-h-[2em] text-sm"></div>
-             <button id="newGameBtn" type="button" class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm sm:text-base">
-                 New Game
-             </button>
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Practice Your Finishes!</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label for="minScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Min Score:</label>
+                    <input type="number" id="minScoreInput" name="minScoreInput" value="2" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
+                </div>
+                <div>
+                    <label for="maxScoreInput" class="block text-sm font-medium text-gray-700 mb-1">Max Score:</label>
+                    <input type="number" id="maxScoreInput" name="maxScoreInput" value="170" min="2" max="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric">
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 text-center mb-3 -mt-2">Set range & click 'New Game'</p>
+            <div class="text-center mb-3 p-3 bg-gray-100 rounded-lg">
+                <p class="text-sm font-medium text-gray-600">Score to checkout:</p>
+                <p id="gameScoreDisplay" class="text-2xl sm:text-3xl font-bold text-red-600">-</p>
+            </div>
+            <div class="mb-3">
+                <label for="scoreInputGame" class="block text-sm font-medium text-gray-700 mb-1">Your checkout attempt (e.g., T20, D16):</label>
+                <input type="text" id="scoreInputGame" name="scoreInputGame" placeholder="T20, D20 or T19 D16 etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm" autocapitalize="off" autocorrect="off">
+            </div>
+            <div class="flex flex-col gap-2 mb-3">
+                <button id="submitAnswerBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
+                    Check My Answer
+                </button>
+                <button id="revealAnswerBtn" type="button" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
+                    Reveal Answer
+                </button>
+            </div>
+            <div id="feedbackAreaGame" class="mt-3 text-center font-medium min-h-[2em] text-sm"></div>
+            <button id="newGameBtn" type="button" class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm sm:text-base">
+                New Game
+            </button>
         </div>
 
         <div id="playMatchChoiceSection" class="hidden">
-             <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4 text-center">Select Match Type</h2>
-             <div class="flex flex-col sm:flex-row gap-3">
-                 <button id="pvpBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
-                      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 15v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
-                      Player vs Player
-                 </button>
-                 <button id="playPcBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
-                      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"></path><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1z"></path><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2-1a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5z" clip-rule="evenodd"></path></svg>
-                      Player vs Computer
-                 </button>
-             </div>
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4 text-center">Select Match Type</h2>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="pvpBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 15v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                    Player vs Player
+                </button>
+                <button id="playPcBtn" type="button" class="w-full sm:w-auto flex-grow sm:flex-grow-0 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"></path><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1z"></path><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2-1a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5z" clip-rule="evenodd"></path></svg>
+                    Player vs Computer
+                </button>
+            </div>
         </div>
 
         <div id="pvpModeSection" class="hidden">
-             <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Player vs Player (501)</h2>
-             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                 <div>
-                     <label for="player1NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 1:</label>
-                     <input type="text" id="player1NameInputPvp" value="Player 1" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-                 </div>
-                 <div>
-                     <label for="player2NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 2:</label>
-                     <input type="text" id="player2NameInputPvp" value="Player 2" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-                 </div>
-             </div>
-             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                 <div id="player1DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                     <p id="player1NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 1</p>
-                     <p id="player1ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                     <p class="avg-text text-gray-500 mt-0.5">(Wins: <span id="player1GamesWonPvp" class="font-medium">0</span>)</p>
-                     <p class="avg-text text-gray-500 mt-0.5">Leg Avg: <span id="p1LegAvgPvp" class="font-medium">-</span></p>
-                     <p class="avg-text text-gray-500">Overall Avg: <span id="p1OverallAvgPvp" class="font-medium">-</span></p>
-                 </div>
-                 <div id="player2DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
-                     <p id="player2NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 2</p>
-                     <p id="player2ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                     <p class="avg-text text-gray-500 mt-0.5">(Wins: <span id="player2GamesWonPvp" class="font-medium">0</span>)</p>
-                     <p class="avg-text text-gray-500 mt-0.5">Leg Avg: <span id="p2LegAvgPvp" class="font-medium">-</span></p>
-                     <p class="avg-text text-gray-500">Overall Avg: <span id="p2OverallAvgPvp" class="font-medium">-</span></p>
-                 </div>
-             </div>
-             <p id="currentPlayerIndicatorPvp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
-             <div class="mb-2">
-                 <label for="turnScoreInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Enter score this turn (0-180):</label>
-                 <input type="number" id="turnScoreInputPvp" name="turnScoreInputPvp" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
-             </div>
-             <div class="flex flex-col sm:flex-row gap-2 mb-2">
-                 <button id="submitTurnScoreBtnPvp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
-                     Submit Score
-                 </button>
-                 <button id="undoTurnBtnPvp" type="button" class="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
-                     Undo
-                 </button>
-             </div>
-             <div id="messageAreaPvp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
-             <div id="checkoutSuggestionPvp" class="mt-1 text-center text-sm"></div>
-             <button id="resetPvpGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
-                 Reset Leg
-             </button>
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Player vs Player (501)</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                <div>
+                    <label for="player1NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 1:</label>
+                    <input type="text" id="player1NameInputPvp" value="Player 1" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                </div>
+                <div>
+                    <label for="player2NameInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Player 2:</label>
+                    <input type="text" id="player2NameInputPvp" value="Player 2" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                <div id="player1DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                    <p id="player1NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 1</p>
+                    <p id="player1ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
+                    <p class="avg-text mt-0.5">Legs: <span id="player1GamesWonPvp" class="avg-value">0</span></p>
+                    <p class="avg-text mt-0.5">Leg Avg: <span id="p1LegAvgPvp" class="avg-value">-</span></p>
+                    <p class="avg-text">Overall Avg: <span id="p1OverallAvgPvp" class="avg-value">-</span></p>
+                </div>
+                <div id="player2DisplayPvp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
+                    <p id="player2NameDisplayPvp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Player 2</p>
+                    <p id="player2ScorePvp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
+                    <p class="avg-text mt-0.5">Legs: <span id="player2GamesWonPvp" class="avg-value">0</span></p>
+                    <p class="avg-text mt-0.5">Leg Avg: <span id="p2LegAvgPvp" class="avg-value">-</span></p>
+                    <p class="avg-text">Overall Avg: <span id="p2OverallAvgPvp" class="avg-value">-</span></p>
+                </div>
+            </div>
+            <p id="currentPlayerIndicatorPvp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
+            <div class="mb-2">
+                <label for="turnScoreInputPvp" class="block text-sm font-medium text-gray-700 mb-1">Enter score this turn (0-180):</label>
+                <input type="number" id="turnScoreInputPvp" name="turnScoreInputPvp" placeholder="e.g., 100" class="numeric-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out text-sm" inputmode="numeric" pattern="[0-9]*" min="0" max="180">
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 mb-2">
+                <button id="submitTurnScoreBtnPvp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
+                    Submit Score
+                </button>
+                <button id="undoTurnBtnPvp" type="button" class="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm sm:text-base" disabled>
+                    Undo
+                </button>
+            </div>
+            <div id="messageAreaPvp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
+            <div id="checkoutSuggestionPvp" class="mt-1 text-center text-sm text-blue-600 font-medium"></div>
+            <button id="resetPvpGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
+                Reset Leg
+            </button>
         </div>
 
         <div id="vsComputerModeSection" class="hidden">
             <h2 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3 text-center">Play vs Computer</h2>
 
-            <div id="vsCompSetupArea" class="mb-3 border-b pb-3">
+            <div id="vsCompSetupArea" class="mb-3 border-b border-gray-200 pb-3">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                     <div>
-                         <label for="startScoreInputVsComp" class="setting-label block font-medium text-gray-700">Starting Score:</label>
-                         <input type="number" id="startScoreInputVsComp" value="501" min="101" step="100" class="setting-input w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-150 ease-in-out">
-                     </div>
-                     <div>
-                         <label for="legsToWinInputVsComp" class="setting-label block font-medium text-gray-700">First to (Legs):</label>
-                         <input type="number" id="legsToWinInputVsComp" value="3" min="1" class="setting-input w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-150 ease-in-out">
-                     </div>
+                    <div>
+                        <label for="startScoreInputVsComp" class="setting-label block font-medium">Starting Score:</label>
+                        <input type="number" id="startScoreInputVsComp" value="501" min="101" step="100" class="setting-input w-full">
+                    </div>
+                    <div>
+                        <label for="legsToWinInputVsComp" class="setting-label block font-medium">First to (Legs):</label>
+                        <input type="number" id="legsToWinInputVsComp" value="3" min="1" class="setting-input w-full">
+                    </div>
                 </div>
 
                 <div id="difficultySelectionArea">
                     <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Select Difficulty Level (1-10):</label>
-                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-1 justify-center">
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only"> <label for="diff1" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">1</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only"> <label for="diff2" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">2</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only"> <label for="diff3" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">3</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only"> <label for="diff4" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">4</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only" checked> <label for="diff5" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">5</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only"> <label for="diff6" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">6</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only"> <label for="diff7" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">7</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only"> <label for="diff8" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">8</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only"> <label for="diff9" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">9</label> </div>
-                        <div class="text-center"> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only"> <label for="diff10" class="difficulty-label block border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out">10</label> </div>
+                    <div class="grid grid-cols-5 gap-1.5 justify-center max-w-xs mx-auto">
+                        <div> <input type="radio" name="difficulty" id="diff1" value="1" class="sr-only difficulty-radio"> <label for="diff1" class="difficulty-label">1</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff2" value="2" class="sr-only difficulty-radio"> <label for="diff2" class="difficulty-label">2</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff3" value="3" class="sr-only difficulty-radio"> <label for="diff3" class="difficulty-label">3</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff4" value="4" class="sr-only difficulty-radio"> <label for="diff4" class="difficulty-label">4</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff5" value="5" class="sr-only difficulty-radio" checked> <label for="diff5" class="difficulty-label">5</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff6" value="6" class="sr-only difficulty-radio"> <label for="diff6" class="difficulty-label">6</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff7" value="7" class="sr-only difficulty-radio"> <label for="diff7" class="difficulty-label">7</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff8" value="8" class="sr-only difficulty-radio"> <label for="diff8" class="difficulty-label">8</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff9" value="9" class="sr-only difficulty-radio"> <label for="diff9" class="difficulty-label">9</label> </div>
+                        <div> <input type="radio" name="difficulty" id="diff10" value="10" class="sr-only difficulty-radio"> <label for="diff10" class="difficulty-label">10</label> </div>
                     </div>
                 </div>
+                 <button id="startVsCompGameBtn" type="button" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base">
+                    Start Match
+                </button>
             </div>
-
-            <button id="startVsCompGameBtn" type="button" class="w-full my-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 text-sm sm:text-base">
-                Start Match
-            </button>
 
             <div id="vsCompScoreDisplay" class="hidden">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                     <div id="player1DisplayVsComp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
                         <p id="player1NameDisplayVsComp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">You</p>
                         <p id="player1ScoreVsComp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                        <p class="avg-text text-gray-500 mt-0.5">(<span id="player1GamesWonVsComp" class="font-medium">0</span> / <span id="targetLegsVsComp">3</span> Legs)</p>
-                        <p class="avg-text text-gray-500 mt-0.5">Leg Avg: <span id="legAvgDisplayVsComp" class="font-medium">-</span></p>
-                        <p class="avg-text text-gray-500">Overall Avg: <span id="overallAvgDisplayVsComp" class="font-medium">-</span></p>
+                        <p class="avg-text mt-0.5">(<span id="player1GamesWonVsComp" class="avg-value">0</span> / <span id="targetLegsVsComp">3</span> Legs)</p>
+                        <p class="avg-text mt-0.5">Leg Avg: <span id="legAvgDisplayVsComp" class="avg-value">-</span></p>
+                        <p class="avg-text">Overall Avg: <span id="overallAvgDisplayVsComp" class="avg-value">-</span></p>
                     </div>
                     <div id="player2DisplayVsComp" class="p-2 border border-gray-200 rounded-lg text-center transition-colors duration-300">
                         <p id="player2NameDisplayVsComp" class="font-semibold text-sm sm:text-base text-gray-800 truncate">Computer</p>
                         <p id="player2ScoreVsComp" class="text-xl sm:text-2xl font-bold text-indigo-600">501</p>
-                        <p class="avg-text text-gray-500 mt-0.5">(<span id="player2GamesWonVsComp" class="font-medium">0</span> / <span id="targetLegsVsComp2">3</span> Legs)</p>
-                        <p class="avg-text text-gray-500 mt-0.5">Leg Avg: <span id="compLegAvgDisplayVsComp" class="font-medium">-</span></p>
-                        <p class="avg-text text-gray-500">Overall Avg: <span id="compOverallAvgDisplayVsComp" class="font-medium">-</span></p>
+                        <p class="avg-text mt-0.5">(<span id="player2GamesWonVsComp" class="avg-value">0</span> / <span id="targetLegsVsComp2">3</span> Legs)</p>
+                        <p class="avg-text mt-0.5">Leg Avg: <span id="compLegAvgDisplayVsComp" class="avg-value">-</span></p>
+                        <p class="avg-text">Overall Avg: <span id="compOverallAvgDisplayVsComp" class="avg-value">-</span></p>
                     </div>
                 </div>
                 <p id="currentPlayerIndicatorVsComp" class="text-center font-semibold text-gray-700 mb-2 text-sm">Current Player: -</p>
@@ -243,17 +331,17 @@
                     <button id="submitTurnScoreBtnVsComp" type="button" class="flex-grow w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm sm:text-base">
                         Submit Score
                     </button>
-                </div>
+                    </div>
                 <div id="messageAreaVsComp" class="mt-2 text-center font-medium min-h-[1.8em] text-sm"></div>
-                <div id="checkoutSuggestionVsComp" class="mt-1 text-center text-sm"></div>
+                <div id="checkoutSuggestionVsComp" class="mt-1 text-center text-sm text-blue-600 font-medium"></div>
                 <button id="resetVsCompGameBtn" type="button" class="w-full mt-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
                     Reset Match
                 </button>
             </div>
         </div>
 
-        <div id="numericKeypad" class="hidden sm:hidden fixed bottom-0 left-0 right-0 bg-gray-200 p-2 shadow-lg border-t border-gray-300 z-50">
-            <div class="grid grid-cols-3 gap-2">
+        <div id="numericKeypad" class="hidden sm:hidden fixed bottom-0 left-0 right-0 bg-gray-200 p-2 shadow-[0_-2px_5px_rgba(0,0,0,0.1)] border-t border-gray-300 z-50">
+             <div class="grid grid-cols-3 gap-2">
                 <button type="button" class="keypad-button keypad-num">7</button>
                 <button type="button" class="keypad-button keypad-num">8</button>
                 <button type="button" class="keypad-button keypad-num">9</button>
@@ -263,9 +351,9 @@
                 <button type="button" class="keypad-button keypad-num">1</button>
                 <button type="button" class="keypad-button keypad-num">2</button>
                 <button type="button" class="keypad-button keypad-num">3</button>
-                <button type="button" id="keypadBackspace" class="keypad-button text-red-600">⌫</button>
+                <button type="button" id="keypadBackspace" class="keypad-button">⌫</button>
                 <button type="button" class="keypad-button keypad-num">0</button>
-                <button type="button" id="keypadEnter" class="keypad-button text-green-600">↵</button>
+                <button type="button" id="keypadEnter" class="keypad-button">↵</button>
             </div>
         </div>
 
@@ -273,11 +361,29 @@
 
     <script>
         // --- Checkout Data (Standard Finishes) ---
-        const checkouts = { /* ... data unchanged ... */ };
+        const checkouts = {
+            170: ["T20 T20 Bull"], 167: ["T20 T19 Bull"], 164: ["T20 T18 Bull", "T19 T19 Bull"], 161: ["T20 T17 Bull"], 160: ["T20 T20 D20"],
+            158: ["T20 T20 D19"], 157: ["T20 T19 D20"], 156: ["T20 T20 D18"], 155: ["T20 T19 D19"], 154: ["T20 T18 D20"], 153: ["T20 T19 D18"], 152: ["T20 T20 D16"], 151: ["T20 T17 D20"], 150: ["T20 T18 D18"],
+            149: ["T20 T19 D16"], 148: ["T20 T16 D20"], 147: ["T20 T17 D18"], 146: ["T20 T18 D16", "T19 T19 D16"], 145: ["T20 T15 D20"], 144: ["T20 T20 D12"], 143: ["T20 T17 D16"], 142: ["T20 T14 D20"], 141: ["T20 T19 D12"], 140: ["T20 T16 D16", "T20 T20 D10"],
+            139: ["T20 T13 D20", "T19 T14 D20"], 138: ["T20 T18 D12"], 137: ["T20 T19 D10", "T17 T18 D16"], 136: ["T20 T20 D8"], 135: ["T20 T17 D12", "Bull T15 D20"], 134: ["T20 T14 D16"], 133: ["T20 T19 D8"], 132: ["T20 T16 D12", "Bull T14 D20"], 131: ["T20 T13 D16"], 130: ["T20 T18 D8", "T20 T20 D5"],
+            129: ["T19 T16 D12", "T19 T14 D16"], 128: ["T18 T14 D16", "T20 T12 D16"], 127: ["T20 T17 D8"], 126: ["T19 T19 D6", "T19 T13 D16"], 125: ["Bull T17 D8", "25 T20 D20"], 124: ["T20 T16 D8"], 123: ["T19 T16 D9"], 122: ["T18 T20 D4", "T18 T12 D16"], 121: ["T20 T11 D14", "T17 T10 D20", "Bull T13 D16"],
+            120: ["T20 20 D20"], 119: ["T19 T14 D10"], 118: ["T20 18 D20"], 117: ["T20 17 D20"], 116: ["T20 16 D20"], 115: ["T20 15 D20"], 114: ["T20 14 D20"], 113: ["T19 16 D20"], 112: ["T20 12 D20"], 111: ["T20 11 D20", "T19 14 D20"],
+            110: ["T20 10 D20", "Bull 20 D20"], 109: ["T19 12 D20", "T20 9 D20"], 108: ["T20 8 D20", "T19 11 D20"], 107: ["T19 10 D20"], 106: ["T20 6 D20"], 105: ["T20 5 D20", "T19 8 D20"], 104: ["T18 10 D20", "T20 4 D20"], 103: ["T19 6 D20", "T17 12 D20"], 102: ["T20 2 D20", "T18 8 D20"],
+            101: ["T17 10 D20", "T20 1 D20"], 100: ["T20 D20"], 99: ["T19 10 D16"], 98: ["T20 D19"], 97: ["T19 D20"], 96: ["T20 D18"], 95: ["T19 D19"], 94: ["T18 D20"], 93: ["T19 D18"], 92: ["T20 D16"],
+            91: ["T17 D20"], 90: ["T20 D15", "T18 D18"], 89: ["T19 D16"], 88: ["T20 D14", "T16 D20"], 87: ["T17 D18"], 86: ["T18 D16"], 85: ["T15 D20", "T19 D14"], 84: ["T20 D12", "T16 D18"], 83: ["T17 D16"], 82: ["Bull D16", "T14 D20"],
+            81: ["T19 D12", "T15 D18"], 80: ["T20 D10", "T16 D16"], 79: ["T13 D20", "T19 D11"], 78: ["T18 D12", "T14 D18"], 77: ["T15 D16", "T19 D10"], 76: ["T20 D8", "T12 D20"], 75: ["T17 D12", "T13 D18"], 74: ["T14 D16", "T18 D10"], 73: ["T19 D8", "T11 D20"], 72: ["T16 D12", "T12 D18"],
+            71: ["T13 D16", "T17 D10"], 70: ["T10 D20", "T18 D8"], 69: ["T19 D6", "T11 D18"], 68: ["T20 D4", "T16 D10"], 67: ["T17 D8", "T9 D20"], 66: ["T10 D18", "T14 D12"], 65: ["Bull D8", "T11 D16"], 64: ["T16 D8", "T8 D20"], 63: ["T13 D12", "T9 D18"], 62: ["T10 D16", "T14 D10"],
+            61: ["Bull D6", "T11 D14", "T7 D20"], 60: ["20 D20"], 59: ["19 D20"], 58: ["18 D20"], 57: ["17 D20"], 56: ["16 D20", "T16 D4"], 55: ["15 D20", "T15 D5"], 54: ["14 D20", "T14 D6"], 53: ["13 D20", "T13 D7"], 52: ["12 D20", "T12 D8"],
+            51: ["11 D20", "T11 D9"], 50: ["10 D20", "Bull"], 49: ["9 D20", "T9 D11"], 48: ["16 D16", "8 D20"], 47: ["15 D16", "7 D20"], 46: ["6 D20", "10 D18"], 45: ["13 D16", "5 D20"], 44: ["12 D16", "4 D20"], 43: ["11 D16", "3 D20"], 42: ["10 D16", "2 D20"],
+            41: ["9 D16", "1 D20"], 40: ["D20"], 39: ["7 D16"], 38: ["D19"], 37: ["5 D16"], 36: ["D18"], 35: ["3 D16"], 34: ["D17"], 33: ["1 D16"], 32: ["D16"], 31: ["15 D8"], 30: ["D15"], 29: ["13 D8"],
+            28: ["D14"], 27: ["11 D8"], 26: ["D13"], 25: ["9 D8"], 24: ["D12"], 23: ["7 D8"], 22: ["D11"], 21: ["5 D8"], 20: ["D10"], 19: ["3 D8"], 18: ["D9"], 17: ["1 D8"], 16: ["D8"], 15: ["7 D4"], 14: ["D7"],
+            13: ["5 D4"], 12: ["D6"], 11: ["3 D4"], 10: ["D5"], 9: ["1 D4"], 8: ["D4"], 7: ["S3 D2"], 6: ["D3"], 5: ["S1 D2"], 4: ["D2"], 3: ["S1 D1"], 2: ["D1"]
+        };
         const impossibleCheckouts = [169, 168, 166, 165, 163, 162, 159];
         let finishableScores = [];
 
-        // --- DOM Elements ---
+        // --- DOM Elements (Grouped by Mode/Feature) ---
+        // Mode Switching
         const lookupModeBtn = document.getElementById('lookupModeBtn');
         const gameModeBtn = document.getElementById('gameModeBtn');
         const playMatchModeBtn = document.getElementById('playMatchModeBtn');
@@ -288,11 +394,13 @@
         const playPcBtn = document.getElementById('playPcBtn');
         const pvpModeSection = document.getElementById('pvpModeSection');
         const vsComputerModeSection = document.getElementById('vsComputerModeSection');
+
         // Lookup Elements
         const scoreInputLookup = document.getElementById('scoreInputLookup');
         const calculateBtnLookup = document.getElementById('calculateBtnLookup');
         const checkoutListLookup = document.getElementById('checkoutListLookup');
         const messageAreaLookup = document.getElementById('messageAreaLookup');
+
         // Practice Elements
         const minScoreInput = document.getElementById('minScoreInput');
         const maxScoreInput = document.getElementById('maxScoreInput');
@@ -302,6 +410,8 @@
         const revealAnswerBtn = document.getElementById('revealAnswerBtn');
         const feedbackAreaGame = document.getElementById('feedbackAreaGame');
         const newGameBtn = document.getElementById('newGameBtn');
+        let practiceGameTimeoutId = null; // Timer for auto-new game
+
         // PvP (Tracker) Elements
         const player1NameInputPvp = document.getElementById('player1NameInputPvp');
         const player2NameInputPvp = document.getElementById('player2NameInputPvp');
@@ -324,6 +434,7 @@
         const messageAreaPvp = document.getElementById('messageAreaPvp');
         const checkoutSuggestionPvp = document.getElementById('checkoutSuggestionPvp');
         const resetPvpGameBtn = document.getElementById('resetPvpGameBtn');
+
         // Vs Comp Setup Elements
         const vsCompSetupArea = document.getElementById('vsCompSetupArea');
         const startScoreInputVsComp = document.getElementById('startScoreInputVsComp');
@@ -331,6 +442,7 @@
         const difficultySelectionArea = document.getElementById('difficultySelectionArea');
         const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
         const startVsCompGameBtn = document.getElementById('startVsCompGameBtn');
+
         // Vs Comp Gameplay Elements
         const vsCompScoreDisplay = document.getElementById('vsCompScoreDisplay');
         const player1DisplayVsComp = document.getElementById('player1DisplayVsComp');
@@ -341,8 +453,8 @@
         const player2ScoreVsComp = document.getElementById('player2ScoreVsComp');
         const player1GamesWonVsComp = document.getElementById('player1GamesWonVsComp');
         const player2GamesWonVsComp = document.getElementById('player2GamesWonVsComp');
-        const targetLegsVsComp = document.getElementById('targetLegsVsComp');
-        const targetLegsVsComp2 = document.getElementById('targetLegsVsComp2');
+        const targetLegsVsComp = document.getElementById('targetLegsVsComp'); // Target legs display for player
+        const targetLegsVsComp2 = document.getElementById('targetLegsVsComp2'); // Target legs display for computer
         const legAvgDisplayVsComp = document.getElementById('legAvgDisplayVsComp');
         const overallAvgDisplayVsComp = document.getElementById('overallAvgDisplayVsComp');
         const compLegAvgDisplayVsComp = document.getElementById('compLegAvgDisplayVsComp');
@@ -353,335 +465,937 @@
         const messageAreaVsComp = document.getElementById('messageAreaVsComp');
         const checkoutSuggestionVsComp = document.getElementById('checkoutSuggestionVsComp');
         const resetVsCompGameBtn = document.getElementById('resetVsCompGameBtn');
+
         // Keypad Elements
         const numericKeypad = document.getElementById('numericKeypad');
-        const keypadButtons = numericKeypad?.querySelectorAll('.keypad-button');
+        const keypadButtons = numericKeypad?.querySelectorAll('.keypad-button'); // Use optional chaining
         const keypadBackspace = document.getElementById('keypadBackspace');
         const keypadEnter = document.getElementById('keypadEnter');
-        const numericInputs = document.querySelectorAll('.numeric-input');
+        const numericInputs = document.querySelectorAll('.numeric-input'); // Inputs that trigger keypad
 
-        // --- State ---
-        let currentMode = 'lookup'; // 'lookup', 'practice', 'matchChoice', 'pvp', 'vsComp'
-        let currentGameScore = 0; // Practice mode score
-        // Shared 501 Game State (Tracker & VsComp)
-        let playerNames = ["Player 1", "Player 2"]; // Will be updated based on mode
+        // --- State Variables ---
+        let currentMode = 'lookup'; // 'lookup', 'game', 'playMatch', 'pvp', 'vsComp'
+        let currentGameScore = 0; // Practice mode target score
+        let currentPracticeCheckout = ''; // Correct checkout for practice mode
+
+        // Shared 501 Game State (PvP & VsComp)
+        let playerNames = ["Player 1", "Player 2"]; // Default names
         let playerScores = [501, 501];
         let playerGamesWonTally = [0, 0]; // Legs won in current match
         let currentPlayerIndex = 0;
-        let legStartingPlayerIndex = 0;
-        let legWon = false;
-        let matchWon = false; // Flag for Vs Comp match end
+        let legStartingPlayerIndex = 0; // Who starts the leg
+        let legWon = false; // Is the current leg finished?
+        let matchWon = false; // Is the Vs Comp match finished?
+        let startScore = 501; // Default start score (can be configured)
+        let legsToWin = 3; // Default legs to win (VsComp)
+
         // PvP (Tracker) Specific State
-        let lastPlayerScores = null; // For undo
-        let lastPlayerIndex = null; // For undo
-        let lastGamesWonTally = null; // For undo
+        let lastTurnState = null; // Stores { scores: [...], index: X, p1Turns: {...}, p2Turns: {...}, gamesWon: [...] } for undo
         let undoPossible = false;
-        let nextLegTimeoutId = null;
+        let nextLegTimeoutId = null; // Timer for starting next leg message
+
         // PvP Average Tracking State
         let p1TotalScore = 0, p1TotalTurns = 0, p1LegScore = 0, p1LegTurns = 0;
         let p2TotalScore = 0, p2TotalTurns = 0, p2LegScore = 0, p2LegTurns = 0;
+
         // Vs Computer Specific State
         let vsCompDifficulty = 5; // Default difficulty level (1-10)
-        let computerTurnTimeoutId = null;
-        let startScore = 501; // Configurable start score (used by both modes now)
-        let legsToWin = 3; // Configurable legs to win (VsComp only for now)
+        let computerTurnTimeoutId = null; // Timer for computer's turn delay
+
         // VsComp Average Tracking State
-        let humanTotalScoreVsComp = 0; // Renamed to avoid clash if we make PvP overall avg separate later
-        let humanTotalTurnsVsComp = 0;
-        let humanLegScoreVsComp = 0;
-        let humanLegTurnsVsComp = 0;
-        let computerTotalScore = 0;
-        let computerTotalTurns = 0;
-        let computerLegScore = 0;
-        let computerLegTurns = 0;
+        let humanTotalScoreVsComp = 0, humanTotalTurnsVsComp = 0, humanLegScoreVsComp = 0, humanLegTurnsVsComp = 0;
+        let computerTotalScore = 0, computerTotalTurns = 0, computerLegScore = 0, computerLegTurns = 0;
+
         // Keypad State
-        let activeNumericInput = null;
+        let activeNumericInput = null; // Which input field is currently focused for the keypad
 
         // --- Constants ---
-        const COMPUTER_TURN_DELAY = 1000;
+        const COMPUTER_TURN_DELAY = 800; // Slightly faster computer turn
         const DEFAULT_START_SCORE = 501;
+        const MAX_SCORE = 180; // Max score in one turn
+        const MIN_CHECKOUT_SCORE = 2;
+        const MAX_CHECKOUT_SCORE = 170;
+        const PRACTICE_NEW_GAME_DELAY = 2000; // Delay in ms before new practice game starts
 
-        // --- Functions ---
+        // --- Core Functions ---
 
-        /** Populates the finishableScores array */
-        function initializeGameData() { /* ...unchanged... */ }
-
-        /** Starts a new practice game */
-        function startNewPracticeGame() { /* ...unchanged... */ }
-
-        /** Checks the practice game answer */
-        function checkPracticeAnswer() { /* ...unchanged... */ }
-
-        /** Reveals the practice game answer */
-        function revealAnswer() { /* ...unchanged... */ }
-
-        /** Displays feedback messages */
-        function displayGameFeedback(message, type, areaElement) { /* ...unchanged... */ }
-
-        /** Displays checkout lookup results */
-        function displayLookupCheckouts() { /* ...unchanged... */ }
-
-        // --- Shared 501 / Vs Comp / PvP Functions ---
-
-        /** Resets the game state for the current mode */
-        function resetGame() { /* ...unchanged... */ }
-
-        /** Starts the next leg for the current 501-based mode */
-        function startNextLeg() { /* ...unchanged... */ }
-
-        /** Updates the visual highlight for the current player */
-        function updateCurrentPlayerIndicator() { /* ...unchanged... */ }
-
-        /** Handles score submission for PvP OR Human player in Vs Comp */
-        function submitTurnScore() {
-            if (legWon || matchWon) return;
-
-            const isVsComp = currentMode === 'vsComp';
-            const isPvp = currentMode === 'pvp';
-
-            const turnInput = isVsComp ? turnScoreInputVsComp : (isPvp ? turnScoreInputPvp : null);
-            const messageArea = isVsComp ? messageAreaVsComp : (isPvp ? messageAreaPvp : null);
-            const suggestionArea = isVsComp ? checkoutSuggestionVsComp : (isPvp ? checkoutSuggestionPvp : null);
-            const submitBtn = isVsComp ? submitTurnScoreBtnVsComp : (isPvp ? submitTurnScoreBtnPvp : null);
-            const undoBtn = isPvp ? undoTurnBtnPvp : null;
-
-            if (!turnInput || !messageArea || !suggestionArea || !submitBtn) { console.error("Missing elements for submitting turn score!"); return; }
-
-            const playerIndex = currentPlayerIndex;
-            messageArea.textContent = ''; suggestionArea.innerHTML = '';
-
-            const enteredScoreText = turnInput.value;
-            const enteredScore = parseInt(enteredScoreText);
-            if (isNaN(enteredScore) || enteredScore < 0 || enteredScore > 180) {
-                messageArea.textContent = 'Invalid score. Please enter 0-180.';
-                turnInput.select(); return;
-            }
-
-            // Store state for potential undo (PvP mode only)
-            if (isPvp) {
-                lastPlayerScores = [...playerScores]; lastPlayerIndex = currentPlayerIndex; lastGamesWonTally = [...playerGamesWonTally];
-                undoPossible = true; if(undoBtn) undoBtn.disabled = false;
-            }
-
-            // Update averages - count turn regardless of bust
-            if (isVsComp && playerIndex === 0) { // Human in Vs Comp
-                humanLegTurns++; humanTotalTurns++;
-            } else if (isPvp) { // Player 1 or 2 in PvP
-                if (playerIndex === 0) { p1LegTurns++; p1TotalTurns++; }
-                else { p2LegTurns++; p2TotalTurns++; }
-            }
-
-            let currentScore = playerScores[playerIndex];
-            const potentialScore = currentScore - enteredScore;
-
-            // Check for Bust
-            if (potentialScore < 2 && potentialScore !== 0) {
-                messageArea.textContent = `${playerNames[playerIndex]} Bust! Score remains ${currentScore}.`;
-                 // Update average displays even on bust
-                 if (isVsComp && playerIndex === 0) updateAverageDisplays();
-                 else if (isPvp) updatePvpAverageDisplays();
-            } else { // Valid score or win
-                playerScores[playerIndex] = potentialScore;
-                // Update score display
-                if (isVsComp && playerIndex === 0) { if(player1ScoreVsComp) player1ScoreVsComp.textContent = potentialScore; }
-                else if (isPvp) {
-                    const scoreEl = (playerIndex === 0) ? player1ScorePvp : player2ScorePvp;
-                    if(scoreEl) scoreEl.textContent = potentialScore;
-                }
-
-                 // Add score to averages only if valid
-                 if (isVsComp && playerIndex === 0) {
-                     humanLegScore += enteredScore; humanTotalScore += enteredScore; updateAverageDisplays();
-                 } else if (isPvp) {
-                     if (playerIndex === 0) { p1LegScore += enteredScore; p1TotalScore += enteredScore; }
-                     else { p2LegScore += enteredScore; p2TotalScore += enteredScore; }
-                     updatePvpAverageDisplays();
-                 }
-
-                messageArea.textContent = `${playerNames[playerIndex]} scored ${enteredScore}. Remaining: ${potentialScore}`;
-
-                // Check for Leg Win
-                if (potentialScore === 0) {
-                    legWon = true;
-                    playerGamesWonTally[playerIndex]++;
-                    // Update wins display
-                    if (isVsComp) { if(player1GamesWonVsComp) player1GamesWonVsComp.textContent = playerGamesWonTally[playerIndex]; }
-                    else if (isPvp) {
-                        const winsEl = (playerIndex === 0) ? player1GamesWonPvp : player2GamesWonPvp;
-                        if(winsEl) winsEl.textContent = playerGamesWonTally[playerIndex];
-                    }
-
-                    // Check for Match Win (Vs Comp only)
-                    if (isVsComp && playerGamesWonTally[playerIndex] >= legsToWin) {
-                        matchWon = true;
-                        const winColor = playerIndex === 0 ? 'green' : 'red';
-                        displayGameFeedback(`MATCH WON by ${playerNames[playerIndex]}! (${playerGamesWonTally[0]} - ${playerGamesWonTally[1]})`, winColor, messageArea);
-                        turnInput.disabled = true; submitBtn.disabled = true;
-                    } else {
-                        // Leg won, but match continues (or single leg in PvP)
-                        const winColor = 'green';
-                        displayGameFeedback(`GAME SHOT! Leg to ${playerNames[playerIndex]}! Starting next leg in 2s...`, winColor, messageArea);
-                        turnInput.disabled = true; submitBtn.disabled = true; if (isPvp && undoBtn) undoBtn.disabled = true;
-                        nextLegTimeoutId = setTimeout(startNextLeg, 2000);
-                    }
-                    return; // Exit function early after win
-                }
-            }
-
-            // If no win, switch Player
-            currentPlayerIndex = (currentPlayerIndex + 1) % 2;
-            updateCurrentPlayerIndicator();
-            turnInput.value = '';
-
-            if (isVsComp && currentPlayerIndex === 1) { // Vs Comp: Trigger computer's turn
-                turnInput.disabled = true; submitBtn.disabled = true;
-                triggerComputerTurn();
-            } else { // PvP or Human's turn in VsComp: Show suggestion for next player
-                displayCheckoutSuggestion(playerScores[currentPlayerIndex], suggestionArea);
-                turnInput.focus();
-            }
+        /** Populates the finishableScores array from the checkouts object */
+        function initializeGameData() {
+            finishableScores = Object.keys(checkouts)
+                .map(Number)
+                .filter(score => score >= MIN_CHECKOUT_SCORE && score <= MAX_CHECKOUT_SCORE)
+                .sort((a, b) => a - b);
+            console.log("Finishable scores initialized.");
         }
 
-        /** Undoes the last turn in PvP mode */
-        function undoLastTurn() { /* ...unchanged... */ }
+        /** Displays feedback messages with styling */
+        function displayFeedback(message, type = 'info', areaElement) {
+            if (!areaElement) return; // Safety check
+            areaElement.textContent = message;
+            areaElement.className = 'mt-2 text-center font-medium min-h-[1.8em] text-sm'; // Reset classes
+            switch (type) {
+                case 'success': areaElement.classList.add('text-green-600'); break;
+                case 'error': areaElement.classList.add('text-red-600'); break;
+                case 'warning': areaElement.classList.add('text-yellow-600'); break;
+                case 'info': areaElement.classList.add('text-blue-600'); break;
+                default: areaElement.classList.add('text-gray-700'); break;
+            }
+            // Add fade-in animation for feedback items
+            areaElement.classList.add('feedback-item');
+             // Force reflow to restart animation if message changes quickly
+            void areaElement.offsetWidth;
+        }
 
         /** Displays checkout suggestion if applicable */
-        function displayCheckoutSuggestion(score, suggestionArea) { /* ...unchanged... */ }
-
-        // --- Vs Computer Specific Functions ---
-
-        /** Sets up the UI for Vs Computer mode */
-        function setupVsComputerUI() { /* ...unchanged... */ }
-
-        /** Starts a new game against the computer */
-        function startVsComputerGame() { /* ...unchanged... */ }
-
-        /** Updates the human average displays */
-        function updateAverageDisplays() { /* ... Corrected average calculation ... */ }
-
-         /** Updates the computer average displays */
-        function updateComputerAverageDisplays() { /* ... Corrected average calculation ... */ }
-
-         /** Updates the PvP average displays */
-         function updatePvpAverageDisplays() { /* ... Corrected average calculation ... */ }
-
-
-        /** Generates a score for the computer based on difficulty level (1-10) */
-        function generateComputerScore(remainingScore) { /* ...unchanged... */ }
-
-        /** Handles the computer's turn */
-        function computerTurn() { /* ...unchanged... */ }
-
-        /** Wrapper to trigger computer turn with delay */
-        function triggerComputerTurn() { /* ...unchanged... */ }
-
+        function displayCheckoutSuggestion(score, suggestionArea) {
+             if (!suggestionArea) return;
+             suggestionArea.textContent = ''; // Clear previous suggestion
+             if (score > 1 && score <= MAX_CHECKOUT_SCORE && !impossibleCheckouts.includes(score)) {
+                 const possible = checkouts[score];
+                 if (possible && possible.length > 0) {
+                    // Display the first (often preferred) checkout
+                    suggestionArea.textContent = `Suggest: ${possible[0]}`;
+                 }
+             }
+        }
 
         // --- Mode Switching ---
-        /** Switches between the different modes */
+
+        /** Switches between the different app modes */
         function switchMode(modeToSwitchTo) {
             console.log(`Switching mode to: ${modeToSwitchTo}`);
+            currentMode = modeToSwitchTo; // Set current mode immediately
 
-            // Hide all sections first - Added null checks
-            if(lookupModeSection) lookupModeSection.classList.add('hidden');
-            if(gameModeSection) gameModeSection.classList.add('hidden');
-            if(pvpModeSection) pvpModeSection.classList.add('hidden');
-            if(vsComputerModeSection) vsComputerModeSection.classList.add('hidden');
-            if(playMatchChoiceSection) playMatchChoiceSection.classList.add('hidden');
+            // Hide all primary sections first
+            lookupModeSection?.classList.add('hidden');
+            gameModeSection?.classList.add('hidden');
+            playMatchChoiceSection?.classList.add('hidden');
+            pvpModeSection?.classList.add('hidden');
+            vsComputerModeSection?.classList.add('hidden');
 
-            // Deactivate all top-level mode buttons
-            if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
-            if(gameModeBtn) gameModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
-            if(playMatchModeBtn) playMatchModeBtn.classList.replace('mode-button-active', 'mode-button-inactive');
+             // Remove active state from all main mode buttons
+            lookupModeBtn?.classList.replace('mode-button-active', 'mode-button-inactive');
+            gameModeBtn?.classList.replace('mode-button-active', 'mode-button-inactive');
+            playMatchModeBtn?.classList.replace('mode-button-active', 'mode-button-inactive');
 
-            // Clear any pending timers
+            // Remove active sub-mode indicators from PvP/VsComp sections and buttons
+            pvpModeSection?.classList.remove('match-active');
+            vsComputerModeSection?.classList.remove('match-active');
+            pvpBtn?.classList.remove('sub-mode-active');
+            playPcBtn?.classList.remove('sub-mode-active');
+
+
+            // Clear any pending timers from game modes
             if (nextLegTimeoutId) { clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null; }
             if (computerTurnTimeoutId) { clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null; }
+            if (practiceGameTimeoutId) { clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; } // Clear practice timer
 
             hideKeypad(); // Hide keypad whenever mode changes
 
-            let focusElement = null;
-            // Set currentMode *after* potential resets triggered by other modes
-            currentMode = modeToSwitchTo;
+            let focusElement = null; // Element to focus after switching
 
+            // Activate the correct section and button
             switch (modeToSwitchTo) {
                 case 'lookup':
-                    if(lookupModeSection) lookupModeSection.classList.remove('hidden');
-                    if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
+                    lookupModeSection?.classList.remove('hidden');
+                    lookupModeBtn?.classList.replace('mode-button-inactive', 'mode-button-active');
                     focusElement = scoreInputLookup;
                     break;
                 case 'game': // Practice Game
-                    if(gameModeSection) gameModeSection.classList.remove('hidden');
-                    if(gameModeBtn) gameModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
-                    startNewPracticeGame();
+                    gameModeSection?.classList.remove('hidden');
+                    gameModeBtn?.classList.replace('mode-button-inactive', 'mode-button-active');
+                    startNewPracticeGame(); // Start a new practice round
                     focusElement = scoreInputGame;
                     break;
-                case 'playMatch': // Show choice screen
-                     if(playMatchChoiceSection) playMatchChoiceSection.classList.remove('hidden');
-                     if(playMatchModeBtn) playMatchModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
-                     focusElement = pvpBtn; // Focus first choice button
-                     break;
-                // 'pvp' and 'vsComp' modes are now entered via listeners on pvpBtn and playPcBtn
-                default: // Default to lookup
+                case 'playMatch': // Show match type choice screen
+                    playMatchChoiceSection?.classList.remove('hidden');
+                    playMatchModeBtn?.classList.replace('mode-button-inactive', 'mode-button-active');
+                    focusElement = pvpBtn; // Focus first choice button
+                    break;
+                case 'pvp': // PvP Match (already selected via button)
+                     pvpModeSection?.classList.remove('hidden');
+                     pvpModeSection?.classList.add('match-active'); // Indicate PvP section is active
+                     playMatchModeBtn?.classList.replace('mode-button-inactive', 'mode-button-active'); // Keep parent button active
+                     pvpBtn?.classList.add('sub-mode-active'); // Indicate PvP button was chosen
+                     playPcBtn?.classList.remove('sub-mode-active');
+                     resetGame(); // Initialize/Reset PvP game state
+                     focusElement = turnScoreInputPvp;
+                    break;
+                case 'vsComp': // Vs Computer Match (already selected via button)
+                    vsComputerModeSection?.classList.remove('hidden');
+                    vsComputerModeSection?.classList.add('match-active'); // Indicate VsComp section is active
+                    playMatchModeBtn?.classList.replace('mode-button-inactive', 'mode-button-active'); // Keep parent button active
+                    playPcBtn?.classList.add('sub-mode-active'); // Indicate VsComp button was chosen
+                    pvpBtn?.classList.remove('sub-mode-active');
+                    resetGame(); // Initialize/Reset VsComp game state (shows setup first)
+                    focusElement = startVsCompGameBtn; // Focus the start button initially
+                    break;
+                default: // Default to lookup if something goes wrong
                     currentMode = 'lookup';
-                    if(lookupModeSection) lookupModeSection.classList.remove('hidden');
-                    if(lookupModeBtn) lookupModeBtn.classList.replace('mode-button-inactive', 'mode-button-active');
+                    lookupModeSection?.classList.remove('hidden');
+                    lookupModeBtn?.classList.replace('mode-button-inactive', 'mode-button-active');
                     focusElement = scoreInputLookup;
                     break;
             }
-            // Focus logic
-            if (focusElement && typeof focusElement.focus === 'function' && !focusElement.disabled) { setTimeout(() => focusElement.focus(), 50); }
-            else if (focusElement && focusElement.nodeName === 'LABEL') { const radioId = focusElement.getAttribute('for'); const radioToFocus = document.getElementById(radioId); if (radioToFocus && typeof radioToFocus.focus === 'function') { setTimeout(() => radioToFocus.focus(), 50); } }
+
+            // Set focus with a slight delay
+            if (focusElement && typeof focusElement.focus === 'function' && !focusElement.disabled) {
+                 setTimeout(() => focusElement.focus(), 50);
+            }
+             // Handle focusing radio button labels correctly
+             else if (focusElement && focusElement.nodeName === 'LABEL') {
+                 const radioId = focusElement.getAttribute('for');
+                 const radioToFocus = document.getElementById(radioId);
+                 if (radioToFocus && typeof radioToFocus.focus === 'function') {
+                     setTimeout(() => radioToFocus.focus(), 50);
+                 }
+             }
+        }
+
+
+        // --- Checkout Lookup Functions ---
+
+        /** Displays checkout lookup results */
+        function displayLookupCheckouts() {
+            if (!checkoutListLookup || !scoreInputLookup || !messageAreaLookup) return;
+
+            const score = parseInt(scoreInputLookup.value);
+            messageAreaLookup.textContent = ''; // Clear previous messages
+            checkoutListLookup.innerHTML = ''; // Clear previous results
+
+            if (isNaN(score) || score < MIN_CHECKOUT_SCORE || score > MAX_CHECKOUT_SCORE) {
+                messageAreaLookup.textContent = `Please enter a score between ${MIN_CHECKOUT_SCORE} and ${MAX_CHECKOUT_SCORE}.`;
+                checkoutListLookup.innerHTML = `<p class="text-gray-500">No checkouts to display.</p>`;
+                return;
+            }
+
+            if (impossibleCheckouts.includes(score)) {
+                messageAreaLookup.textContent = `Checkout not possible for ${score}.`;
+                 checkoutListLookup.innerHTML = `<p class="text-gray-500">No checkouts to display.</p>`;
+                return;
+            }
+
+            const possibleCheckouts = checkouts[score];
+            if (possibleCheckouts && possibleCheckouts.length > 0) {
+                possibleCheckouts.forEach((checkout, index) => {
+                    const p = document.createElement('p');
+                    p.textContent = checkout;
+                    p.className = 'result-item p-1.5 bg-gray-50 rounded'; // Add styling and animation class
+                    p.style.animationDelay = `${index * 0.05}s`; // Stagger animation
+                    checkoutListLookup.appendChild(p);
+                });
+            } else {
+                 messageAreaLookup.textContent = `No standard checkout found for ${score}.`;
+                 checkoutListLookup.innerHTML = `<p class="text-gray-500">Try finishing differently.</p>`;
+            }
+        }
+
+        // --- Practice Game Functions ---
+
+        /** Starts a new practice game */
+        function startNewPracticeGame() {
+             if (!minScoreInput || !maxScoreInput || !gameScoreDisplay || !scoreInputGame || !submitAnswerBtn || !revealAnswerBtn || !feedbackAreaGame) return;
+
+             // Clear any existing timer before starting a new game
+             if (practiceGameTimeoutId) { clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; }
+
+             const minScore = parseInt(minScoreInput.value) || MIN_CHECKOUT_SCORE;
+             const maxScore = parseInt(maxScoreInput.value) || MAX_CHECKOUT_SCORE;
+
+             if (minScore > maxScore || minScore < MIN_CHECKOUT_SCORE || maxScore > MAX_CHECKOUT_SCORE) {
+                 displayFeedback("Invalid score range.", 'error', feedbackAreaGame);
+                 gameScoreDisplay.textContent = '-';
+                 submitAnswerBtn.disabled = true;
+                 revealAnswerBtn.disabled = true;
+                 return;
+             }
+
+             const possibleScores = finishableScores.filter(s => s >= minScore && s <= maxScore);
+             if (possibleScores.length === 0) {
+                 displayFeedback("No finishable scores in the selected range.", 'error', feedbackAreaGame);
+                 gameScoreDisplay.textContent = '-';
+                 submitAnswerBtn.disabled = true;
+                 revealAnswerBtn.disabled = true;
+                 return;
+             }
+
+             currentGameScore = possibleScores[Math.floor(Math.random() * possibleScores.length)];
+             currentPracticeCheckout = checkouts[currentGameScore] ? checkouts[currentGameScore][0] : "Unknown"; // Store the primary checkout
+
+             gameScoreDisplay.textContent = currentGameScore;
+             scoreInputGame.value = '';
+             feedbackAreaGame.innerHTML = ''; // Clear feedback
+             feedbackAreaGame.className = 'mt-3 text-center font-medium min-h-[2em] text-sm'; // Reset class
+             submitAnswerBtn.disabled = false;
+             revealAnswerBtn.disabled = false;
+             scoreInputGame.focus();
+             console.log(`Practice Game: Target ${currentGameScore}, Checkout: ${currentPracticeCheckout}`);
+        }
+
+        /** Checks the practice game answer (user types checkout string) */
+        function checkPracticeAnswer() {
+            if (!scoreInputGame || !feedbackAreaGame || !submitAnswerBtn || !revealAnswerBtn) return;
+
+            // Clear any pending new game timer if user submits again quickly
+             if (practiceGameTimeoutId) { clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; }
+
+            const userAnswer = scoreInputGame.value.trim().toUpperCase().replace(/\s+/g, ' '); // Normalize input
+            const correctAnswer = currentPracticeCheckout.toUpperCase();
+
+            if (!userAnswer) {
+                displayFeedback("Please enter your checkout attempt.", 'warning', feedbackAreaGame);
+                return;
+            }
+
+            // Simple check: does the user input match *any* of the possible checkouts?
+            const possibleCheckoutsForScore = checkouts[currentGameScore] || [];
+            const isCorrect = possibleCheckoutsForScore.some(c => c.toUpperCase().replace(/\s+/g, ' ') === userAnswer);
+
+
+            if (isCorrect) {
+                displayFeedback(`Correct! ${userAnswer} is a valid checkout for ${currentGameScore}. Next score in ${PRACTICE_NEW_GAME_DELAY / 1000}s...`, 'success', feedbackAreaGame);
+                submitAnswerBtn.disabled = true; // Disable after correct answer
+                revealAnswerBtn.disabled = true; // Disable reveal as well
+
+                // --- MODIFICATION: Start new game automatically after delay ---
+                practiceGameTimeoutId = setTimeout(startNewPracticeGame, PRACTICE_NEW_GAME_DELAY);
+            } else {
+                displayFeedback(`Incorrect. Try again or reveal the answer.`, 'error', feedbackAreaGame);
+                 scoreInputGame.focus(); // Keep focus on input for retry
+                 scoreInputGame.select(); // Select text for easy replacement
+            }
+        }
+
+        /** Reveals the practice game answer */
+        function revealAnswer() {
+             if (!feedbackAreaGame || !submitAnswerBtn || !revealAnswerBtn) return;
+
+             // Clear any pending new game timer if user reveals
+             if (practiceGameTimeoutId) { clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; }
+
+             const possible = checkouts[currentGameScore];
+             if (possible && possible.length > 0) {
+                displayFeedback(`A possible checkout is: ${possible.join(' or ')}`, 'info', feedbackAreaGame);
+             } else {
+                 displayFeedback(`No standard checkout known for ${currentGameScore}.`, 'info', feedbackAreaGame);
+             }
+             submitAnswerBtn.disabled = true; // Disable checking after revealing
+             revealAnswerBtn.disabled = true; // Disable revealing again
+        }
+
+
+        // --- Shared 501 / Vs Comp / PvP Functions ---
+
+        /** Resets the game state based on the current mode */
+        function resetGame() {
+            console.log(`Resetting game for mode: ${currentMode}`);
+            legWon = false;
+            matchWon = false; // Reset match status too
+            clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null;
+            clearTimeout(computerTurnTimeoutId); computerTurnTimeoutId = null;
+            clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; // Clear practice timer on general reset too
+
+            if (currentMode === 'pvp') {
+                // Reset PvP specific state
+                startScore = DEFAULT_START_SCORE; // PvP always uses 501
+                playerNames = [player1NameInputPvp?.value || "Player 1", player2NameInputPvp?.value || "Player 2"];
+                playerGamesWonTally = [0, 0];
+                legStartingPlayerIndex = 0; // Player 1 starts first leg
+                currentPlayerIndex = legStartingPlayerIndex;
+                p1TotalScore = 0; p1TotalTurns = 0; p1LegScore = 0; p1LegTurns = 0;
+                p2TotalScore = 0; p2TotalTurns = 0; p2LegScore = 0; p2LegTurns = 0;
+                lastTurnState = null;
+                undoPossible = false;
+                if(undoTurnBtnPvp) undoTurnBtnPvp.disabled = true;
+                if(turnScoreInputPvp) turnScoreInputPvp.value = '';
+                if(turnScoreInputPvp) turnScoreInputPvp.disabled = false;
+                if(submitTurnScoreBtnPvp) submitTurnScoreBtnPvp.disabled = false;
+                if(messageAreaPvp) messageAreaPvp.textContent = '';
+                if(checkoutSuggestionPvp) checkoutSuggestionPvp.textContent = '';
+                setupPvpUI(); // Update names, scores, averages etc.
+                updateCurrentPlayerIndicator();
+            } else if (currentMode === 'vsComp') {
+                // Reset Vs Comp state - show setup first
+                if(vsCompSetupArea) vsCompSetupArea.classList.remove('hidden');
+                if(vsCompScoreDisplay) vsCompScoreDisplay.classList.add('hidden');
+                if(resetVsCompGameBtn) resetVsCompGameBtn.textContent = 'Reset Match'; // Button text might change on win
+
+                // Reset internal game vars (will be set properly on 'Start Match')
+                startScore = parseInt(startScoreInputVsComp?.value) || DEFAULT_START_SCORE;
+                legsToWin = parseInt(legsToWinInputVsComp?.value) || 3;
+                vsCompDifficulty = parseInt(document.querySelector('input[name="difficulty"]:checked')?.value) || 5;
+                playerNames = ["You", "Computer"];
+                playerGamesWonTally = [0, 0];
+                legStartingPlayerIndex = 0; // Player always starts first leg vs Comp
+                currentPlayerIndex = legStartingPlayerIndex;
+                humanTotalScoreVsComp = 0; humanTotalTurnsVsComp = 0; humanLegScoreVsComp = 0; humanLegTurnsVsComp = 0;
+                computerTotalScore = 0; computerTotalTurns = 0; computerLegScore = 0; computerLegTurns = 0;
+                if(turnScoreInputVsComp) turnScoreInputVsComp.value = '';
+                if(turnScoreInputVsComp) turnScoreInputVsComp.disabled = true; // Disabled until match starts
+                if(submitTurnScoreBtnVsComp) submitTurnScoreBtnVsComp.disabled = true;
+                if(messageAreaVsComp) messageAreaVsComp.textContent = 'Setup your match and click Start.';
+                if(checkoutSuggestionVsComp) checkoutSuggestionVsComp.textContent = '';
+                // Don't call setupVsComputerUI() here, it's called by startVsComputerGame()
+            }
+        }
+
+        /** Starts the next leg for the current 501-based mode */
+        function startNextLeg() {
+            console.log("Starting next leg...");
+            legWon = false;
+            clearTimeout(nextLegTimeoutId); nextLegTimeoutId = null;
+            playerScores = [startScore, startScore]; // Reset scores to start score
+            legStartingPlayerIndex = 1 - legStartingPlayerIndex; // Alternate starting player
+            currentPlayerIndex = legStartingPlayerIndex;
+
+            if (currentMode === 'pvp') {
+                 p1LegScore = 0; p1LegTurns = 0;
+                 p2LegScore = 0; p2LegTurns = 0;
+                 lastTurnState = null; // Cannot undo across legs
+                 undoPossible = false;
+                 if(undoTurnBtnPvp) undoTurnBtnPvp.disabled = true;
+                 if(turnScoreInputPvp) turnScoreInputPvp.value = '';
+                 if(turnScoreInputPvp) turnScoreInputPvp.disabled = false;
+                 if(submitTurnScoreBtnPvp) submitTurnScoreBtnPvp.disabled = false;
+                 if(messageAreaPvp) messageAreaPvp.textContent = `Leg ${playerGamesWonTally[0] + playerGamesWonTally[1] + 1}! ${playerNames[currentPlayerIndex]} starts.`;
+                 if(checkoutSuggestionPvp) checkoutSuggestionPvp.textContent = '';
+                 setupPvpUI(); // Update scores, reset leg averages
+                 updateCurrentPlayerIndicator();
+                 if(turnScoreInputPvp) turnScoreInputPvp.focus();
+            } else if (currentMode === 'vsComp') {
+                 humanLegScoreVsComp = 0; humanLegTurnsVsComp = 0;
+                 computerLegScore = 0; computerLegTurns = 0;
+                 if(turnScoreInputVsComp) turnScoreInputVsComp.value = '';
+                 if(turnScoreInputVsComp) turnScoreInputVsComp.disabled = false;
+                 if(submitTurnScoreBtnVsComp) submitTurnScoreBtnVsComp.disabled = false;
+                 if(messageAreaVsComp) messageAreaVsComp.textContent = `Leg ${playerGamesWonTally[0] + playerGamesWonTally[1] + 1}! ${playerNames[currentPlayerIndex]} starts.`;
+                 if(checkoutSuggestionVsComp) checkoutSuggestionVsComp.textContent = '';
+                 setupVsComputerUI(); // Update scores, reset leg averages
+                 updateCurrentPlayerIndicator();
+                 if (currentPlayerIndex === 1) { // If computer starts
+                     triggerComputerTurn();
+                 } else {
+                     if(turnScoreInputVsComp) turnScoreInputVsComp.focus();
+                 }
+            }
+        }
+
+        /** Updates the visual highlight for the current player */
+        function updateCurrentPlayerIndicator() {
+            if (currentMode === 'pvp') {
+                if (!player1DisplayPvp || !player2DisplayPvp || !currentPlayerIndicatorPvp) return;
+                currentPlayerIndicatorPvp.textContent = `Current Player: ${playerNames[currentPlayerIndex]}`;
+                player1DisplayPvp.classList.toggle('current-player-highlight', currentPlayerIndex === 0 && !legWon);
+                player2DisplayPvp.classList.toggle('current-player-highlight', currentPlayerIndex === 1 && !legWon);
+            } else if (currentMode === 'vsComp') {
+                 if (!player1DisplayVsComp || !player2DisplayVsComp || !currentPlayerIndicatorVsComp) return;
+                 currentPlayerIndicatorVsComp.textContent = `Current Player: ${playerNames[currentPlayerIndex]}`;
+                 player1DisplayVsComp.classList.toggle('current-player-highlight', currentPlayerIndex === 0 && !legWon && !matchWon);
+                 player2DisplayVsComp.classList.toggle('current-player-highlight', currentPlayerIndex === 1 && !legWon && !matchWon);
+                 // Disable human input if it's computer's turn
+                 if(turnScoreInputVsComp) turnScoreInputVsComp.disabled = (currentPlayerIndex === 1 || legWon || matchWon);
+                 if(submitTurnScoreBtnVsComp) submitTurnScoreBtnVsComp.disabled = (currentPlayerIndex === 1 || legWon || matchWon);
+            }
+        }
+
+        /** Handles score submission for PvP OR Human player in Vs Comp */
+        function submitTurnScore() {
+            let turnScoreInput, messageArea, submitBtn;
+            let isVsComp = currentMode === 'vsComp';
+            let isPvp = currentMode === 'pvp';
+
+            if (isPvp) {
+                turnScoreInput = turnScoreInputPvp;
+                messageArea = messageAreaPvp;
+                submitBtn = submitTurnScoreBtnPvp;
+            } else if (isVsComp) {
+                turnScoreInput = turnScoreInputVsComp;
+                messageArea = messageAreaVsComp;
+                submitBtn = submitTurnScoreBtnVsComp;
+            } else {
+                return; // Should not happen if called correctly
+            }
+
+            if (!turnScoreInput || !messageArea || !submitBtn || legWon || matchWon) return;
+
+            const scoreInput = parseInt(turnScoreInput.value);
+
+            // --- Input Validation ---
+            if (isNaN(scoreInput) || scoreInput < 0 || scoreInput > MAX_SCORE) {
+                displayFeedback(`Invalid score. Please enter between 0 and ${MAX_SCORE}.`, 'error', messageArea);
+                turnScoreInput.focus(); // Keep focus on input
+                return;
+            }
+
+            const currentScore = playerScores[currentPlayerIndex];
+            const remainingScore = currentScore - scoreInput;
+
+            // --- Bust Check ---
+            if (remainingScore < 0 || remainingScore === 1) {
+                displayFeedback(`Bust! Score reset to ${currentScore}.`, 'warning', messageArea);
+                // Update averages
+                 if (isPvp) {
+                     if (currentPlayerIndex === 0) { p1LegTurns++; p1TotalTurns++; }
+                     else { p2LegTurns++; p2TotalTurns++; }
+                     updatePvpAverageDisplays(); // Update display after turn count increment
+                     // Save state for undo BEFORE switching player
+                     saveUndoStatePvp();
+                 } else { // VsComp (Human player)
+                     humanLegTurnsVsComp++; humanTotalTurnsVsComp++;
+                     updateAverageDisplays(); // Update display
+                 }
+
+                // Switch player
+                currentPlayerIndex = 1 - currentPlayerIndex;
+                turnScoreInput.value = ''; // Clear input for next player
+                updateCurrentPlayerIndicator();
+                displayCheckoutSuggestion(playerScores[currentPlayerIndex], isPvp ? checkoutSuggestionPvp : checkoutSuggestionVsComp); // Suggest for next player
+
+                // Trigger computer turn if applicable
+                if (isVsComp && currentPlayerIndex === 1) {
+                    triggerComputerTurn();
+                } else {
+                    turnScoreInput.focus(); // Focus input for next human player
+                }
+                return; // End turn processing after bust
+            }
+
+            // --- Valid Score - Update State ---
+            if (isPvp) {
+                // Save state for undo BEFORE making changes
+                saveUndoStatePvp();
+                // Update scores and averages
+                playerScores[currentPlayerIndex] = remainingScore;
+                if (currentPlayerIndex === 0) {
+                    p1LegScore += scoreInput; p1TotalScore += scoreInput; p1LegTurns++; p1TotalTurns++;
+                } else {
+                    p2LegScore += scoreInput; p2TotalScore += scoreInput; p2LegTurns++; p2TotalTurns++;
+                }
+                updatePvpAverageDisplays();
+            } else { // VsComp (Human player)
+                playerScores[currentPlayerIndex] = remainingScore;
+                humanLegScoreVsComp += scoreInput; humanTotalScoreVsComp += scoreInput;
+                humanLegTurnsVsComp++; humanTotalTurnsVsComp++;
+                updateAverageDisplays();
+            }
+
+
+             // --- Leg/Game Win Check ---
+            if (remainingScore === 0) {
+                legWon = true;
+                playerGamesWonTally[currentPlayerIndex]++;
+                displayFeedback(`${playerNames[currentPlayerIndex]} wins the leg!`, 'success', messageArea);
+                turnScoreInput.value = '';
+                turnScoreInput.disabled = true;
+                submitBtn.disabled = true;
+                if(undoTurnBtnPvp) undoTurnBtnPvp.disabled = true; // Cannot undo winning throw
+
+                // Update UI immediately
+                if (isPvp) setupPvpUI(); else setupVsComputerUI();
+
+                // Check for Match Win (VsComp only)
+                if (isVsComp && playerGamesWonTally[currentPlayerIndex] >= legsToWin) {
+                    matchWon = true;
+                    displayFeedback(`${playerNames[currentPlayerIndex]} wins the match ${playerGamesWonTally[0]} - ${playerGamesWonTally[1]}!`, 'success', messageArea);
+                    if(resetVsCompGameBtn) resetVsCompGameBtn.textContent = 'New Match'; // Change button text
+                    updateCurrentPlayerIndicator(); // Update highlight (removes it)
+                } else {
+                    // Start next leg after a delay
+                    displayFeedback(`${playerNames[currentPlayerIndex]} wins the leg! Next leg starting soon...`, 'success', messageArea);
+                    nextLegTimeoutId = setTimeout(startNextLeg, 3000); // 3 second delay
+                }
+
+            } else {
+                 // --- Continue Game - Switch Player ---
+                 displayFeedback(`Score: ${scoreInput}. ${remainingScore} remaining.`, 'info', messageArea);
+                 currentPlayerIndex = 1 - currentPlayerIndex;
+                 turnScoreInput.value = ''; // Clear input for next player
+                 updateCurrentPlayerIndicator();
+                 displayCheckoutSuggestion(playerScores[currentPlayerIndex], isPvp ? checkoutSuggestionPvp : checkoutSuggestionVsComp);
+
+                 // Trigger computer turn if applicable
+                 if (isVsComp && currentPlayerIndex === 1) {
+                     triggerComputerTurn();
+                 } else {
+                    turnScoreInput.focus();
+                 }
+            }
+        }
+
+        /** Saves the state before a PvP turn for potential undo */
+        function saveUndoStatePvp() {
+            lastTurnState = {
+                scores: [...playerScores],
+                index: currentPlayerIndex,
+                p1Turns: { leg: p1LegTurns, total: p1TotalTurns },
+                p2Turns: { leg: p2LegTurns, total: p2TotalTurns },
+                p1Score: { leg: p1LegScore, total: p1TotalScore },
+                p2Score: { leg: p2LegScore, total: p2TotalScore },
+                gamesWon: [...playerGamesWonTally] // In case undo spans a leg win somehow (shouldn't happen with current logic)
+            };
+            undoPossible = true;
+            if(undoTurnBtnPvp) undoTurnBtnPvp.disabled = false;
+            console.log("PvP state saved for undo:", lastTurnState);
+        }
+
+
+        /** Undoes the last turn in PvP mode */
+        function undoLastTurn() {
+            if (!undoPossible || !lastTurnState || currentMode !== 'pvp' || legWon) {
+                console.warn("Undo not possible or invalid state.");
+                return;
+            }
+
+            console.log("Undoing last turn. Restoring state:", lastTurnState);
+
+            // Restore state from saved snapshot
+            playerScores = [...lastTurnState.scores];
+            currentPlayerIndex = lastTurnState.index;
+            p1LegTurns = lastTurnState.p1Turns.leg;
+            p1TotalTurns = lastTurnState.p1Turns.total;
+            p2LegTurns = lastTurnState.p2Turns.leg;
+            p2TotalTurns = lastTurnState.p2Turns.total;
+            p1LegScore = lastTurnState.p1Score.leg;
+            p1TotalScore = lastTurnState.p1Score.total;
+            p2LegScore = lastTurnState.p2Score.leg;
+            p2TotalScore = lastTurnState.p2Score.total;
+            playerGamesWonTally = [...lastTurnState.gamesWon]; // Restore leg wins just in case
+
+            // Update UI
+            setupPvpUI(); // Refreshes scores, names, averages
+            updateCurrentPlayerIndicator(); // Sets the highlight correctly
+            displayCheckoutSuggestion(playerScores[currentPlayerIndex], checkoutSuggestionPvp); // Show suggestion for restored player
+
+            // Clear messages and reset buttons
+            if(messageAreaPvp) messageAreaPvp.textContent = "Last turn undone.";
+            if(turnScoreInputPvp) turnScoreInputPvp.value = ''; // Clear input
+            if(turnScoreInputPvp) turnScoreInputPvp.disabled = false;
+            if(submitTurnScoreBtnPvp) submitTurnScoreBtnPvp.disabled = false;
+
+            // Disable further undo until next turn
+            undoPossible = false;
+            lastTurnState = null;
+            if(undoTurnBtnPvp) undoTurnBtnPvp.disabled = true;
+            if(turnScoreInputPvp) turnScoreInputPvp.focus();
+        }
+
+
+        // --- PvP (Tracker) Specific Functions ---
+
+        /** Sets up the UI elements for PvP mode */
+        function setupPvpUI() {
+             if (!player1NameDisplayPvp || !player2NameDisplayPvp || !player1ScorePvp || !player2ScorePvp || !player1GamesWonPvp || !player2GamesWonPvp) return;
+
+             player1NameDisplayPvp.textContent = playerNames[0];
+             player2NameDisplayPvp.textContent = playerNames[1];
+             player1ScorePvp.textContent = playerScores[0];
+             player2ScorePvp.textContent = playerScores[1];
+             player1GamesWonPvp.textContent = playerGamesWonTally[0];
+             player2GamesWonPvp.textContent = playerGamesWonTally[1];
+             updatePvpAverageDisplays(); // Calculate and display averages
+        }
+
+        /** Updates the PvP average displays */
+        function updatePvpAverageDisplays() {
+            // Player 1
+            const p1LegAvg = p1LegTurns > 0 ? (p1LegScore / p1LegTurns * 3).toFixed(2) : '-';
+            const p1OverallAvg = p1TotalTurns > 0 ? (p1TotalScore / p1TotalTurns * 3).toFixed(2) : '-';
+            if(p1LegAvgPvp) p1LegAvgPvp.textContent = p1LegAvg;
+            if(p1OverallAvgPvp) p1OverallAvgPvp.textContent = p1OverallAvg;
+
+            // Player 2
+            const p2LegAvg = p2LegTurns > 0 ? (p2LegScore / p2LegTurns * 3).toFixed(2) : '-';
+            const p2OverallAvg = p2TotalTurns > 0 ? (p2TotalScore / p2TotalTurns * 3).toFixed(2) : '-';
+             if(p2LegAvgPvp) p2LegAvgPvp.textContent = p2LegAvg;
+             if(p2OverallAvgPvp) p2OverallAvgPvp.textContent = p2OverallAvg;
+        }
+
+        // --- Vs Computer Specific Functions ---
+
+        /** Starts a new game against the computer after setup */
+        function startVsComputerGame() {
+            console.log("Starting Vs Computer game...");
+            // Hide setup, show gameplay
+            if(vsCompSetupArea) vsCompSetupArea.classList.add('hidden');
+            if(vsCompScoreDisplay) vsCompScoreDisplay.classList.remove('hidden');
+
+            // Get settings from setup
+            startScore = parseInt(startScoreInputVsComp?.value) || DEFAULT_START_SCORE;
+            legsToWin = parseInt(legsToWinInputVsComp?.value) || 3;
+            vsCompDifficulty = parseInt(document.querySelector('input[name="difficulty"]:checked')?.value) || 5;
+            console.log(`Vs Comp Settings: Start=${startScore}, Legs=${legsToWin}, Difficulty=${vsCompDifficulty}`);
+
+            // Reset game state with new settings
+            playerNames = ["You", "Computer"];
+            playerScores = [startScore, startScore];
+            playerGamesWonTally = [0, 0];
+            legStartingPlayerIndex = 0; // Human always starts first leg
+            currentPlayerIndex = legStartingPlayerIndex;
+            legWon = false;
+            matchWon = false;
+
+            // Reset averages
+             humanTotalScoreVsComp = 0; humanTotalTurnsVsComp = 0; humanLegScoreVsComp = 0; humanLegTurnsVsComp = 0;
+             computerTotalScore = 0; computerTotalTurns = 0; computerLegScore = 0; computerLegTurns = 0;
+
+             // Update UI
+             if(resetVsCompGameBtn) resetVsCompGameBtn.textContent = 'Reset Match';
+             setupVsComputerUI(); // Update names, scores, averages, target legs display
+             updateCurrentPlayerIndicator();
+             displayCheckoutSuggestion(playerScores[currentPlayerIndex], checkoutSuggestionVsComp);
+             if(messageAreaVsComp) messageAreaVsComp.textContent = `Match Started! First to ${legsToWin} legs. You start.`;
+             if(turnScoreInputVsComp) turnScoreInputVsComp.focus();
+        }
+
+        /** Sets up the UI elements for Vs Computer mode gameplay */
+        function setupVsComputerUI() {
+            if (!player1NameDisplayVsComp || !player2NameDisplayVsComp || !player1ScoreVsComp || !player2ScoreVsComp || !player1GamesWonVsComp || !player2GamesWonVsComp || !targetLegsVsComp || !targetLegsVsComp2) return;
+
+            player1NameDisplayVsComp.textContent = playerNames[0]; // "You"
+            player2NameDisplayVsComp.textContent = playerNames[1]; // "Computer"
+            player1ScoreVsComp.textContent = playerScores[0];
+            player2ScoreVsComp.textContent = playerScores[1];
+            player1GamesWonVsComp.textContent = playerGamesWonTally[0];
+            player2GamesWonVsComp.textContent = playerGamesWonTally[1];
+            targetLegsVsComp.textContent = legsToWin; // Show target legs
+            targetLegsVsComp2.textContent = legsToWin; // Show target legs
+            updateAverageDisplays(); // Update human averages
+            updateComputerAverageDisplays(); // Update computer averages
+        }
+
+        /** Updates the human average displays in Vs Comp */
+        function updateAverageDisplays() {
+            const legAvg = humanLegTurnsVsComp > 0 ? (humanLegScoreVsComp / humanLegTurnsVsComp * 3).toFixed(2) : '-';
+            const overallAvg = humanTotalTurnsVsComp > 0 ? (humanTotalScoreVsComp / humanTotalTurnsVsComp * 3).toFixed(2) : '-';
+            if(legAvgDisplayVsComp) legAvgDisplayVsComp.textContent = legAvg;
+            if(overallAvgDisplayVsComp) overallAvgDisplayVsComp.textContent = overallAvg;
+        }
+
+        /** Updates the computer average displays in Vs Comp */
+        function updateComputerAverageDisplays() {
+            const legAvg = computerLegTurns > 0 ? (computerLegScore / computerLegTurns * 3).toFixed(2) : '-';
+            const overallAvg = computerTotalTurns > 0 ? (computerTotalScore / computerTotalTurns * 3).toFixed(2) : '-';
+             if(compLegAvgDisplayVsComp) compLegAvgDisplayVsComp.textContent = legAvg;
+             if(compOverallAvgDisplayVsComp) compOverallAvgDisplayVsComp.textContent = overallAvg;
+        }
+
+
+        /** Generates a score for the computer based on difficulty level (1-10) */
+        function generateComputerScore(remainingScore) {
+            // Difficulty influences target average and consistency
+            // Level 1 ~ 20 avg, Level 5 ~ 50 avg, Level 10 ~ 90 avg (approx)
+            const baseAvg = 15 + (vsCompDifficulty * 7.5); // Target average score per turn
+            const consistencyFactor = 0.6 + (vsCompDifficulty * 0.04); // How likely to hit near the average (0.64 to 1.0)
+
+            let scoreAttempt;
+
+            // --- Checkout Logic ---
+            if (remainingScore <= MAX_CHECKOUT_SCORE && !impossibleCheckouts.includes(remainingScore) && checkouts[remainingScore]) {
+                 // Attempt checkout based on difficulty
+                 const checkoutSuccessRate = 0.1 + (vsCompDifficulty * 0.08); // 18% (L1) to 90% (L10) chance to hit checkout
+                 if (Math.random() < checkoutSuccessRate) {
+                     console.log(`Computer (L${vsCompDifficulty}) attempts checkout ${remainingScore} and SUCCEEDS!`);
+                     return remainingScore; // Successful checkout
+                 } else {
+                     // Missed checkout - score something plausible but not the win
+                     console.log(`Computer (L${vsCompDifficulty}) attempts checkout ${remainingScore} and MISSES.`);
+                     // Score roughly 2/3rds of the target, minimum 20, max 100 to avoid silly high scores on misses
+                     scoreAttempt = Math.max(20, Math.min(100, Math.floor(remainingScore * (0.5 + Math.random() * 0.3))));
+                      // Ensure the miss doesn't bust or leave 1
+                      if (remainingScore - scoreAttempt <= 1) {
+                          scoreAttempt = Math.max(0, remainingScore - 2); // Leave a finishable score if possible
+                      }
+                     console.log(`Computer missed checkout, scoring ${scoreAttempt}`);
+                     return scoreAttempt;
+                 }
+            }
+
+            // --- Standard Scoring Logic ---
+            // Generate a score based on target average and consistency
+            const minScore = Math.max(0, baseAvg - (60 / consistencyFactor)); // Wider variance at lower levels
+            const maxScore = Math.min(MAX_SCORE, baseAvg + (60 * consistencyFactor)); // Clamp max score
+            scoreAttempt = Math.round(minScore + Math.random() * (maxScore - minScore));
+
+            // Ensure score doesn't bust or leave 1
+            if (remainingScore - scoreAttempt <= 1) {
+                 // Aim for a score that leaves a finishable number if possible, otherwise just avoid bust
+                 if (remainingScore > 2) {
+                    scoreAttempt = Math.max(0, remainingScore - (Math.random() < 0.7 ? 2 : 4)); // Try to leave D1 or D2
+                 } else {
+                    scoreAttempt = 0; // Only option is to score 0 if on 2
+                 }
+            }
+
+             // Clamp score between 0 and MAX_SCORE, and ensure it doesn't exceed remaining
+             scoreAttempt = Math.max(0, Math.min(scoreAttempt, MAX_SCORE, remainingScore - (remainingScore === 1 ? 1:0) )); // Prevent leaving 1 unless starting score was 1
+
+            console.log(`Computer (L${vsCompDifficulty}) scoring. Target avg: ${baseAvg.toFixed(1)}, Range: [${minScore.toFixed(0)}-${maxScore.toFixed(0)}]. Rolled: ${scoreAttempt}`);
+            return scoreAttempt;
+        }
+
+        /** Handles the computer's turn */
+        function computerTurn() {
+             if (currentMode !== 'vsComp' || currentPlayerIndex !== 1 || legWon || matchWon) {
+                 console.log("Computer turn skipped (not active, leg/match won, or not computer's turn).");
+                 return;
+             }
+             console.log("Computer turn starts...");
+
+             const currentScore = playerScores[1];
+             const score = generateComputerScore(currentScore);
+             const remainingScore = currentScore - score;
+
+             // Update state
+             playerScores[1] = remainingScore;
+             computerLegScore += score; computerTotalScore += score;
+             computerLegTurns++; computerTotalTurns++;
+             updateComputerAverageDisplays(); // Update averages
+
+             // Check for win
+             if (remainingScore === 0) {
+                 legWon = true;
+                 playerGamesWonTally[1]++;
+                 displayFeedback(`Computer scores ${score} and wins the leg!`, 'success', messageAreaVsComp);
+                 setupVsComputerUI(); // Update UI
+
+                 // Check for Match Win
+                 if (playerGamesWonTally[1] >= legsToWin) {
+                     matchWon = true;
+                     displayFeedback(`Computer wins the match ${playerGamesWonTally[0]} - ${playerGamesWonTally[1]}!`, 'error', messageAreaVsComp); // Use 'error' color for loss
+                     if(resetVsCompGameBtn) resetVsCompGameBtn.textContent = 'New Match';
+                     updateCurrentPlayerIndicator(); // Update highlight (removes it)
+                 } else {
+                     // Start next leg after delay
+                     displayFeedback(`Computer scores ${score} and wins the leg! Next leg starting soon...`, 'success', messageAreaVsComp);
+                     nextLegTimeoutId = setTimeout(startNextLeg, 3000);
+                 }
+             } else {
+                 // Continue game - switch back to human
+                 displayFeedback(`Computer scores ${score}. ${remainingScore} remaining. Your turn!`, 'info', messageAreaVsComp);
+                 currentPlayerIndex = 0; // Switch to human
+                 updateCurrentPlayerIndicator();
+                 displayCheckoutSuggestion(playerScores[currentPlayerIndex], checkoutSuggestionVsComp);
+                 if(turnScoreInputVsComp) turnScoreInputVsComp.focus(); // Focus input for human
+             }
+        }
+
+        /** Wrapper to trigger computer turn with delay */
+        function triggerComputerTurn() {
+            if (currentMode === 'vsComp' && currentPlayerIndex === 1 && !legWon && !matchWon) {
+                 console.log(`Triggering computer turn in ${COMPUTER_TURN_DELAY}ms`);
+                 displayFeedback("Computer is thinking...", 'info', messageAreaVsComp); // Indicate thinking
+                 clearTimeout(computerTurnTimeoutId); // Clear previous timer if any
+                 computerTurnTimeoutId = setTimeout(computerTurn, COMPUTER_TURN_DELAY);
+            }
         }
 
         // --- Keypad Functions ---
-        function showKeypad() { /* ...unchanged... */ }
-        function hideKeypad() { /* ...unchanged... */ }
-        function handleKeypadInput(event) { /* ...unchanged... */ }
-        function handleBackspace() { /* ...unchanged... */ }
-        function handleEnter() { /* ...unchanged... */ }
+
+        /** Shows the numeric keypad */
+        function showKeypad() {
+            if (numericKeypad && window.innerWidth < 640) { // Only show on small screens (Tailwind 'sm' breakpoint)
+                numericKeypad.classList.remove('hidden');
+                // Adjust body padding to prevent content from being hidden behind keypad
+                 document.body.style.paddingBottom = `${numericKeypad.offsetHeight + 16}px`; // Add keypad height + some margin
+            }
+        }
+
+        /** Hides the numeric keypad */
+        function hideKeypad() {
+            if (numericKeypad) {
+                numericKeypad.classList.add('hidden');
+                document.body.style.paddingBottom = '1rem'; // Reset body padding (default p-4)
+            }
+             activeNumericInput = null; // Clear active input when keypad hides
+        }
+
+        /** Handles numeric input from the keypad */
+        function handleKeypadInput(event) {
+            if (activeNumericInput && !activeNumericInput.disabled) {
+                const num = event.target.textContent;
+                activeNumericInput.value += num;
+                 // Trigger input event manually if needed for other listeners
+                 activeNumericInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+
+        /** Handles backspace input from the keypad */
+        function handleBackspace() {
+            if (activeNumericInput && !activeNumericInput.disabled) {
+                activeNumericInput.value = activeNumericInput.value.slice(0, -1);
+                 // Trigger input event manually
+                 activeNumericInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+
+        /** Handles enter/submit action from the keypad */
+        function handleEnter() {
+             if (activeNumericInput && !activeNumericInput.disabled) {
+                 console.log(`Keypad Enter pressed for mode: ${currentMode}`);
+                 // Determine which button to click based on the current mode and active input
+                 if (currentMode === 'lookup' && activeNumericInput === scoreInputLookup) {
+                     calculateBtnLookup?.click();
+                 } else if (currentMode === 'pvp' && activeNumericInput === turnScoreInputPvp) {
+                     submitTurnScoreBtnPvp?.click();
+                 } else if (currentMode === 'vsComp' && activeNumericInput === turnScoreInputVsComp) {
+                     submitTurnScoreBtnVsComp?.click();
+                 }
+                 // Add other modes if keypad is used there (e.g., practice game)
+                 // else if (currentMode === 'game' && activeNumericInput === scoreInputGame) {
+                 //     submitAnswerBtn?.click();
+                 // }
+
+                 // Optionally hide keypad after enter, or let blur handle it
+                 // hideKeypad();
+                  activeNumericInput.blur(); // Trigger blur to potentially hide keypad
+             }
+        }
 
 
         // --- Event Listeners ---
-        if(lookupModeBtn) lookupModeBtn.addEventListener('click', () => switchMode('lookup'));
-        if(gameModeBtn) gameModeBtn.addEventListener('click', () => switchMode('game'));
-        if(playMatchModeBtn) playMatchModeBtn.addEventListener('click', () => switchMode('playMatch'));
 
-        // Listeners for sub-mode choices
-        if(pvpBtn) pvpBtn.addEventListener('click', () => {
-            currentMode = 'pvp'; // Set mode
-            if(playMatchChoiceSection) playMatchChoiceSection.classList.add('hidden');
-            if(pvpModeSection) pvpModeSection.classList.remove('hidden');
-            if(playMatchModeBtn) playMatchModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); // Keep parent button active
-            resetGame(); // Reset/Setup PvP game
+        // Mode Switching Buttons
+        lookupModeBtn?.addEventListener('click', () => switchMode('lookup'));
+        gameModeBtn?.addEventListener('click', () => switchMode('game'));
+        playMatchModeBtn?.addEventListener('click', () => switchMode('playMatch'));
+
+        // Match Type Choice Buttons (Triggers mode switch internally)
+        pvpBtn?.addEventListener('click', () => switchMode('pvp'));
+        playPcBtn?.addEventListener('click', () => switchMode('vsComp'));
+
+        // Checkout Lookup Listeners
+        calculateBtnLookup?.addEventListener('click', displayLookupCheckouts);
+        scoreInputLookup?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); calculateBtnLookup?.click(); } });
+        scoreInputLookup?.addEventListener('input', () => { if(messageAreaLookup) messageAreaLookup.textContent = ''; }); // Clear message on input
+
+        // Practice Game Listeners
+        submitAnswerBtn?.addEventListener('click', checkPracticeAnswer);
+        revealAnswerBtn?.addEventListener('click', revealAnswer);
+        newGameBtn?.addEventListener('click', startNewPracticeGame); // Manual new game still works
+        scoreInputGame?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitAnswerBtn?.disabled) submitAnswerBtn?.click(); } });
+        scoreInputGame?.addEventListener('input', () => {
+            // Clear feedback and any pending new game timer if user starts typing again
+            if (practiceGameTimeoutId) { clearTimeout(practiceGameTimeoutId); practiceGameTimeoutId = null; }
+            if (!submitAnswerBtn?.disabled && feedbackAreaGame) {
+                feedbackAreaGame.innerHTML = '';
+                feedbackAreaGame.className = 'mt-4 text-center font-medium min-h-[2em] text-sm';
+            }
         });
-         if(playPcBtn) playPcBtn.addEventListener('click', () => {
-            currentMode = 'vsComp'; // Set mode
-            if(playMatchChoiceSection) playMatchChoiceSection.classList.add('hidden');
-            if(vsComputerModeSection) vsComputerModeSection.classList.remove('hidden');
-             if(playMatchModeBtn) playMatchModeBtn.classList.replace('mode-button-inactive', 'mode-button-active'); // Keep parent button active
-            resetGame(); // Reset/Setup VsComp game (shows setup screen)
-        });
 
+        // PvP Listeners
+        submitTurnScoreBtnPvp?.addEventListener('click', submitTurnScore);
+        resetPvpGameBtn?.addEventListener('click', resetGame);
+        undoTurnBtnPvp?.addEventListener('click', undoLastTurn);
+        turnScoreInputPvp?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnPvp?.disabled && !legWon) submitTurnScoreBtnPvp?.click(); } });
+        player1NameInputPvp?.addEventListener('input', (e) => { const n = e.target.value || "Player 1"; if(player1NameDisplayPvp) player1NameDisplayPvp.textContent = n; playerNames[0] = n; if(currentMode === 'pvp') updateCurrentPlayerIndicator(); });
+        player2NameInputPvp?.addEventListener('input', (e) => { const n = e.target.value || "Player 2"; if(player2NameDisplayPvp) player2NameDisplayPvp.textContent = n; playerNames[1] = n; if(currentMode === 'pvp') updateCurrentPlayerIndicator(); });
 
-        if(calculateBtnLookup) calculateBtnLookup.addEventListener('click', displayLookupCheckouts);
-        if(scoreInputLookup) { scoreInputLookup.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); calculateBtnLookup.click(); } }); scoreInputLookup.addEventListener('input', () => { if(messageAreaLookup) messageAreaLookup.textContent = ''; }); }
-        if(submitAnswerBtn) submitAnswerBtn.addEventListener('click', checkPracticeAnswer);
-        if(revealAnswerBtn) revealAnswerBtn.addEventListener('click', revealAnswer);
-        if(newGameBtn) newGameBtn.addEventListener('click', startNewPracticeGame);
-        if(scoreInputGame) { scoreInputGame.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitAnswerBtn.disabled) submitAnswerBtn.click(); } }); scoreInputGame.addEventListener('input', () => { if (!submitAnswerBtn.disabled && feedbackAreaGame) { feedbackAreaGame.innerHTML = ''; feedbackAreaGame.className = 'mt-4 text-center font-medium min-h-[2em] text-sm'; } }); }
-        // PvP Listeners (formerly tracker)
-        if(submitTurnScoreBtnPvp) submitTurnScoreBtnPvp.addEventListener('click', submitTurnScore);
-        if(resetPvpGameBtn) resetPvpGameBtn.addEventListener('click', resetGame);
-        if(undoTurnBtnPvp) undoTurnBtnPvp.addEventListener('click', undoLastTurn);
-        if(turnScoreInputPvp) turnScoreInputPvp.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnPvp.disabled && !legWon) submitTurnScoreBtnPvp.click(); } });
-        if(player1NameInputPvp) player1NameInputPvp.addEventListener('input', (e) => { const n = e.target.value || "Player 1"; if(player1NameDisplayPvp) player1NameDisplayPvp.textContent = n; playerNames[0] = n; if(currentMode === 'pvp') updateCurrentPlayerIndicator(); });
-        if(player2NameInputPvp) player2NameInputPvp.addEventListener('input', (e) => { const n = e.target.value || "Player 2"; if(player2NameDisplayPvp) player2NameDisplayPvp.textContent = n; playerNames[1] = n; if(currentMode === 'pvp') updateCurrentPlayerIndicator(); });
         // Vs Comp Listeners
-        if(difficultyRadios) difficultyRadios.forEach(radio => { radio.addEventListener('change', (e) => { vsCompDifficulty = parseInt(e.target.value); console.log(`Difficulty set to Level: ${vsCompDifficulty}`); }); });
-        if(startVsCompGameBtn) startVsCompGameBtn.addEventListener('click', startVsComputerGame);
-        if(submitTurnScoreBtnVsComp) submitTurnScoreBtnVsComp.addEventListener('click', submitTurnScore);
-        if(resetVsCompGameBtn) resetVsCompGameBtn.addEventListener('click', resetGame);
-        if(turnScoreInputVsComp) turnScoreInputVsComp.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnVsComp.disabled && !legWon && !matchWon) submitTurnScoreBtnVsComp.click(); } });
+        difficultyRadios?.forEach(radio => { radio.addEventListener('change', (e) => { vsCompDifficulty = parseInt(e.target.value); console.log(`Difficulty set to Level: ${vsCompDifficulty}`); }); });
+        startVsCompGameBtn?.addEventListener('click', startVsComputerGame);
+        submitTurnScoreBtnVsComp?.addEventListener('click', submitTurnScore);
+        resetVsCompGameBtn?.addEventListener('click', resetGame);
+        turnScoreInputVsComp?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!submitTurnScoreBtnVsComp?.disabled && !legWon && !matchWon && currentPlayerIndex === 0) submitTurnScoreBtnVsComp?.click(); } });
 
         // Keypad Listeners
         if (keypadButtons) {
@@ -691,18 +1405,33 @@
                 else if (button.id === 'keypadEnter') { button.addEventListener('click', handleEnter); }
             });
         }
-        // Listen for focus on numeric inputs to show keypad
+        // Listen for focus/blur on numeric inputs to show/hide keypad
         if (numericInputs) {
             numericInputs.forEach(input => {
-                input.addEventListener('focus', (e) => { activeNumericInput = e.target; if (window.innerWidth < 640) { showKeypad(); } });
-                 input.addEventListener('blur', (e) => { setTimeout(() => { if (numericKeypad && !numericKeypad.contains(document.activeElement)) { hideKeypad(); } }, 50); });
+                input.addEventListener('focus', (e) => {
+                     activeNumericInput = e.target;
+                     if (window.innerWidth < 640) { showKeypad(); }
+                });
+                 // Use a small timeout on blur to allow clicking keypad buttons before hiding
+                 input.addEventListener('blur', (e) => {
+                     setTimeout(() => {
+                         // Check if the new focused element is INSIDE the keypad
+                         const newlyFocused = document.activeElement;
+                         if (!numericKeypad?.contains(newlyFocused)) {
+                             hideKeypad();
+                         }
+                     }, 100); // 100ms delay
+                 });
             });
         }
 
         // --- Initialization ---
-        initializeGameData();
-        resetGame(); // Initialize shared game state
-        switchMode('lookup'); // Start in lookup mode
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM fully loaded and parsed");
+            initializeGameData();
+            resetGame(); // Initialize shared game state based on default mode
+            switchMode('lookup'); // Start in lookup mode explicitly
+        });
 
     </script>
 </body>
